@@ -56,6 +56,7 @@ const UploadPage: React.FC = () => {
           }
         }
       }
+      console.log('invalidating files');
       queryClient.invalidateQueries({ queryKey: ['files', user?.id] });
     } catch (error) {
       setError(parseErrorMessage(error));
