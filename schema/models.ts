@@ -7,7 +7,7 @@ export interface User {
 }
 
 export interface File {
-  id: number;
+  id: string;
   name: string;
   path: string;
   size: number;
@@ -25,9 +25,38 @@ export interface Transcription {
   content: string | null;
   isTranscribing: boolean;
   error: string | null;
-  fullTranscription: any | null; // Using 'any' for JSONB type
+  fullTranscription: FullTranscription | null;
   createdAt: Date;
   updatedAt: Date;
-  fileId: number;
+  fileId: string;
   userId: string;
 }
+
+export type FullTranscription = {
+  results: {
+    channels: Array<{
+      alternatives: Array<{
+        words: Array<{
+          word: string;
+          start: number;
+          end: number;
+          confidence: number;
+          punctuated_word: string;
+        }>;
+      }>;
+    }>;
+    utterances: Array<{
+      id: string;
+      start: number;
+      end: number;
+      words: Array<{
+        word: string;
+        start: number;
+        end: number;
+        confidence: number;
+        punctuated_word: string;
+      }>;
+      transcript: string;
+    }>;
+  };
+};

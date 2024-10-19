@@ -6,10 +6,11 @@ import { FC, useEffect } from 'react';
 import DataTable from '@/components/ui/table';
 import { createClient } from '@/utils/supabase/client';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useFiles } from '@/hooks/useFiles';
 import { useUser } from '@/hooks/useUser';
-
+import { PlayIcon } from 'lucide-react';
+import Link from 'next/link';
 const FileList: FC<{ refreshTrigger: number }> = ({ refreshTrigger }) => {
   const queryClient = useQueryClient();
   const supabase = createClient();
@@ -63,6 +64,25 @@ const FileList: FC<{ refreshTrigger: number }> = ({ refreshTrigger }) => {
       accessorKey: 'createdAt',
       cell: (info: CellContext<File, string>) =>
         new Date(info.getValue()).toLocaleDateString(),
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: (info: CellContext<File, string>) => {
+        if (info.row.original.status === 'transcribed') {
+          return (
+            <Link
+              href={`/play/${info.row.original.id}`}
+              className="flex items-center gap-2"
+            >
+              <div className="flex rounded-full items-center justify-center border border-amber-500 p-2">
+                <PlayIcon className="w-4 h-4 text-amber-500 fill-amber-500" />
+              </div>
+              Play
+            </Link>
+          );
+        }
+      },
     },
   ];
 
