@@ -3,12 +3,15 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FileList from './FileList';
 import { parseErrorMessage } from '@/lib/utils';
+import { useQueryClient } from '@tanstack/react-query';
+import { useUser } from '@/hooks/useUser';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<number>(0);
   const [message, setMessage] = useState<string>('');
-  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+  const queryClient = useQueryClient();
+  const { data: user } = useUser();
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -53,7 +56,7 @@ const UploadPage: React.FC = () => {
           }
         }
       }
-      setRefreshTrigger((prev) => prev + 1);
+      queryClient.invalidateQueries({ queryKey: ['files', user?.id] });
     } catch (error) {
       setError(parseErrorMessage(error));
     }
@@ -100,7 +103,7 @@ const UploadPage: React.FC = () => {
         )}
       </div>
       <div className="mt-4">
-        <FileList refreshTrigger={refreshTrigger} />
+        <FileList />
       </div>
     </div>
   );

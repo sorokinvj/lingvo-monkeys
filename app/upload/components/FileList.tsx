@@ -11,7 +11,8 @@ import { useFiles } from '@/hooks/useFiles';
 import { useUser } from '@/hooks/useUser';
 import { PlayIcon } from 'lucide-react';
 import Link from 'next/link';
-const FileList: FC<{ refreshTrigger: number }> = ({ refreshTrigger }) => {
+
+const FileList: FC = () => {
   const queryClient = useQueryClient();
   const supabase = createClient();
 
