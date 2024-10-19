@@ -104,10 +104,11 @@ export async function POST(request: NextRequest) {
         );
 
         // Prepare the callback URL
-        const ngrokUrl =
-          'https://ead4-2001-8a0-7207-eb00-1d84-bf5-1ac0-9fca.ngrok-free.app';
+        // const ngrokUrl =
+        //   'https://ead4-2001-8a0-7207-eb00-1d84-bf5-1ac0-9fca.ngrok-free.app';
+        //   const callbackUrl = `${ngrokUrl}/api/transcription-callback`;
         const origin = request.headers.get('origin') || request.nextUrl.origin;
-        const callbackUrl = `${ngrokUrl}/api/transcription-callback`;
+        const callbackUrl = `${origin}/api/transcription-callback`;
 
         // Send asynchronous transcription request
         const { result, error: deepgramError } =
