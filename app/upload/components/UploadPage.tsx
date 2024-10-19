@@ -2,9 +2,14 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FileList from './FileList';
+import { parseErrorMessage } from '@/lib/utils';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<number>(0);
+  const [message, setMessage] = useState<string>('');
+  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (!file) return;
@@ -19,16 +24,38 @@ const UploadPage: React.FC = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Upload failed');
+        throw new Error('Upload failed');
       }
 
-      const result = await response.json();
-      console.log('File uploaded successfully:', result);
-      // Here you can update the UI or state to reflect the successful upload
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error('Unable to read response');
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const text = new TextDecoder().decode(value);
+        const events = text.split('\n\n').filter(Boolean);
+
+        for (const event of events) {
+          const [eventType, data] = event.split('\n');
+          if (eventType === 'event: progress') {
+            const { progress: newProgress, message: newMessage } = JSON.parse(
+              data.replace('data: ', '')
+            );
+            setProgress(newProgress);
+            setMessage(newMessage);
+          } else if (eventType === 'event: error') {
+            const { error: errorMessage } = JSON.parse(
+              data.replace('data: ', '')
+            );
+            setError(errorMessage);
+          }
+        }
+      }
+      setRefreshTrigger((prev) => prev + 1);
     } catch (error) {
-      const errorData = error as { message: string };
-      setError(errorData.message);
+      setError(parseErrorMessage(error));
     }
   }, []);
 
@@ -55,6 +82,17 @@ const UploadPage: React.FC = () => {
         ) : (
           <p>Drag and drop an MP3 file here, or click to select a file</p>
         )}
+        {progress > 0 && progress < 100 && (
+          <div className="mt-4">
+            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <div
+                className="bg-blue-600 h-2.5 rounded-full"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+            <p className="mt-2">{message}</p>
+          </div>
+        )}
         {error && (
           <p className="text-red-500 text-center max-w-prose mx-auto">
             {error}
@@ -62,7 +100,7 @@ const UploadPage: React.FC = () => {
         )}
       </div>
       <div className="mt-4">
-        <FileList />
+        <FileList refreshTrigger={refreshTrigger} />
       </div>
     </div>
   );
