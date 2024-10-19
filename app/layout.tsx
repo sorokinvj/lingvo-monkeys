@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className="bg-background text-foreground">
         <Providers>
           <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
+            <div className="flex-1 w-full flex flex-col items-center">
               <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                 <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                   <h1 className="text-2xl font-bold">Lingvo Monkeys</h1>
