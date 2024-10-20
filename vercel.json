@@ -1,8 +1,20 @@
 {
   "functions": {
     "app/api/upload/route.ts": {
-      "maxDuration": 60,
-      "memory": 1024
+      "maxDuration": 60
     }
+  },
+  "routes": [
+    {
+      "src": "/api/upload",
+      "dest": "/api/upload",
+      "methods": ["POST"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*"
+      }
+    }
+  ],
+  "bodyParser": {
+    "sizeLimit": "50mb"
   }
 }
