@@ -1,25 +1,34 @@
-import { signUpAction } from "@/app/actions";
-import { FormMessage, Message } from "@/components/form-message";
-import { SubmitButton } from "@/components/submit-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
+'use client';
 
-export default function Signup({ searchParams }: { searchParams: Message }) {
-  if ("message" in searchParams) {
-    return (
-      <div className="w-full flex-1 flex items-center h-screen sm:max-w-md justify-center gap-2 p-4">
-        <FormMessage message={searchParams} />
-      </div>
-    );
-  }
+import { signUpAction } from '@/app/actions';
+import { SubmitButton } from '@/components/submit-button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { parseErrorMessage } from '@/lib/utils';
+import Link from 'next/link';
+import { useState } from 'react';
+
+export default function Signup() {
+  const [message, setMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (formData: FormData) => {
+    const result = await signUpAction(formData);
+    if ('error' in result) {
+      setMessage(parseErrorMessage(result?.error));
+    } else if ('success' in result) {
+      setMessage(result.success);
+    }
+  };
 
   return (
     <>
-      <form className="flex flex-col min-w-64 max-w-64 mx-auto">
+      <form
+        className="flex flex-col min-w-64 max-w-64 mx-auto"
+        action={handleSubmit}
+      >
         <h1 className="text-2xl font-medium">Sign up</h1>
         <p className="text-sm text text-foreground">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link className="text-primary font-medium underline" href="/sign-in">
             Sign in
           </Link>
@@ -35,10 +44,8 @@ export default function Signup({ searchParams }: { searchParams: Message }) {
             minLength={6}
             required
           />
-          <SubmitButton formAction={signUpAction} pendingText="Signing up...">
-            Sign up
-          </SubmitButton>
-          <FormMessage message={searchParams} />
+          <SubmitButton pendingText="Signing up...">Sign up</SubmitButton>
+          {message}
         </div>
       </form>
     </>
