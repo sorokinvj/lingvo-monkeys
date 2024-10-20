@@ -1,7 +1,7 @@
 // libs
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import WaveSurfer from 'wavesurfer.js';
-import { Pause, Play } from 'lucide-react';
+import { Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import dayjs from 'dayjs';
 
 interface PlayerProps {
@@ -20,6 +20,7 @@ const Player: React.FC<PlayerProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [isReady, setIsReady] = useState(false);
+  const [playbackRate, setPlaybackRate] = useState(1.0);
 
   const initializeWaveSurfer = useCallback(() => {
     if (containerRef.current && !wavesurferRef.current) {
@@ -86,6 +87,17 @@ const Player: React.FC<PlayerProps> = ({
     return dayjs().startOf('day').millisecond(timeInMs).format('HH:mm:ss.SSS');
   };
 
+  const changePlaybackRate = useCallback((increment: boolean) => {
+    if (wavesurferRef.current) {
+      setPlaybackRate((prevRate) => {
+        const newRate = increment ? prevRate + 0.1 : prevRate - 0.1;
+        const roundedRate = Number(newRate.toFixed(1));
+        wavesurferRef.current?.setPlaybackRate(roundedRate);
+        return roundedRate;
+      });
+    }
+  }, []);
+
   return (
     <div className="fixed bottom-8 left-8 right-8 mx-auto w-11/12 max-w-4xl bg-white rounded-lg shadow-lg p-4 z-50">
       <div className="flex flex-col space-y-2">
@@ -97,6 +109,21 @@ const Player: React.FC<PlayerProps> = ({
           >
             {isPlaying ? <Pause size={24} /> : <Play size={24} />}
           </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => changePlaybackRate(false)}
+              className="p-1 bg-gray-200 rounded"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <span className="font-mono">{playbackRate.toFixed(1)}x</span>
+            <button
+              onClick={() => changePlaybackRate(true)}
+              className="p-1 bg-gray-200 rounded"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
           <p className="font-mono">{formatTime(currentTime)}</p>
         </div>
         <div ref={containerRef} className="w-full" style={{ height: '60px' }} />
