@@ -5,6 +5,7 @@ import FileList from './FileList';
 import { parseErrorMessage } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/hooks/useUser';
+import { createClient } from '@/utils/supabase/client';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -13,62 +14,89 @@ const UploadPage: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: user } = useUser();
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (!file) return;
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
+      try {
+        setMessage('Uploading file...');
+        setProgress(10);
+        const supabase = createClient();
+        const { data, error: uploadError } = await supabase.storage
+          .from('audio-files')
+          .upload(`${user?.id}/${Date.now()}_${file.name}`, file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
 
-    try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+        if (uploadError) throw uploadError;
+        setMessage('Getting public URL...');
+        setProgress(20);
+        // Get public URL
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from('audio-files').getPublicUrl(data.path);
 
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
+        setMessage('Creating record in database...');
+        setProgress(30);
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: file.name,
+            path: data.path,
+            size: file.size,
+            mimeType: file.type,
+            publicUrl,
+          }),
+        });
+        setProgress(40);
+        if (!response.ok) {
+          throw new Error('Upload process failed');
+        }
 
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error('Unable to read response');
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error('Unable to read response');
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
 
-        const text = new TextDecoder().decode(value);
-        const events = text.split('\n\n').filter(Boolean);
+          const text = new TextDecoder().decode(value);
+          const events = text.split('\n\n').filter(Boolean);
 
-        for (const event of events) {
-          const [eventType, data] = event.split('\n');
-          if (eventType === 'event: progress') {
-            const { progress: newProgress, message: newMessage } = JSON.parse(
-              data.replace('data: ', '')
-            );
-            setProgress(newProgress);
-            setMessage(newMessage);
-          } else if (eventType === 'event: error') {
-            const { error: errorMessage } = JSON.parse(
-              data.replace('data: ', '')
-            );
-            setError(errorMessage);
+          for (const event of events) {
+            const [eventType, data] = event.split('\n');
+            if (eventType === 'event: progress') {
+              const { progress: newProgress, message: newMessage } = JSON.parse(
+                data.replace('data: ', '')
+              );
+              setProgress(newProgress);
+              setMessage(newMessage);
+            } else if (eventType === 'event: error') {
+              const { error: errorMessage } = JSON.parse(
+                data.replace('data: ', '')
+              );
+              setError(errorMessage);
+            }
           }
         }
+        console.log('invalidating files');
+        queryClient.invalidateQueries({ queryKey: ['files', user?.id] });
+      } catch (error) {
+        setError(parseErrorMessage(error));
       }
-      console.log('invalidating files');
-      queryClient.invalidateQueries({ queryKey: ['files', user?.id] });
-    } catch (error) {
-      setError(parseErrorMessage(error));
-    }
-  }, []);
+    },
+    [user]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
       'audio/mpeg': ['.mp3'],
     },
-    maxSize: 10 * 1024 * 1024, // 10MB max size
+    maxSize: 50 * 1024 * 1024, // 50MB max size
   });
 
   return (

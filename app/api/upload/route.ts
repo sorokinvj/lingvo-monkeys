@@ -33,55 +33,15 @@ export async function POST(request: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const BUCKET_NAME = 'audio-files';
-        const formData = await request.formData();
-        const file = formData.get('file') as File;
-
-        if (!file) {
-          return NextResponse.json(
-            { error: 'No file uploaded' },
-            { status: 400 }
-          );
-        }
-        controller.enqueue(
-          encoder.encode(
-            'event: progress\ndata: ' +
-              JSON.stringify({ progress: 10, message: 'File upload started' }) +
-              '\n\n'
-          )
-        );
-
-        // Upload file to Supabase Storage
-        const { data, error } = await supabase.storage
-          .from(BUCKET_NAME)
-          .upload(`${user.id}/${Date.now()}_${file.name}`, file);
-        if (error) {
-          return NextResponse.json({ error: error.message }, { status: 500 });
-        }
-
-        controller.enqueue(
-          encoder.encode(
-            'event: progress\ndata: ' +
-              JSON.stringify({
-                progress: 30,
-                message: 'File uploaded to storage',
-              }) +
-              '\n\n'
-          )
-        );
-
-        const {
-          data: { publicUrl },
-        } = supabase.storage.from(BUCKET_NAME).getPublicUrl(data.path);
-
+        const { name, path, size, mimeType, publicUrl } = await request.json();
         // Create File record in database
         const { data: newFile, error: insertError } = await supabase
           .from('File')
           .insert({
-            name: file.name,
-            path: data.path,
-            size: file.size,
-            mimeType: file.type,
+            name,
+            path,
+            size,
+            mimeType,
             userId: user.id,
             publicUrl,
           })
@@ -104,13 +64,20 @@ export async function POST(request: NextRequest) {
         );
 
         // Prepare the callback URL
-        // const ngrokUrl =
-        //   'https://ead4-2001-8a0-7207-eb00-1d84-bf5-1ac0-9fca.ngrok-free.app';
-        //   const callbackUrl = `${ngrokUrl}/api/transcription-callback`;
         const origin = request.headers.get('origin') || request.nextUrl.origin;
         const callbackUrl = `${origin}/api/transcription-callback`;
 
-        // Send asynchronous transcription request
+        controller.enqueue(
+          encoder.encode(
+            'event: progress\ndata: ' +
+              JSON.stringify({
+                progress: 60,
+                message: 'Preparing transcription',
+              }) +
+              '\n\n'
+          )
+        );
+
         const { result, error: deepgramError } =
           await deepgram.listen.prerecorded.transcribeUrlCallback(
             {
@@ -124,7 +91,7 @@ export async function POST(request: NextRequest) {
               utterances: true,
             }
           );
-        console.log('Deepgram transcription error:', deepgramError);
+
         if (deepgramError) {
           return NextResponse.json(
             { error: 'Transcription request failed' },
