@@ -47,7 +47,7 @@ const Transcription: FC<Props> = ({
             data-start={word.start}
             data-end={word.end}
             className={`inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded transition-colors duration-300 
-              ${index === activeWordIndex ? 'bg-yellow-200 font-bold' : 'hover:bg-gray-200'}`}
+              ${index < activeWordIndex ? 'bg-gray-200' : 'hover:bg-gray-200'}`}
             onClick={() => onWordClick(word.start)}
           >
             {word.punctuated_word}
