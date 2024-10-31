@@ -79,7 +79,7 @@ export const Drawer: React.FC<DrawerProps> = ({
           {hasNoBackgroundOverlay ? (
             <div />
           ) : (
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity" />
+            <div className="fixed inset-0 bg-gray-500/50 dark:bg-gray-900/50 transition-opacity" />
           )}
         </TransitionChild>
 
@@ -98,16 +98,16 @@ export const Drawer: React.FC<DrawerProps> = ({
                 leaveTo={translateClasses[position].leave}
               >
                 <DialogPanel className="pointer-events-auto max-w-1/2 w-full">
-                  <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                  <div className="flex h-full flex-col overflow-y-scroll bg-white dark:bg-gray-800 shadow-xl">
                     <div className="p-4 sm:p-6">
                       <div className="flex items-start justify-between">
-                        <DialogTitle className="text-lg font-medium text-gray-900">
+                        <DialogTitle className="text-lg font-medium text-gray-900 dark:text-gray-100">
                           {title}
                         </DialogTitle>
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="rounded-md bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
                             onClick={onClose}
                           >
                             <span className="sr-only">Close panel</span>

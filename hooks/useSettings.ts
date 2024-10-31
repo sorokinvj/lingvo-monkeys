@@ -1,3 +1,4 @@
+import { FontOption } from '@/config/fonts';
 import { create } from 'zustand';
 
 export type HighlightMode = 'current' | 'all past' | 'past row';
@@ -8,7 +9,9 @@ export interface UserSettings {
   currentWordHighlightColor: string;
   playbackSpeed: number;
   fontSize: number;
+  lineHeight: number;
   highlightMode: HighlightMode;
+  fontFamily: FontOption;
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -17,8 +20,10 @@ const DEFAULT_SETTINGS: UserSettings = {
   pastWordsHighlightColor: 'transparent',
   currentWordHighlightColor: 'transparent',
   playbackSpeed: 1.0,
-  fontSize: 16,
+  fontSize: 1.375,
+  lineHeight: 1.5,
   highlightMode: 'all past',
+  fontFamily: 'System Native',
 };
 
 const STORAGE_KEY = 'user_transcript_settings';

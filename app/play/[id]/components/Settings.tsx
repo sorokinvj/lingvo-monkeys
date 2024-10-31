@@ -1,13 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Volume2, Monitor, RotateCcw, Type, Droplet } from 'lucide-react';
-import {
-  HighlightMode,
-  UserSettings,
-  useSettings,
-} from '@/app/hooks/useSettings';
+import { RotateCcw, Type } from 'lucide-react';
+import { HighlightMode, useSettings } from '@/hooks/useSettings';
 import { ColorPickerPopover } from './ColorPickerPopover';
+import { FontSelector } from './FontSelector';
+import { FontOption } from '@/config/fonts';
 
 const Settings: React.FC = () => {
   const { settings, updateSetting, resetSettings } = useSettings();
@@ -27,26 +25,66 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div className="space-y-16 p-4">
+    <div className="space-y-16 p-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
       <div className="space-y-4">
-        <h3 className="text-xl font-medium flex items-center gap-2">
-          <Monitor className="h-6 w-6" />
-          Display Settings
-        </h3>
-        <div className="space-y-2">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm text-gray-600">Font Size</label>
-            <input
-              type="range"
-              min="12"
-              max="32"
-              step="2"
-              value={settings.fontSize}
-              onChange={(e) =>
-                updateSetting('fontSize', parseInt(e.target.value))
-              }
-              className="w-full"
-            />
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium flex items-center gap-2">
+            <Type className="h-6 w-6" />
+            Font Settings
+          </h3>
+
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600 dark:text-gray-400">
+                Font Size
+              </label>
+              <input
+                type="range"
+                min="0.5"
+                max="2"
+                step="0.125"
+                value={settings.fontSize}
+                onChange={(e) =>
+                  updateSetting('fontSize', parseFloat(e.target.value))
+                }
+                className="w-full"
+              />
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {Math.round(settings.fontSize * 16)}px
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600 dark:text-gray-400">
+                Line Height
+              </label>
+              <input
+                type="range"
+                min="0.5"
+                max="2.5"
+                step="0.1"
+                value={settings.lineHeight}
+                onChange={(e) =>
+                  updateSetting('lineHeight', parseFloat(e.target.value))
+                }
+                className="w-full"
+              />
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {(settings.lineHeight * 100).toFixed(0)}%
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600 dark:text-gray-400">
+                Font Family
+              </label>
+              <FontSelector
+                value={settings.fontFamily}
+                onChange={(font) =>
+                  updateSetting('fontFamily', font as FontOption)
+                }
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -57,11 +95,11 @@ const Settings: React.FC = () => {
           Text Appearance
         </h3>
         <div className="flex flex-col gap-2">
-          <label className="text-base font-medium text-gray-600">
+          <label className="text-base font-medium text-gray-600 dark:text-gray-400">
             Highlight Mode
           </label>
           <select
-            className="w-full rounded-md border border-gray-200 p-2"
+            className="w-full rounded-md border border-gray-200 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 dark:text-gray-200"
             value={settings.highlightMode}
             onChange={(e) =>
               updateSetting('highlightMode', e.target.value as HighlightMode)
@@ -124,10 +162,9 @@ const Settings: React.FC = () => {
           </div>
         </div>
       </div>
-
       <button
         onClick={resetSettings}
-        className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+        className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
       >
         <RotateCcw className="h-4 w-4" />
         Reset to Defaults

@@ -1,6 +1,7 @@
 import { FC, useState, useEffect, useCallback } from 'react';
 import { FullTranscription } from '@/schema/models';
-import { useSettings } from '@/app/hooks/useSettings';
+import { useSettings } from '@/hooks/useSettings';
+import { AVAILABLE_FONTS } from '@/config/fonts';
 
 type Props = {
   transcript?: FullTranscription | null;
@@ -67,14 +68,25 @@ const Transcription: FC<Props> = ({
       if (!el) return;
 
       const highlight = shouldHighlight(index, el);
+      const selectedFont = AVAILABLE_FONTS.find(
+        (font) => font.name === settings.fontFamily
+      );
 
       Object.assign(el.style, {
         color: highlight ? settings.pastWordsColor : settings.currentWordColor,
         backgroundColor: highlight
           ? settings.pastWordsHighlightColor
           : settings.currentWordHighlightColor,
-        fontSize: `${settings.fontSize}px`,
+        fontSize: `${settings.fontSize}rem`,
+        lineHeight: settings.lineHeight,
+        fontFamily: selectedFont?.value || 'system-ui',
+        fontSmooth: 'always',
+        WebkitFontSmoothing: 'antialiased',
+        MozOsxFontSmoothing: 'grayscale',
+        fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1, "dlig" 1',
+        textRendering: 'optimizeLegibility',
         transition: 'color 0.3s, background-color 0.3s',
+        letterSpacing: '-0.01em',
       });
     },
     [settings, shouldHighlight]
@@ -95,8 +107,8 @@ const Transcription: FC<Props> = ({
   const words = transcript.results.channels[0].alternatives[0].words;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-50 overflow-hidden">
-      <div className="font-serif text-lg leading-relaxed break-words">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      <div className="font-serif text-lg leading-relaxed break-words dark:text-gray-200 subpixel-antialiased">
         {words.map((word, index) => (
           <span
             key={`${word.start}-${word.end}`}
@@ -104,7 +116,7 @@ const Transcription: FC<Props> = ({
             data-end={word.end}
             data-word-index={index}
             ref={(el) => applyWordStyles(el, index)}
-            className="inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded"
+            className="inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
             onClick={() => onWordClick(word.start)}
           >
             {word.punctuated_word}

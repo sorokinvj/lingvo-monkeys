@@ -47,14 +47,14 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
   }, []);
 
   return (
-    <>
-      <div className="max-w-3xl w-full mx-auto flex items-center relative py-4">
+    <div className="mt-4 mx-auto bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md relative flex flex-col h-[calc(100vh-14rem)] pb-32">
+      <div className="absolute z-40 -translate-x-1/2 top-6">
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="p-4 hover:bg-gray-200 transition-colors border border-gray-400 rounded-full"
+          className="p-4 bg-white dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 transition-colors border border-gray-400 dark:border-gray-600 rounded-full"
           aria-label="Open settings"
         >
-          <Settings2 className="h-5 w-5" />
+          <Settings2 className="h-5 w-5 dark:text-gray-200" />
         </button>
 
         <Drawer
@@ -63,29 +63,25 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
           position="left"
           width="w-80"
           minWidth="min-w-[320px]"
-          title="User Settings"
         >
           <Settings />
         </Drawer>
       </div>
-
-      <div className="max-w-3xl mx-auto bg-gray-50 rounded-lg shadow-md relative flex flex-col h-[calc(100vh-2rem)] pb-32">
-        <div className="flex-grow overflow-y-auto p-6">
-          <Transcript
-            transcript={transcript?.fullTranscription}
-            currentTimeMS={currentTimeMS}
-            onWordClick={handleWordClick}
-          />
-        </div>
-        <div className="fixed bottom-12 left-8 right-8 mx-auto w-11/12 max-w-4xl bg-white rounded-lg shadow-lg p-4 z-50">
-          <Player
-            publicUrl={publicUrl}
-            jumpToPositionMS={jumpToPositionMS}
-            onTimeUpdate={handleTimeUpdate}
-          />
-        </div>
+      <div className="flex-grow overflow-y-auto p-6">
+        <Transcript
+          transcript={transcript?.fullTranscription}
+          currentTimeMS={currentTimeMS}
+          onWordClick={handleWordClick}
+        />
       </div>
-    </>
+      <div className="fixed bottom-24 left-8 right-8 mx-auto w-11/12 max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 z-50">
+        <Player
+          publicUrl={publicUrl}
+          jumpToPositionMS={jumpToPositionMS}
+          onTimeUpdate={handleTimeUpdate}
+        />
+      </div>
+    </div>
   );
 };
 
