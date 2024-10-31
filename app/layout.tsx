@@ -1,6 +1,5 @@
 import { EnvVarWarning } from '@/components/env-var-warning';
 import HeaderAuth from '@/components/header-auth';
-import { ThemeSwitcher } from '@/components/theme-switcher';
 import { hasEnvVars } from '@/utils/supabase/check-env-vars';
 import { GeistSans } from 'geist/font/sans';
 import './globals.css';
@@ -36,10 +35,6 @@ export default function RootLayout({
               <div className="flex flex-col w-full max-w-5xl flex-1">
                 {children}
               </div>
-              <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-8">
-                Switch theme
-                <ThemeSwitcher />
-              </footer>
             </div>
           </main>
         </Providers>

@@ -1,5 +1,7 @@
 import { FC, useState, useEffect, useCallback } from 'react';
 import { FullTranscription } from '@/schema/models';
+import { useSettings } from '@/hooks/useSettings';
+import { AVAILABLE_FONTS } from '@/config/fonts';
 
 type Props = {
   transcript?: FullTranscription | null;
@@ -12,6 +14,7 @@ const Transcription: FC<Props> = ({
   currentTimeMS,
   onWordClick,
 }) => {
+  const { settings } = useSettings();
   const [activeWordIndex, setActiveWordIndex] = useState(-1);
 
   const findActiveWordIndex = useCallback((words: any[], timeMS: number) => {
@@ -24,6 +27,71 @@ const Transcription: FC<Props> = ({
     });
   }, []);
 
+  const isInSameRow = useCallback((word1: DOMRect, word2: DOMRect) => {
+    const threshold = 5;
+    return Math.abs(word1.top - word2.top) < threshold;
+  }, []);
+
+  const shouldHighlight = useCallback(
+    (index: number, spanRef: HTMLSpanElement | null) => {
+      if (!spanRef) return false;
+
+      switch (settings.highlightMode) {
+        case 'current':
+          return index === activeWordIndex;
+        case 'all past':
+          return index < activeWordIndex;
+        case 'past row': {
+          if (index >= activeWordIndex) return false;
+
+          const activeWordElement = document.querySelector(
+            `[data-word-index="${activeWordIndex}"]`
+          );
+          if (!activeWordElement) return false;
+
+          const activeWordRect = activeWordElement.getBoundingClientRect();
+          const currentWordRect = spanRef.getBoundingClientRect();
+          return (
+            isInSameRow(activeWordRect, currentWordRect) &&
+            index < activeWordIndex
+          );
+        }
+        default:
+          return false;
+      }
+    },
+    [activeWordIndex, settings.highlightMode, isInSameRow]
+  );
+
+  const applyWordStyles = useCallback(
+    (el: HTMLSpanElement | null, index: number) => {
+      if (!el) return;
+
+      const highlight = shouldHighlight(index, el);
+      const selectedFont = AVAILABLE_FONTS.find(
+        (font) => font.name === settings.fontFamily
+      );
+
+      Object.assign(el.style, {
+        color: highlight ? settings.pastWordsColor : settings.currentWordColor,
+        backgroundColor: highlight
+          ? settings.pastWordsHighlightColor
+          : settings.currentWordHighlightColor,
+        fontSize: `${settings.fontSize}rem`,
+        lineHeight: settings.lineHeight,
+        fontFamily: selectedFont?.value || 'system-ui',
+        fontSmooth: 'always',
+        WebkitFontSmoothing: 'antialiased',
+        MozOsxFontSmoothing: 'grayscale',
+        fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1, "dlig" 1',
+        textRendering: 'optimizeLegibility',
+        transition: 'color 0.3s, background-color 0.3s',
+        letterSpacing: '-0.01em',
+      });
+    },
+    [settings, shouldHighlight]
+  );
+
   useEffect(() => {
     if (transcript) {
       const words = transcript.results.channels[0].alternatives[0].words;
@@ -32,22 +100,23 @@ const Transcription: FC<Props> = ({
         setActiveWordIndex(newActiveIndex);
       }
     }
-  }, [currentTimeMS, transcript, findActiveWordIndex]);
+  }, [currentTimeMS, transcript]);
 
   if (!transcript) return null;
 
   const words = transcript.results.channels[0].alternatives[0].words;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-50 overflow-hidden">
-      <div className="font-serif text-lg leading-relaxed break-words">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      <div className="font-serif text-lg leading-relaxed break-words dark:text-gray-200 subpixel-antialiased">
         {words.map((word, index) => (
           <span
             key={`${word.start}-${word.end}`}
             data-start={word.start}
             data-end={word.end}
-            className={`inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded transition-colors duration-300 
-              ${index === activeWordIndex ? 'bg-yellow-200 font-bold' : 'hover:bg-gray-200'}`}
+            data-word-index={index}
+            ref={(el) => applyWordStyles(el, index)}
+            className="inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
             onClick={() => onWordClick(word.start)}
           >
             {word.punctuated_word}
