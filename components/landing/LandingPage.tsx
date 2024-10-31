@@ -84,18 +84,19 @@ const steps = [
     name: 'Upload',
     img: stepUpload,
     description:
-      'Перетащите файлы в зону загрузки, она начнется сразу же. Пока мы принимаем только .mp3, .wav, .flac и .mp4.',
+      'Drop files into the upload zone, and the magic begins instantly. For now, we accept .mp3, .wav, .flac, and .mp4 files.',
   },
   {
     name: 'Edit',
     img: stepEdit,
     description:
-      'Если роботы сделали ошибку, ее легко исправить в редакторе. Просто кликните на подсвеченное слово, и плеер тут же воспроизведет его.',
+      'If our robots make a slip-up, fixing it is a breeze in the editor. Just click on any highlighted word, and the player will instantly replay it.',
   },
   {
     name: 'Export',
     img: stepExport,
-    description: 'Расшифровку можно скачать в формате Microsoft Word или PDF.',
+    description:
+      'Download your transcript as a Microsoft Word document or PDF.',
   },
 ];
 
@@ -190,23 +191,23 @@ const LandingPage = () => {
       </div>
       <div className="my-32">
         <BenefitSection
-          title="Экономьте время и деньги"
-          description="Не ждите 6 часов, если нужен текст часового интервью. Быстрее и дешевле расшифровать роботом, а потом исправить за ним, если потребуется."
+          title="Save Time and Money"
+          description="Why wait 6 hours for a one-hour interview transcript? It's faster and more cost-effective to let robots do the heavy lifting, then polish it up if needed."
           image={moneyRobot}
           circleColor="yellow"
         />
 
         <BenefitSection
-          title="Увеличивайте аудиторию"
-          description="Переводите ваши ролики в Youtube на другие языки, делайте субтитры и развивайте фанатское сообщество на всех языках."
+          title="Expand Your Reach"
+          description="Transform your YouTube videos with multilingual translations, add subtitles, and grow your fan community across all languages."
           image={audienceRobot}
           circleColor="green"
           reversed
         />
 
         <BenefitSection
-          title="Познайте силу текста"
-          description="Публикуйте расшифровки рядом с вашими видео и аудио. Текст повышает цитируемость, привлекает трафик из Гугла и дает людям возможность быстро познакомится с контентом."
+          title="Harness the Power of Text"
+          description="Publish transcripts alongside your video and audio content. Text boosts quotability, drives Google traffic, and gives people a quick way to digest your content."
           image={powerRobot}
           circleColor="red"
         />
@@ -214,7 +215,7 @@ const LandingPage = () => {
         <div className="flex justify-center mt-20">
           <Link href="/audio">
             <button className="px-8 py-3 bg-[#ffda71] text-[#4C505B] rounded-lg font-bold hover:bg-[#ffda71]/90 transition-colors">
-              2 часа расшифровок бесплатно
+              Try 2 Hours of Free Transcription
             </button>
           </Link>
         </div>
