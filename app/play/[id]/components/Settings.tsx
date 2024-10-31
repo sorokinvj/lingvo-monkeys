@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
-import { RotateCcw, Type } from 'lucide-react';
+import { RotateCcw, Sun, Type } from 'lucide-react';
 import { HighlightMode, useSettings } from '@/hooks/useSettings';
 import { ColorPickerPopover } from './ColorPickerPopover';
 import { FontSelector } from './FontSelector';
 import { FontOption } from '@/config/fonts';
+import { ThemeSwitcher } from '@/components/theme-switcher';
 
 const Settings: React.FC = () => {
   const { settings, updateSetting, resetSettings } = useSettings();
@@ -26,6 +27,19 @@ const Settings: React.FC = () => {
 
   return (
     <div className="space-y-16 p-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+      <div className="space-y-4">
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium flex items-center gap-2">
+            <Sun className="h-6 w-6" />
+            Theme
+          </h3>
+          <div className="flex items-center">
+            <ThemeSwitcher
+              onSelect={(theme) => updateSetting('theme', theme)}
+            />
+          </div>
+        </div>
+      </div>
       <div className="space-y-4">
         <div className="space-y-4">
           <h3 className="text-xl font-medium flex items-center gap-2">

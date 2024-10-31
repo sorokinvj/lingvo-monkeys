@@ -12,6 +12,7 @@ export interface UserSettings {
   lineHeight: number;
   highlightMode: HighlightMode;
   fontFamily: FontOption;
+  theme: 'light' | 'dark' | 'system';
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -24,6 +25,7 @@ const DEFAULT_SETTINGS: UserSettings = {
   lineHeight: 1.5,
   highlightMode: 'all past',
   fontFamily: 'System Native',
+  theme: 'system',
 };
 
 const STORAGE_KEY = 'user_transcript_settings';

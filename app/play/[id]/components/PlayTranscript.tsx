@@ -47,7 +47,7 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
   }, []);
 
   return (
-    <div className="mt-4 mx-auto bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md relative flex flex-col h-[calc(100vh-14rem)] pb-32">
+    <div className="mt-4 mx-auto bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md relative flex flex-col h-[calc(100vh-6rem)] pb-32">
       <div className="absolute z-40 -translate-x-1/2 top-6">
         <button
           onClick={() => setIsSidebarOpen(true)}
@@ -62,7 +62,7 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
           onClose={() => setIsSidebarOpen(false)}
           position="left"
           width="w-80"
-          minWidth="min-w-[320px]"
+          minWidth="min-w-[380px]"
         >
           <Settings />
         </Drawer>
@@ -74,7 +74,7 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
           onWordClick={handleWordClick}
         />
       </div>
-      <div className="fixed bottom-24 left-8 right-8 mx-auto w-11/12 max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 z-50">
+      <div className="fixed bottom-6 left-8 right-8 mx-auto w-11/12 max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 z-50">
         <Player
           publicUrl={publicUrl}
           jumpToPositionMS={jumpToPositionMS}
