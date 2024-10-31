@@ -1,5 +1,6 @@
 import { FC, useState, useEffect, useCallback } from 'react';
 import { FullTranscription } from '@/schema/models';
+import { useSettings } from '@/app/hooks/useSettings';
 
 type Props = {
   transcript?: FullTranscription | null;
@@ -13,6 +14,7 @@ const Transcription: FC<Props> = ({
   onWordClick,
 }) => {
   const [activeWordIndex, setActiveWordIndex] = useState(-1);
+  const { settings } = useSettings();
 
   const findActiveWordIndex = useCallback((words: any[], timeMS: number) => {
     return words.findIndex((word, index) => {
@@ -46,8 +48,22 @@ const Transcription: FC<Props> = ({
             key={`${word.start}-${word.end}`}
             data-start={word.start}
             data-end={word.end}
-            className={`inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded transition-colors duration-300 
-              ${index < activeWordIndex ? 'text-gray-200' : 'text-gray-600 hover:bg-gray-200'}`}
+            className="inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded"
+            style={
+              index < activeWordIndex
+                ? {
+                    color: settings.pastWordsColor,
+                    transition: 'color 0.3s, opacity 0.3s',
+                    fontSize: `${settings.fontSize}px`,
+                    backgroundColor: settings.pastWordsHighlightColor,
+                  }
+                : {
+                    fontSize: `${settings.fontSize}px`,
+                    color: settings.currentWordColor,
+                    transition: 'color 0.3s, opacity 0.3s',
+                    backgroundColor: settings.currentWordHighlightColor,
+                  }
+            }
             onClick={() => onWordClick(word.start)}
           >
             {word.punctuated_word}

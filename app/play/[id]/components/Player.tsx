@@ -99,35 +99,33 @@ const Player: React.FC<PlayerProps> = ({
   }, []);
 
   return (
-    <div className="fixed bottom-8 left-8 right-8 mx-auto w-11/12 max-w-4xl bg-white rounded-lg shadow-lg p-4 z-50">
-      <div className="flex flex-col space-y-2">
-        <div className="flex items-center justify-between">
+    <div className="flex flex-col space-y-2">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={onPlayPause}
+          type="button"
+          className="p-2 bg-gray-200 rounded-full"
+        >
+          {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+        </button>
+        <div className="flex items-center space-x-2">
           <button
-            onClick={onPlayPause}
-            type="button"
-            className="p-2 bg-gray-200 rounded-full"
+            onClick={() => changePlaybackRate(false)}
+            className="p-1 bg-gray-200 rounded"
           >
-            {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+            <ChevronLeft size={20} />
           </button>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => changePlaybackRate(false)}
-              className="p-1 bg-gray-200 rounded"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <span className="font-mono">{playbackRate.toFixed(1)}x</span>
-            <button
-              onClick={() => changePlaybackRate(true)}
-              className="p-1 bg-gray-200 rounded"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
-          <p className="font-mono">{formatTime(currentTime)}</p>
+          <span className="font-mono">{playbackRate.toFixed(1)}x</span>
+          <button
+            onClick={() => changePlaybackRate(true)}
+            className="p-1 bg-gray-200 rounded"
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
-        <div ref={containerRef} className="w-full" style={{ height: '60px' }} />
+        <p className="font-mono">{formatTime(currentTime)}</p>
       </div>
+      <div ref={containerRef} className="w-full" style={{ height: '60px' }} />
     </div>
   );
 };
