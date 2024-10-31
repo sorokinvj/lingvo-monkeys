@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 
+export type HighlightMode = 'current' | 'all past' | 'past row';
 export interface UserSettings {
   pastWordsColor: string;
   pastWordsHighlightColor: string;
@@ -7,6 +8,7 @@ export interface UserSettings {
   currentWordHighlightColor: string;
   playbackSpeed: number;
   fontSize: number;
+  highlightMode: HighlightMode;
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -16,6 +18,7 @@ const DEFAULT_SETTINGS: UserSettings = {
   currentWordHighlightColor: 'transparent',
   playbackSpeed: 1.0,
   fontSize: 16,
+  highlightMode: 'all past',
 };
 
 const STORAGE_KEY = 'user_transcript_settings';

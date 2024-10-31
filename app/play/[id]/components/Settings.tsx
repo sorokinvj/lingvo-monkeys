@@ -2,7 +2,11 @@
 
 import React from 'react';
 import { Volume2, Monitor, RotateCcw, Type, Droplet } from 'lucide-react';
-import { UserSettings, useSettings } from '@/app/hooks/useSettings';
+import {
+  HighlightMode,
+  UserSettings,
+  useSettings,
+} from '@/app/hooks/useSettings';
 import { ColorPickerPopover } from './ColorPickerPopover';
 
 const Settings: React.FC = () => {
@@ -24,30 +28,6 @@ const Settings: React.FC = () => {
 
   return (
     <div className="space-y-16 p-4">
-      <div className="space-y-4">
-        <h3 className="text-xl font-medium flex items-center gap-2">
-          <Volume2 className="h-6 w-6" />
-          Playback Settings
-        </h3>
-        <div className="space-y-2">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm text-gray-600">Playback Speed</label>
-            <select
-              className="w-full rounded-md border border-gray-200 p-2"
-              value={settings.playbackSpeed}
-              onChange={(e) =>
-                updateSetting('playbackSpeed', parseFloat(e.target.value))
-              }
-            >
-              <option value={0.5}>0.5x</option>
-              <option value={1.0}>1.0x</option>
-              <option value={1.5}>1.5x</option>
-              <option value={2.0}>2.0x</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
       <div className="space-y-4">
         <h3 className="text-xl font-medium flex items-center gap-2">
           <Monitor className="h-6 w-6" />
@@ -76,9 +56,27 @@ const Settings: React.FC = () => {
           <Type className="h-6 w-6" />
           Text Appearance
         </h3>
+        <div className="flex flex-col gap-2">
+          <label className="text-base font-medium text-gray-600">
+            Highlight Mode
+          </label>
+          <select
+            className="w-full rounded-md border border-gray-200 p-2"
+            value={settings.highlightMode}
+            onChange={(e) =>
+              updateSetting('highlightMode', e.target.value as HighlightMode)
+            }
+          >
+            <option value="current">Current word</option>
+            <option value="all past">All previous words</option>
+            <option value="past row">Previous words in the same row</option>
+          </select>
+        </div>
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
-            <h4 className="text-base font-medium text-gray-600">Past Words</h4>
+            <h4 className="text-base font-medium text-gray-600">
+              Highlight Color
+            </h4>
             <div className="flex items-center gap-6">
               <div className="flex flex-col gap-2">
                 <p className="text-sm text-gray-600">Text</p>
@@ -88,7 +86,7 @@ const Settings: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <p className="text-sm text-gray-600">Highlight</p>
+                <p className="text-sm text-gray-600">Background</p>
                 <div className="flex items-center gap-2">
                   <div className="relative bg-white rounded-md w-12 h-8 border border-gray-200">
                     <div
@@ -96,7 +94,7 @@ const Settings: React.FC = () => {
                       style={{
                         background: `linear-gradient(to right top, transparent calc(50% - 2px), red calc(50% - 2px), red calc(50% + 2px), transparent calc(50% + 2px))`,
                       }}
-                      title="No highlight"
+                      title="Transparent"
                       onClick={() =>
                         handleColorChange('pastWordsHighlightColor')(
                           'transparent'
@@ -115,9 +113,7 @@ const Settings: React.FC = () => {
         </div>
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
-            <h4 className="text-base font-medium text-gray-600">
-              Current Words
-            </h4>
+            <h4 className="text-base font-medium text-gray-600">Main Text</h4>
             <div className="flex flex-col gap-2">
               <p className="text-sm text-gray-600">Text</p>
               <ColorPickerPopover

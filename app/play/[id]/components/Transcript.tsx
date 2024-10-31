@@ -13,8 +13,8 @@ const Transcription: FC<Props> = ({
   currentTimeMS,
   onWordClick,
 }) => {
-  const [activeWordIndex, setActiveWordIndex] = useState(-1);
   const { settings } = useSettings();
+  const [activeWordIndex, setActiveWordIndex] = useState(-1);
 
   const findActiveWordIndex = useCallback((words: any[], timeMS: number) => {
     return words.findIndex((word, index) => {
@@ -26,6 +26,60 @@ const Transcription: FC<Props> = ({
     });
   }, []);
 
+  const isInSameRow = useCallback((word1: DOMRect, word2: DOMRect) => {
+    const threshold = 5;
+    return Math.abs(word1.top - word2.top) < threshold;
+  }, []);
+
+  const shouldHighlight = useCallback(
+    (index: number, spanRef: HTMLSpanElement | null) => {
+      if (!spanRef) return false;
+
+      switch (settings.highlightMode) {
+        case 'current':
+          return index === activeWordIndex;
+        case 'all past':
+          return index < activeWordIndex;
+        case 'past row': {
+          if (index >= activeWordIndex) return false;
+
+          const activeWordElement = document.querySelector(
+            `[data-word-index="${activeWordIndex}"]`
+          );
+          if (!activeWordElement) return false;
+
+          const activeWordRect = activeWordElement.getBoundingClientRect();
+          const currentWordRect = spanRef.getBoundingClientRect();
+          return (
+            isInSameRow(activeWordRect, currentWordRect) &&
+            index < activeWordIndex
+          );
+        }
+        default:
+          return false;
+      }
+    },
+    [activeWordIndex, settings.highlightMode, isInSameRow]
+  );
+
+  const applyWordStyles = useCallback(
+    (el: HTMLSpanElement | null, index: number) => {
+      if (!el) return;
+
+      const highlight = shouldHighlight(index, el);
+
+      Object.assign(el.style, {
+        color: highlight ? settings.pastWordsColor : settings.currentWordColor,
+        backgroundColor: highlight
+          ? settings.pastWordsHighlightColor
+          : settings.currentWordHighlightColor,
+        fontSize: `${settings.fontSize}px`,
+        transition: 'color 0.3s, background-color 0.3s',
+      });
+    },
+    [settings, shouldHighlight]
+  );
+
   useEffect(() => {
     if (transcript) {
       const words = transcript.results.channels[0].alternatives[0].words;
@@ -34,7 +88,7 @@ const Transcription: FC<Props> = ({
         setActiveWordIndex(newActiveIndex);
       }
     }
-  }, [currentTimeMS, transcript, findActiveWordIndex]);
+  }, [currentTimeMS, transcript]);
 
   if (!transcript) return null;
 
@@ -48,22 +102,9 @@ const Transcription: FC<Props> = ({
             key={`${word.start}-${word.end}`}
             data-start={word.start}
             data-end={word.end}
+            data-word-index={index}
+            ref={(el) => applyWordStyles(el, index)}
             className="inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded"
-            style={
-              index < activeWordIndex
-                ? {
-                    color: settings.pastWordsColor,
-                    transition: 'color 0.3s, opacity 0.3s',
-                    fontSize: `${settings.fontSize}px`,
-                    backgroundColor: settings.pastWordsHighlightColor,
-                  }
-                : {
-                    fontSize: `${settings.fontSize}px`,
-                    color: settings.currentWordColor,
-                    transition: 'color 0.3s, opacity 0.3s',
-                    backgroundColor: settings.currentWordHighlightColor,
-                  }
-            }
             onClick={() => onWordClick(word.start)}
           >
             {word.punctuated_word}
