@@ -1,30 +1,20 @@
 'use client';
-
-import { signUpAction } from '@/app/actions';
 import { SubmitButton } from '@/components/submit-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { parseErrorMessage } from '@/lib/utils';
 import Link from 'next/link';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import Image from 'next/image';
 
-export default function Signup() {
-  const [message, setMessage] = useState<string | null>(null);
+interface SignInFormProps {
+  action: (formData: FormData) => Promise<any>;
+}
 
-  const handleSubmit = async (formData: FormData) => {
-    const result = await signUpAction(formData);
-    if ('error' in result) {
-      setMessage(parseErrorMessage(result?.error));
-    } else if ('success' in result) {
-      setMessage(result.success);
-    }
-  };
-
+export const SignInForm: FC<SignInFormProps> = ({ action }) => {
   return (
     <form
-      className="flex flex-col min-w-64 mx-auto relative py-2 md:py-12"
-      action={handleSubmit}
+      className="py-2 md:py-12 flex flex-col min-w-64 mx-auto relative"
+      action={action}
     >
       <div className="absolute inset-0 rounded-lg -z-10" />
 
@@ -40,14 +30,14 @@ export default function Signup() {
         Lingvo Monkeys
       </h1>
 
-      <h2 className="text-2xl font-medium text-gray-700">Sign up</h2>
+      <h2 className="text-2xl font-medium text-gray-700">Sign in</h2>
       <p className="text-sm text-gray-400">
-        Already have an account?{' '}
+        Don't have an account?{' '}
         <Link
           className="text-violet-500 font-medium underline hover:text-white transition-colors"
-          href="/sign-in"
+          href="/sign-up"
         >
-          Sign in
+          Sign up
         </Link>
       </p>
 
@@ -69,19 +59,24 @@ export default function Signup() {
           type="password"
           name="password"
           placeholder="Your password"
-          minLength={6}
           required
           className="border-gray-700 placeholder:text-gray-500 focus:ring-gray-600 hover:border-gray-600 transition-colors"
         />
+
+        <Link
+          className="text-violet-500 text-sm font-medium underline hover:text-white transition-colors -mt-2 mb-2"
+          href="/forgot-password"
+        >
+          Forgot password?
+        </Link>
 
         <SubmitButton
           className="bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors"
           pendingText="🌈 Magic happening..."
         >
-          ✨ Sign up ✨
+          ✨ Sign in ✨
         </SubmitButton>
-        {message}
       </div>
     </form>
   );
-}
+};
