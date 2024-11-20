@@ -11,10 +11,21 @@ interface SignInFormProps {
 }
 
 export const SignInForm: FC<SignInFormProps> = ({ action }) => {
+  const [message, setMessage] = useState<string | null>(null);
+
+  async function clientAction(formData: FormData) {
+    const result = await action(formData);
+    if (result?.error) {
+      setMessage(result.error);
+    } else if (result?.success) {
+      window.location.href = '/upload';
+    }
+  }
+
   return (
     <form
       className="py-2 md:py-12 flex flex-col min-w-64 mx-auto relative"
-      action={action}
+      action={clientAction}
     >
       <div className="absolute inset-0 rounded-lg -z-10" />
 
@@ -76,6 +87,7 @@ export const SignInForm: FC<SignInFormProps> = ({ action }) => {
         >
           ✨ Sign in ✨
         </SubmitButton>
+        {message && <p className="text-red-500">{message}</p>}
       </div>
     </form>
   );

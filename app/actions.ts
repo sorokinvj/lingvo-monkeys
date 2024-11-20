@@ -45,7 +45,7 @@ export const signInAction = async (formData: FormData) => {
   });
 
   if (error) {
-    return { error: error.message };
+    return { error: error.message + ' (sorry)' };
   }
 
   return { success: 'Signed in successfully' };

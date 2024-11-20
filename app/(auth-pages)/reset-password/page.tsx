@@ -16,8 +16,6 @@ export default async function ResetPassword({
 }) {
   return (
     <form className="py-2 md:py-12 flex flex-col min-w-64 mx-auto relative">
-      <div className="absolute inset-0 rounded-lg -z-10" />
-
       <Image
         src="/logo-icon.png"
         width={100}
@@ -64,6 +62,7 @@ export default async function ResetPassword({
         >
           Reset password
         </SubmitButton>
+        <FormMessage message={searchParams} />
       </div>
     </form>
   );
