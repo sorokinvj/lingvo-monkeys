@@ -3,7 +3,7 @@ import { signInAction } from '@/app/actions';
 
 export default async function Index() {
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex pt-48 md:pt-12">
       <SignInForm action={signInAction} />
     </div>
   );

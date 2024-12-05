@@ -9,10 +9,9 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFiles } from '@/hooks/useFiles';
 import { useUser } from '@/hooks/useUser';
-import { Badge, PlayIcon } from 'lucide-react';
-import Link from 'next/link';
 import FileStatus from './FileStatus';
 import { Status } from '@/schema/models';
+import FileActions from './FileActions';
 
 const FileList: FC = () => {
   const queryClient = useQueryClient();
@@ -74,21 +73,12 @@ const FileList: FC = () => {
     {
       id: 'actions',
       header: 'Actions',
-      cell: (info: CellContext<File, string>) => {
-        if (info.row.original.status === 'transcribed') {
-          return (
-            <Link
-              href={`/play/${info.row.original.id}`}
-              className="flex items-center gap-2"
-            >
-              <div className="flex rounded-full items-center justify-center border border-amber-500 p-2">
-                <PlayIcon className="w-4 h-4 text-amber-500 fill-amber-500" />
-              </div>
-              Play
-            </Link>
-          );
-        }
-      },
+      cell: (info: CellContext<File, string>) => (
+        <FileActions
+          fileId={info.row.original.id}
+          status={info.row.original.status}
+        />
+      ),
     },
   ];
 
