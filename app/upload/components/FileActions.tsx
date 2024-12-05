@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { TrashIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createClient } from '@/utils/supabase/client';
 
 interface FileActionsProps {
   fileId: string;
@@ -22,11 +23,46 @@ const FileActions: React.FC<FileActionsProps> = ({ fileId, status }) => {
         throw new Error('Failed to delete file');
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const filePath = `${user?.id}/${fileId}.mp3`;
+      console.log('Attempting to delete file at path:', filePath);
+
+      // Проверяем существование файла
+      const { data: files, error: listError } = await supabase.storage
+        .from('audio-files')
+        .list(user?.id, {
+          search: `${fileId}.mp3`,
+        });
+
+      if (listError) {
+        console.error('Error checking file existence:', listError);
+        return;
+      }
+
+      console.log('Files found:', files);
+
+      if (!files || files.length === 0) {
+        console.log('File not found in storage');
+        return;
+      }
+
+      // Если файл существует, удаляем его
+      const { error: storageError } = await supabase.storage
+        .from('audio-files')
+        .remove([filePath]);
+
+      if (storageError) {
+        console.error('Error deleting file from storage:', storageError);
+      } else {
+        console.log('File successfully deleted from storage');
+      }
+
       queryClient.invalidateQueries({ queryKey: ['files'] });
-    },
-    onError: (error: Error) => {
-      console.error('Error deleting file:', error);
     },
   });
 
