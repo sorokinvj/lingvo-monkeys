@@ -1,9 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import { PlayIcon, TrashIcon } from 'lucide-react';
+import { TrashIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { info } from 'console';
 
 interface FileActionsProps {
   fileId: string;
@@ -36,7 +35,7 @@ const FileActions: React.FC<FileActionsProps> = ({ fileId, status }) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex justify-end gap-4">
       {status === 'transcribed' && (
         <Link href={`/play/${fileId}`} className="flex items-center gap-2">
           <Button variant="outline" size="sm">
@@ -44,7 +43,11 @@ const FileActions: React.FC<FileActionsProps> = ({ fileId, status }) => {
           </Button>
         </Link>
       )}
-      <Button variant="destructive" onClick={handleDelete}>
+      <Button
+        variant="default"
+        onClick={handleDelete}
+        className="bg-red-300 hover:bg-red-500"
+      >
         <TrashIcon className="w-4 h-4" />
         Удалить
       </Button>
