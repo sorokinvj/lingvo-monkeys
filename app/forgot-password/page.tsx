@@ -16,7 +16,7 @@ export default function ForgotPassword({
   searchParams: Message;
 }) {
   return (
-    <div className="flex pt-12">
+    <div className="flex pt-48 md:pt-12">
       <form className="py-2 md:py-12 flex flex-col min-w-64 mx-auto relative">
         <h2 className="text-2xl font-medium text-gray-700">Reset Password</h2>
         <p className="text-sm text-gray-400">
