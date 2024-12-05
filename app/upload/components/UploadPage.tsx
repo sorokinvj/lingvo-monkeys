@@ -6,6 +6,7 @@ import { parseErrorMessage } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/hooks/useUser';
 import { createClient } from '@/utils/supabase/client';
+import { v4 as uuidv4 } from 'uuid';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -20,12 +21,14 @@ const UploadPage: React.FC = () => {
       if (!file) return;
 
       try {
+        const fileId = uuidv4();
         setMessage('Uploading file...');
         setProgress(10);
         const supabase = createClient();
+        const filePath = `${user?.id}/${fileId}.mp3`;
         const { data, error: uploadError } = await supabase.storage
           .from('audio-files')
-          .upload(`${user?.id}/${Date.now()}_${file.name}`, file, {
+          .upload(filePath, file, {
             cacheControl: '3600',
             upsert: false,
           });
@@ -33,10 +36,9 @@ const UploadPage: React.FC = () => {
         if (uploadError) throw uploadError;
         setMessage('Getting public URL...');
         setProgress(20);
-        // Get public URL
         const {
           data: { publicUrl },
-        } = supabase.storage.from('audio-files').getPublicUrl(data.path);
+        } = supabase.storage.from('audio-files').getPublicUrl(filePath);
 
         setMessage('Creating record in database...');
         setProgress(30);
@@ -44,8 +46,9 @@ const UploadPage: React.FC = () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            id: fileId,
             name: file.name,
-            path: data.path,
+            path: filePath,
             size: file.size,
             mimeType: file.type,
             publicUrl,

@@ -33,7 +33,8 @@ const FileList: FC = () => {
           table: 'File',
           filter: `userId=eq.${user.id}`,
         },
-        () => {
+        (data) => {
+          console.log('File changed event received:', data);
           queryClient.invalidateQueries({ queryKey: ['files', user.id] });
         }
       )
