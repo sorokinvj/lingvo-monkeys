@@ -2,6 +2,7 @@ import { GeistSans } from 'geist/font/sans';
 
 import './globals.css';
 import Providers from './providers';
+import Header from '@/components/header';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -22,7 +23,10 @@ export default function RootLayout({
     <html lang="en" className={GeistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
         <Providers>
-          <main className="min-h-screen h-full flex flex-col">{children}</main>
+          <Header />
+          <main className="min-h-screen h-full flex flex-col p-4 max-w-6xl mx-auto">
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

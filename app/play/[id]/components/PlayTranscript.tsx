@@ -47,7 +47,7 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
   }, []);
 
   return (
-    <div className="mt-4 mx-auto bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md relative flex flex-col h-[calc(100vh-6rem)] pb-32">
+    <div className="mt-8 mx-auto bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md relative flex flex-col h-[calc(100vh-6rem)] pb-32">
       <div className="absolute z-40 -translate-x-1/2 top-6">
         <button
           onClick={() => setIsSidebarOpen(true)}

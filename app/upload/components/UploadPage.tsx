@@ -100,14 +100,16 @@ const UploadPage: React.FC = () => {
   });
 
   return (
-    <div className="p-4 w-full h-full">
-      <h1 className="text-2xl font-bold mb-4">Upload MP3 File</h1>
+    <div className="p-4 w-full h-full mt-12">
       <div
         {...getRootProps()}
         className={`border-2 border-dashed p-8 text-center cursor-pointer ${
           isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
         }`}
       >
+        <h1 className="text-base font-bold mb-4 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-transparent bg-clip-text">
+          Upload MP3 File
+        </h1>
         <input {...getInputProps()} />
         {isDragActive ? (
           <p>Drop the MP3 file here...</p>

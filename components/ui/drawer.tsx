@@ -18,6 +18,7 @@ interface DrawerProps {
   minWidth?: string;
   position?: 'left' | 'right';
   hasNoBackgroundOverlay?: boolean;
+  className?: string;
 }
 
 const durationClasses = {
@@ -41,6 +42,7 @@ export const Drawer: React.FC<DrawerProps> = ({
   minWidth = 'min-w-[600px]',
   position = 'right',
   hasNoBackgroundOverlay = true,
+  className,
 }) => {
   const durationClass = durationClasses[duration];
 
@@ -97,7 +99,9 @@ export const Drawer: React.FC<DrawerProps> = ({
                 leaveFrom={translateClasses[position].enter}
                 leaveTo={translateClasses[position].leave}
               >
-                <DialogPanel className="pointer-events-auto max-w-1/2 w-full">
+                <DialogPanel
+                  className={`pointer-events-auto max-w-1/2 w-full ${className}`}
+                >
                   <div className="flex h-full flex-col overflow-y-scroll bg-white dark:bg-gray-800 shadow-xl">
                     <div className="p-4 sm:p-6">
                       <div className="flex items-start justify-between">
