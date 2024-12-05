@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useCallback } from 'react';
+import { FC, useState, useEffect, useCallback, Fragment } from 'react';
 import { FullTranscription } from '@/schema/models';
 import { useSettings } from '@/hooks/useSettings';
 import { AVAILABLE_FONTS } from '@/config/fonts';
@@ -109,19 +109,25 @@ const Transcription: FC<Props> = ({
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 overflow-hidden">
       <div className="font-serif text-lg leading-relaxed break-words dark:text-gray-200 subpixel-antialiased">
-        {words.map((word, index) => (
-          <span
-            key={`${word.start}-${word.end}`}
-            data-start={word.start}
-            data-end={word.end}
-            data-word-index={index}
-            ref={(el) => applyWordStyles(el, index)}
-            className="inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
-            onClick={() => onWordClick(word.start)}
-          >
-            {word.punctuated_word}
-          </span>
-        ))}
+        {words.map((word, index) => {
+          const nextWord = words[index + 1];
+          const timeGap = nextWord ? nextWord.start - word.end : 0;
+          return (
+            <Fragment key={`${word.start}-${word.end}`}>
+              <span
+                data-start={word.start}
+                data-end={word.end}
+                data-word-index={index}
+                ref={(el) => applyWordStyles(el, index)}
+                className="inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
+                onClick={() => onWordClick(word.start)}
+              >
+                {word.punctuated_word}
+              </span>
+              {timeGap > 1 && <br />}
+            </Fragment>
+          );
+        })}
       </div>
     </div>
   );

@@ -68,7 +68,7 @@ const Header: FC = () => {
             </h1>
           </Link>
         </div>
-        <div className="hidden md:flex md:items-center gap-8">
+        <div className="flex items-center gap-8">
           {Object.entries(navConfig).map(
             ([key, value]) =>
               ('enabled' in value ? value.enabled : true) && (
@@ -80,54 +80,7 @@ const Header: FC = () => {
               )
           )}
         </div>
-
-        <Button
-          className="!p-0 md:hidden"
-          onClick={() => setIsMobileMenuOpen(true)}
-        >
-          <Image
-            src="/images/mobile-menu.svg"
-            width={24}
-            height={24}
-            alt="Menu"
-          />
-        </Button>
       </nav>
-      <Drawer
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
-        className="h-fit"
-        width="w-full"
-        minWidth="min-w-full"
-      >
-        <nav
-          className="flex flex-col pr-2 py-4"
-          onClick={() => setIsMobileMenuOpen(false)}
-        >
-          <div className="flex flex-col gap-2">
-            {Object.entries(navConfig).map(([key, value]) => (
-              <Link href={value.href} key={key}>
-                <div className="text-sm font-medium text-gray-900 w-full p-2">
-                  {value.title}
-                </div>
-                <hr className="border-gray-200 w-full py-1" />
-              </Link>
-            ))}
-          </div>
-          <div className="flex items-center gap-2 mt-8 w-full">
-            <Link href="/login" className="basis-1/2 w-full">
-              <Button variant="outline" className="w-full">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/schedule-demo" className="basis-1/2 w-full">
-              <Button color="primary" className="w-full">
-                Book a Demo
-              </Button>
-            </Link>
-          </div>
-        </nav>
-      </Drawer>
     </header>
   );
 };

@@ -22,7 +22,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex pt-12">
+    <div className="flex pt-48 md:pt-12">
       <form
         className="flex flex-col min-w-64 mx-auto relative py-2 md:py-12"
         action={handleSubmit}
