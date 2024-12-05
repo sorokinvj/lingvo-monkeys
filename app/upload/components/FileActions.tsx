@@ -35,18 +35,24 @@ const FileActions: React.FC<FileActionsProps> = ({ fileId, status }) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex justify-end gap-4">
       {status === 'transcribed' && (
         <Link href={`/play/${fileId}`} className="flex items-center gap-2">
-          <div className="flex rounded-full items-center justify-center border border-amber-500 p-2">
-            <PlayIcon className="w-4 h-4 text-amber-500 fill-amber-500" />
-          </div>
-          Play
+          <Button
+            variant="outline"
+            className="bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors"
+          >
+            Play
+          </Button>
         </Link>
       )}
-      <Button variant="destructive" onClick={handleDelete}>
+      <Button
+        variant="default"
+        onClick={handleDelete}
+        className="bg-red-300 hover:bg-red-500"
+        loading={deleteFileMutation.isPending}
+      >
         <TrashIcon className="w-4 h-4" />
-        Delete
       </Button>
     </div>
   );
