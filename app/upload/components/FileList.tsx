@@ -9,8 +9,10 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFiles } from '@/hooks/useFiles';
 import { useUser } from '@/hooks/useUser';
-import { PlayIcon } from 'lucide-react';
+import { Badge, PlayIcon } from 'lucide-react';
 import Link from 'next/link';
+import FileStatus from './FileStatus';
+import { Status } from '@/schema/models';
 
 const FileList: FC = () => {
   const queryClient = useQueryClient();
@@ -53,6 +55,9 @@ const FileList: FC = () => {
       id: 'status',
       header: 'Status',
       accessorKey: 'status',
+      cell: (info: CellContext<File, string>) => (
+        <FileStatus status={info.getValue() as Status} />
+      ),
     },
     {
       id: 'mimeType',

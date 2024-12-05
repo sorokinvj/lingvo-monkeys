@@ -6,6 +6,8 @@ export interface User {
   updatedAt: Date;
 }
 
+export type Status = 'pending' | 'transcribing' | 'transcribed' | 'error';
+
 export interface File {
   id: string;
   name: string;
@@ -16,7 +18,7 @@ export interface File {
   createdAt: Date;
   updatedAt: Date;
   userId: string;
-  status: 'pending' | 'transcribing' | 'transcribed' | 'error';
+  status: Status;
   transcriptionId: string | null;
 }
 
