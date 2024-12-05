@@ -45,9 +45,10 @@ export function LandingPage() {
           </div>
         </div>
 
-        <div className="my-12 font-bold text-lg  bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-transparent bg-clip-text">
-          ROOT THE LANGUAGE IN YOUR BRAIN
-        </div>
+        <h2 className="text-4xl font-bold text-center mb-6 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-transparent bg-clip-text">
+          Root The Language In Your Brain
+        </h2>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {benefits.map((benefit, index) => (
             <div key={index} className="flex items-start gap-3 text-left">
