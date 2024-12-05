@@ -16,7 +16,7 @@ export function LandingPage() {
       {/* Hero Section */}
       <section className="text-center py-20">
         <h1 className="text-5xl font-extrabold mb-6  bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-transparent bg-clip-text">
-          Master Any Language Naturally
+          Master English Naturally
         </h1>
         <p className="text-xl md:text-2xl mb-12 text-gray-600 max-w-2xl mx-auto">
           Learn languages the way your brain was designed to - through
