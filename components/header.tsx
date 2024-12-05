@@ -26,8 +26,7 @@ const Header: FC = () => {
 
   return (
     <header
-      className={`
-      bg-white z-20 shadow-header fixed md:relative top-4 md:top-8 
+      className={`relative top-4 md:top-8 
       w-[calc(100%-2rem)] right-1/2 translate-x-1/2 md:max-w-6xl md:mx-auto md:translate-x-0 md:right-auto rounded-full mx-auto
       transition-all duration-300 ease-in-out
     `}
@@ -44,7 +43,7 @@ const Header: FC = () => {
             </h1>
           </Link>
         </div>
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-8 bg-white p-4 rounded-full">
           {Object.entries(navConfig).map(
             ([key, value]) =>
               ('enabled' in value ? value.enabled : true) && (
