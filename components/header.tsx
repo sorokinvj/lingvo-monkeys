@@ -81,14 +81,6 @@ const Header: FC = () => {
           )}
         </div>
 
-        {!user && (
-          <div className="hidden md:flex items-center gap-3">
-            <Link href="/login">
-              <Button variant="outline">Sign in</Button>
-            </Link>
-          </div>
-        )}
-
         <Button
           className="!p-0 md:hidden"
           onClick={() => setIsMobileMenuOpen(true)}
