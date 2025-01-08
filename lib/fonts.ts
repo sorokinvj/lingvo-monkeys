@@ -8,7 +8,7 @@ export const didactGothic = Didact_Gothic({
 });
 
 export const oswald = Oswald({
-  weight: ['400', '600'],
+  weight: ['300', '400', '600'],
   subsets: ['cyrillic'],
   variable: '--font-oswald',
   display: 'swap',
