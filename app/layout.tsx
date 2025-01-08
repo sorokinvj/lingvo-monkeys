@@ -1,5 +1,4 @@
-import { GeistSans } from 'geist/font/sans';
-
+import { didactGothic, oswald } from '@/lib/fonts';
 import './globals.css';
 import Providers from './providers';
 import Header from '@/components/header';
@@ -20,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${didactGothic.variable} ${oswald.variable}`}>
         <Providers>
           <Header />
           <main className="min-h-screen h-full flex flex-col p-4 max-w-6xl mx-auto">

@@ -1,10 +1,14 @@
-import { SignInForm } from '../components/signin-form';
-import { signInAction } from '@/app/actions';
+import { LandingPage } from '@/components/LandingPage/LandingPage';
+
+export const metadata = {
+  title: 'LingvoMonkeys',
+  description: 'Быстрый способ изучить язык без скукоты',
+};
 
 export default async function Index() {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <SignInForm action={signInAction} />
+    <div className="flex h-screen">
+      <LandingPage />
     </div>
   );
 }
