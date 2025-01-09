@@ -96,7 +96,7 @@ export function Hero() {
         </div>
       </div>
       <div className="mb-4">
-        <span className="bg-blue-900 text-white uppercase font-heading text-4xl tracking-widest leading-none">
+        <span className="inline-block bg-blue-900 text-white uppercase font-heading text-4xl tracking-widest leading-none">
           О д н о в р е м е н н о
         </span>
         <p className="text-8xl font-heading">=</p>

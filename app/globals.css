@@ -61,7 +61,7 @@
   }
 
   .font-heading {
-    @apply font-light;
+    @apply font-light uppercase;
   }
 }
 
