@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${didactGothic.variable} ${oswald.variable}`}>
         <Providers>
-          <main className="min-h-screen flex flex-col items-start px-2 sm:px-4 md:px-0 w-full overflow-hidden md:max-w-6xl md:mx-auto">
+          <main className="min-h-screen flex flex-col items-start px-4 md:px-0 w-full overflow-hidden md:max-w-6xl md:mx-auto">
             <Header />
             {children}
           </main>

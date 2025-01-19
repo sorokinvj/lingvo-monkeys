@@ -15,7 +15,7 @@ export const LandingPage: FC = () => {
         src="/landing/LingvoMonkeys.mp4"
         poster="/landing/video-cover.png"
       />
-      {/* <Benefits /> */}
+      <Benefits />
       {/* <Video />
       <WhatsNext />
       <Footer /> */}

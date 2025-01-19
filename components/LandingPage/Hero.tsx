@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export function Hero() {
   return (
-    <section className="w-full px-2 flex flex-col items-center">
+    <section className="w-full flex flex-col items-center">
       {/* Top Section - Title and Hand */}
       <div className="w-full flex flex-col items-center mb-6">
         {/* Mobile Title + Hand */}
@@ -25,7 +25,7 @@ export function Hero() {
         </div>
 
         {/* Main Button */}
-        <div className="w-[120%] -z-1 -mt-16 md:max-w-[300px] md:mx-auto md:mb-6 md:hidden">
+        <div className="w-[120%] -z-1 -mt-12 md:max-w-[300px] md:mx-auto md:mb-6 md:hidden">
           <div className="relative aspect-[2.33/1]">
             <Image
               src="/landing/Circle_new_2.png"
@@ -108,7 +108,7 @@ export function Hero() {
       {/* Description */}
 
       <div className="w-full md:max-w-[600px] md:mx-auto">
-        <p className="mt-4 mb-8 md:my-8 text-base sm:text-xl font-sans px-2 leading-tight">
+        <p className="mt-4 mb-8 md:my-8 text-base sm:text-xl font-sans leading-tight">
           Языковая <span className="text-blue-600">"техника обезьяны"</span> -
           это способ учить язык так же, как{' '}
           <span className="text-blue-600">это делают дети</span>, слушая и
