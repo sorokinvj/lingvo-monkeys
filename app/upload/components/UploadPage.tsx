@@ -6,6 +6,7 @@ import { parseErrorMessage } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/hooks/useUser';
 import { createClient } from '@/utils/supabase/client';
+import { useFiles } from '@/hooks/useFiles';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -13,6 +14,7 @@ const UploadPage: React.FC = () => {
   const [message, setMessage] = useState<string>('');
   const queryClient = useQueryClient();
   const { data: user } = useUser();
+  const { refetch } = useFiles(user?.id);
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -82,8 +84,7 @@ const UploadPage: React.FC = () => {
             }
           }
         }
-        console.log('invalidating files');
-        queryClient.invalidateQueries({ queryKey: ['files', user?.id] });
+        queryClient.invalidateQueries({ queryKey: ['files'] });
       } catch (error) {
         setError(parseErrorMessage(error));
       }

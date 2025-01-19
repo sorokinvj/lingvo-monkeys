@@ -27,20 +27,20 @@ export const SignInForm: FC<SignInFormProps> = ({ action }) => {
       className="py-2 md:py-12 flex flex-col min-w-64 mx-auto relative"
       action={clientAction}
     >
-      <h2 className="text-2xl font-medium text-gray-700">Sign in</h2>
+      <h2 className="text-2xl font-medium text-gray-700">Вход</h2>
       <p className="text-sm text-gray-400">
-        Don't have an account?{' '}
+        Нет аккаунта?{' '}
         <Link
-          className="text-violet-500 font-medium underline hover:text-white transition-colors"
+          className="text-blue-900 font-medium underline hover:text-white transition-colors"
           href="/sign-up"
         >
-          Sign up
+          Регистрация
         </Link>
       </p>
 
       <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
         <Label htmlFor="email" className="text-gray-700">
-          Email
+          Электронная почта
         </Label>
         <Input
           name="email"
@@ -50,28 +50,28 @@ export const SignInForm: FC<SignInFormProps> = ({ action }) => {
         />
 
         <Label htmlFor="password" className="text-gray-700">
-          Password
+          Пароль
         </Label>
         <Input
           type="password"
           name="password"
-          placeholder="Your password"
+          placeholder="Ваш пароль"
           required
           className="border-gray-700 placeholder:text-gray-500 focus:ring-gray-600 hover:border-gray-600 transition-colors"
         />
 
         <Link
-          className="text-violet-500 text-sm font-medium underline hover:text-white transition-colors -mt-2 mb-2"
+          className="text-blue-900 text-sm font-medium underline hover:text-white transition-colors -mt-2 mb-2"
           href="/forgot-password"
         >
-          Forgot password?
+          Забыли пароль?
         </Link>
 
         <SubmitButton
-          className="bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors"
-          pendingText="🌈 Magic happening..."
+          className="bg-gradient-to-r bg-blue-900 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors"
+          pendingText="🌈 "
         >
-          ✨ Sign in ✨
+          Войти
         </SubmitButton>
         {message && <p className="text-red-500">{message}</p>}
       </div>

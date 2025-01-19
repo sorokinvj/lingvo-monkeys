@@ -13,13 +13,14 @@ import { Badge, PlayIcon } from 'lucide-react';
 import Link from 'next/link';
 import FileStatus from './FileStatus';
 import { Status } from '@/schema/models';
+import { Spinner } from '@/components/ui/spinner';
 
 const FileList: FC = () => {
   const queryClient = useQueryClient();
   const supabase = createClient();
 
   const { data: user } = useUser();
-  const { data: files, isLoading, error } = useFiles(user?.id);
+  const { data: files, isLoading, error, refetch } = useFiles(user?.id);
 
   useEffect(() => {
     if (!user) return;
@@ -35,7 +36,7 @@ const FileList: FC = () => {
           filter: `userId=eq.${user.id}`,
         },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['files', user.id] });
+          queryClient.invalidateQueries({ queryKey: ['files'] });
         }
       )
       .subscribe();
@@ -92,18 +93,18 @@ const FileList: FC = () => {
     },
   ];
 
-  if (isLoading) return <div>Loading files...</div>;
+  if (isLoading) return <Spinner />;
   if (error) return <div>Error loading files: {error.message}</div>;
-
-  return (
-    files && (
+  if (files)
+    return (
       <DataTable
         data={files}
         columns={columns}
         defaultSort={[{ id: 'createdAt', desc: true }]}
       />
-    )
-  );
+    );
+
+  return null;
 };
 
 export default FileList;
