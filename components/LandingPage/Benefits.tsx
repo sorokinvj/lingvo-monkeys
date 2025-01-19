@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import Image from 'next/image';
+
 export const Benefits: FC = () => {
   return (
     <>
       {/* Перенос части лэйаута в мобильную версию после видео */}
-      <div className="flex gap-12 justify-center">
+      <div className="flex gap-24 md:gap-36 justify-center">
         <img
           src="/landing/2_Arrow_1.jpg"
           alt="Arrow"
