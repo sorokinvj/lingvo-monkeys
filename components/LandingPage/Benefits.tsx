@@ -24,7 +24,13 @@ export const Benefits: FC = () => {
       </div>
       <h2 className="md:hidden text-center text-3xl uppercase font-heading flex items-center justify-center gap-2">
         <span className="">Загружай язык прямо в</span>
-        <img src="/landing/Brain_NEW.png" alt="Brain icon" className="w-12" />
+        <Image
+          src="/landing/Brain.png"
+          alt="Brain icon"
+          width={135}
+          height={138}
+          className="w-12"
+        />
       </h2>
       {/* ============================ */}
       <section className="flex flex-col gap-8 px-4 md:px-0">

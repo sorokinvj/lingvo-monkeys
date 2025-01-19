@@ -126,7 +126,7 @@ export function Hero() {
       </div>
 
       {/* Icons Section */}
-      <div className="flex flex-wrap justify-center items-center gap-4 mb-8">
+      <div className="flex justify-center items-center gap-4 mb-8">
         {/* Each icon group */}
         <div className="flex flex-col md:flex-row items-center">
           <img
