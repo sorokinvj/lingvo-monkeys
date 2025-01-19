@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export const Footer = () => {
   return (
-    <footer className="w-full md:max-w-5xl md:mx-auto px-4 pt-12 pb-12">
+    <footer className="w-full md:max-w-6xl md:mx-auto px-4 pt-12 pb-12">
       <div className="w-1/2 flex items-center gap-8">
         <Image
           src="/landing/Lingvomonkeys_PAW_right.png"

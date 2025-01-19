@@ -9,11 +9,11 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFiles } from '@/hooks/useFiles';
 import { useUser } from '@/hooks/useUser';
-import { Badge, PlayIcon } from 'lucide-react';
 import Link from 'next/link';
 import FileStatus from './FileStatus';
 import { Status } from '@/schema/models';
 import { Spinner } from '@/components/ui/spinner';
+import { Button } from '@/components/ui/button';
 
 const FileList: FC = () => {
   const queryClient = useQueryClient();
@@ -49,12 +49,12 @@ const FileList: FC = () => {
   const columns = [
     {
       id: 'name',
-      header: 'File Name',
+      header: 'Название',
       accessorKey: 'name',
     },
     {
       id: 'status',
-      header: 'Status',
+      header: 'Статус',
       accessorKey: 'status',
       cell: (info: CellContext<File, string>) => (
         <FileStatus status={info.getValue() as Status} />
@@ -62,19 +62,19 @@ const FileList: FC = () => {
     },
     {
       id: 'mimeType',
-      header: 'Type',
+      header: 'Тип',
       accessorKey: 'mimeType',
     },
     {
       id: 'createdAt',
-      header: 'Upload Date',
+      header: 'Дата загрузки',
       accessorKey: 'createdAt',
       cell: (info: CellContext<File, string>) =>
         new Date(info.getValue()).toLocaleDateString(),
     },
     {
       id: 'actions',
-      header: 'Actions',
+      header: 'Действия',
       cell: (info: CellContext<File, string>) => {
         if (info.row.original.status === 'transcribed') {
           return (
@@ -82,10 +82,9 @@ const FileList: FC = () => {
               href={`/play/${info.row.original.id}`}
               className="flex items-center gap-2"
             >
-              <div className="flex rounded-full items-center justify-center border border-amber-500 p-2">
-                <PlayIcon className="w-4 h-4 text-amber-500 fill-amber-500" />
-              </div>
-              Play
+              <Button variant="outline" size="sm">
+                Открыть
+              </Button>
             </Link>
           );
         }
@@ -93,7 +92,7 @@ const FileList: FC = () => {
     },
   ];
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <Spinner fullscreen size="lg" />;
   if (error) return <div>Error loading files: {error.message}</div>;
   if (files)
     return (

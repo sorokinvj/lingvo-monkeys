@@ -21,7 +21,16 @@ const UploadPage: React.FC = () => {
       const file = acceptedFiles[0];
       if (!file) return;
 
+      const maxSize = 50 * 1024 * 1024; // 50MB
+      if (file.size > maxSize) {
+        setError(
+          `Файл слишком большой. Максимальный размер: 50МБ, размер вашего файла: ${(file.size / (1024 * 1024)).toFixed(1)}МБ`
+        );
+        return;
+      }
+
       try {
+        setError(null);
         setMessage('Uploading file...');
         setProgress(10);
         const supabase = createClient();
@@ -108,15 +117,18 @@ const UploadPage: React.FC = () => {
           isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
         }`}
       >
-        <h1 className="text-base font-bold mb-4 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-transparent bg-clip-text">
-          Upload MP3 File
+        <h1 className="text-base font-bold mb-4 text-blue-900">
+          Загрузить MP3 Файл
         </h1>
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p>Drop the MP3 file here...</p>
+          <p>Отпустите MP3 файл здесь...</p>
         ) : (
-          <p>Drag and drop an MP3 file here, or click to select a file</p>
+          <p>Перетащите MP3 файл сюда или нажмите для выбора</p>
         )}
+        <p className="text-sm text-gray-500 my-2">
+          Максимальный размер файла: 50МБ
+        </p>
         {progress > 0 && progress < 100 && (
           <div className="mt-4">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">

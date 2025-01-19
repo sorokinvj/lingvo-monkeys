@@ -24,7 +24,7 @@ export default function RootLayout({
         <Providers>
           <main className="min-h-screen flex flex-col items-start w-full overflow-hidden md:max-w-6xl md:mx-auto">
             <Header />
-            {children}
+            <div className="w-full flex-1">{children}</div>
             <Footer />
           </main>
         </Providers>
