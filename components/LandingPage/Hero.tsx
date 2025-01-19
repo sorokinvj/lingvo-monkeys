@@ -108,7 +108,7 @@ export function Hero() {
       {/* Description */}
 
       <div className="w-full md:max-w-[600px] md:mx-auto">
-        <p className="mt-8 text-base sm:text-xl font-sans mb-8 px-2 leading-tight">
+        <p className="mt-4 mb-8 md:my-8 text-base sm:text-xl font-sans px-2 leading-tight">
           Языковая <span className="text-blue-600">"техника обезьяны"</span> -
           это способ учить язык так же, как{' '}
           <span className="text-blue-600">это делают дети</span>, слушая и
@@ -136,7 +136,7 @@ export function Hero() {
             Слушай
           </span>
         </div>
-        <span className="text-2xl hidden md:block md:text-4xl">+</span>
+        <span className="text-4xl">+</span>
         <div className="flex flex-col md:flex-row items-center">
           <img
             src="/landing/Monkey__SEE_BIG.jpg"
@@ -152,7 +152,7 @@ export function Hero() {
             Читай
           </span>
         </div>
-        <span className="text-2xl hidden md:block md:text-4xl">+</span>
+        <span className="text-4xl">+</span>
         <div className="flex flex-col md:flex-row items-center">
           <img
             src="/landing/Monkey_SPEAK_BIG.jpg"
