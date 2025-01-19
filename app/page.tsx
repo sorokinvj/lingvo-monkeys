@@ -6,9 +6,5 @@ export const metadata = {
 };
 
 export default async function Index() {
-  return (
-    <div className="flex h-screen">
-      <LandingPage />
-    </div>
-  );
+  return <LandingPage />;
 }

@@ -8,9 +8,9 @@ import { FC } from 'react';
 
 export const LandingPage: FC = () => {
   return (
-    <div className="flex flex-col">
+    <div className="w-full flex flex-col">
       <Hero />
-      <Benefits />
+      {/* <Benefits /> */}
       {/* <Video />
       <WhatsNext />
       <Footer /> */}
