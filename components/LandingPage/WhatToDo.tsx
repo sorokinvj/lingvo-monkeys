@@ -17,7 +17,7 @@ export const WhatToDo = () => {
             width={87}
             height={130}
             alt="Monkey with headphones and book"
-            className="md:hidden w-64"
+            className="md:hidden min-w-16 w-full"
           />
           <div className="flex flex-col relative md:ml-56 md:pt-36 ">
             <h2 className="text-4xl font-heading uppercase flex flex-row gap-2 md:flex-col md:items-end md:text-5xl md:leading-tight md:font-bold">
@@ -25,14 +25,14 @@ export const WhatToDo = () => {
               <span>НАДО</span>
               <span>ДЕЛАТЬ?</span>
             </h2>
-            <Image
-              src="/landing/popodrobnej.jpg"
-              width={1984}
-              height={406}
-              alt="Поподробнее"
-              className="w-1/2 md:hidden"
-            />
             <div className="flex items-center">
+              <Image
+                src="/landing/popodrobnej.jpg"
+                width={1984}
+                height={406}
+                alt="Поподробнее"
+                className="w-1/2 md:hidden"
+              />
               <Image
                 src="/landing/pojaluysta.jpg"
                 width={1984}

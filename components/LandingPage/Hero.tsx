@@ -1,4 +1,4 @@
-import { Link } from 'lucide-react';
+import Link from 'next/link';
 import Image from 'next/image';
 
 export function Hero() {
@@ -33,6 +33,7 @@ export function Hero() {
                 src="/landing/Circle_new_2.png"
                 alt="Button background"
                 fill
+                sizes="100vw"
                 className="object-contain"
                 priority
               />
@@ -96,6 +97,7 @@ export function Hero() {
                     fill
                     className="object-contain"
                     priority
+                    sizes="100vw"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <button className="font-heading text-4xl md:text-2xl sm:text-2xl uppercase underline hover:text-blue-900">

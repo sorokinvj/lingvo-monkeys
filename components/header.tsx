@@ -7,7 +7,7 @@ import { Drawer } from '@/components/ui/drawer';
 import Image from 'next/image';
 import { useUser } from '@/hooks/useUser';
 
-const Header: FC = () => {
+export const Header: FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -83,5 +83,3 @@ const Header: FC = () => {
     </header>
   );
 };
-
-export default Header;

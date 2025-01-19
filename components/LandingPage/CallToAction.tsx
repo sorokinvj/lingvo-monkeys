@@ -13,6 +13,7 @@ export const CallToAction = () => {
               fill
               className="object-contain"
               priority
+              sizes="100vw"
             />
             <div className="absolute inset-0 flex items-center justify-center">
               <button className="text-3xl pt-12 pl-12 md:pt-32 md:pl-24 font-heading font-[500] md:text-6xl uppercase underline hover:text-blue-900">
