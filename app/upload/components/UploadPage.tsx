@@ -93,6 +93,7 @@ const UploadPage: React.FC = () => {
             }
           }
         }
+        refetch();
         queryClient.invalidateQueries({ queryKey: ['files'] });
       } catch (error) {
         setError(parseErrorMessage(error));

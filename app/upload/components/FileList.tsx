@@ -36,7 +36,7 @@ const FileList: FC = () => {
           filter: `userId=eq.${user.id}`,
         },
         () => {
-          queryClient.invalidateQueries({ queryKey: ['files'] });
+          refetch();
         }
       )
       .subscribe();
