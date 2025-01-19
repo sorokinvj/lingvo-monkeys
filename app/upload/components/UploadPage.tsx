@@ -115,7 +115,9 @@ const UploadPage: React.FC = () => {
       <div
         {...getRootProps()}
         className={`border-2 border-dashed p-8 text-center cursor-pointer ${
-          isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+          isDragActive
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-blue-300 rounded-lg'
         }`}
       >
         <h1 className="text-base font-bold mb-4 text-blue-900">
@@ -127,7 +129,7 @@ const UploadPage: React.FC = () => {
         ) : (
           <p>Перетащите MP3 файл сюда или нажмите для выбора</p>
         )}
-        <p className="text-sm text-gray-500 my-2">
+        <p className="text-sm text-gray-500 mt-4">
           Максимальный размер файла: 50МБ
         </p>
         {progress > 0 && progress < 100 && (
