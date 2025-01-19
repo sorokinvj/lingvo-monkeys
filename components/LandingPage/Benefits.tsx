@@ -26,7 +26,7 @@ export const Benefits: FC = () => {
         <img src="/landing/Brain_NEW.png" alt="Brain icon" className="w-12" />
       </h2>
       {/* ============================ */}
-      <section className="flex flex-col gap-8">
+      <section className="flex flex-col gap-8 px-4 md:px-0">
         <div className="flex items-center gap-4">
           <Image
             src="/landing/Brain_icon.png"
@@ -82,7 +82,7 @@ export const Benefits: FC = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row md:items-start md:gap-8 md:mt-8">
+        <div className="flex flex-col md:flex-row md:items-start md:gap-8 md:mt-8 md:px-4">
           <div className="w-full md:w-1/2 flex flex-col gap-8 md:flex-row items-start md:gap-4">
             <div className="w-full md:w-1/2">
               <div className="flex items-center gap-2">
@@ -97,7 +97,7 @@ export const Benefits: FC = () => {
                   className="w-12 md:hidden"
                 />
               </div>
-              <p className="text-lg font-sans leading-tight">
+              <p className="text-lg font-sans leading-tight mt-2">
                 Чтение вслух - это уже говорение. Речевые центры нарабатывают
                 новые нейронные связи. А грамматические конструкции сами собой
                 встраиваются в речь. Именно поэтому практика также поможет
@@ -117,7 +117,7 @@ export const Benefits: FC = () => {
                   className="w-12 md:hidden"
                 />
               </div>
-              <p className="text-lg font-sans leading-tight">
+              <p className="text-lg font-sans leading-tight mt-2">
                 Активное слушание, подкрепленное визуально чтением, прокачивает
                 listening, как говорил тренер Рокки, Микки.
               </p>
@@ -158,7 +158,7 @@ export const Benefits: FC = () => {
                     АРТИКУЛЯЦИОННУЮ БАЗУ
                   </h3>
                 </div>
-                <p className="text-lg font-sans leading-tight">
+                <p className="text-lg font-sans leading-tight mt-2">
                   У каждого языка своя активная группа мышц лица и ротовой
                   полости. Наши мышцы прокачены под родной язык. А мы пытаемся
                   говорить ими же на иностранном - и получаем акцент. Выход один
@@ -178,7 +178,7 @@ export const Benefits: FC = () => {
                     ИНТОНАЦИЮ
                   </h3>
                 </div>
-                <p className="text-lg font-sans leading-tight">
+                <p className="text-lg font-sans leading-tight mt-2">
                   Именно по интонации носители языка понимают, что с ними
                   говорит иностранец. Перенять правильную интонацию можно только
                   постоянным копированием.

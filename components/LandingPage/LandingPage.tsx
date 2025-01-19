@@ -3,6 +3,7 @@ import { Hero } from './Hero';
 import { Video } from './Video';
 import { Benefits } from './Benefits';
 import { FC } from 'react';
+import { WhatToDo } from './WhatToDo';
 
 // import { WhatsNext } from './WhatsNext';
 // import { Footer } from './Footer';
@@ -16,7 +17,8 @@ export const LandingPage: FC = () => {
         poster="/landing/video-cover.png"
       />
       <Benefits />
-      {/* <Video />
+      <WhatToDo />
+      {/* 
       <WhatsNext />
       <Footer /> */}
     </div>

@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export function Hero() {
   return (
-    <section className="w-full flex flex-col items-center">
+    <section className="w-full flex flex-col items-center px-4 md:px-0">
       {/* Top Section - Title and Hand */}
       <div className="w-full flex flex-col items-center mb-6">
         {/* Mobile Title + Hand */}
