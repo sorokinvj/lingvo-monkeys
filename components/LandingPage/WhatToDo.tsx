@@ -4,7 +4,7 @@ export const WhatToDo = () => {
   return (
     <>
       <section className="w-full flex flex-col md:flex-row gap-4 md:gap-16">
-        <div className="w-full flex items-center gap-4 pr-4 md:pr-0 relative">
+        <div className="w-full flex gap-4 pr-4 md:pr-0 relative">
           <Image
             src="/landing/Monkey_HEADPHONES_and_BOOK.jpg"
             width={1144}
@@ -19,22 +19,38 @@ export const WhatToDo = () => {
             alt="Monkey with headphones and book"
             className="md:hidden w-64"
           />
-          <div className="flex flex-col relative md:pl-48 md:pt-60 ">
-            <h2 className="text-4xl font-heading uppercase flex flex-row gap-2 md:flex-col md:items-end md:text-7xl md:leading-tight md:font-bold ">
+          <div className="flex flex-col relative md:ml-56 md:pt-36 ">
+            <h2 className="text-4xl font-heading uppercase flex flex-row gap-2 md:flex-col md:items-end md:text-5xl md:leading-tight md:font-bold">
               <span>ЧТО</span>
               <span>НАДО</span>
               <span>ДЕЛАТЬ?</span>
             </h2>
             <Image
-              src="/landing/Popodrobnej_pozhlujsta.jpg"
+              src="/landing/popodrobnej.jpg"
               width={1984}
-              height={776}
-              alt="Поподробнее, пожалуйста!"
-              className="w-[250px]"
+              height={406}
+              alt="Поподробнее"
+              className="w-1/2 md:hidden"
             />
+            <div className="flex items-center">
+              <Image
+                src="/landing/pojaluysta.jpg"
+                width={1984}
+                height={370}
+                alt="пожалуйста!"
+                className="w-1/2 md:hidden"
+              />
+              <Image
+                src="/landing/Popodrobnej_pozhlujsta.jpg"
+                width={1984}
+                height={776}
+                alt="Поподробнее, пожалуйста!"
+                className="hidden md:w-[250px] md:block"
+              />
+            </div>
           </div>
         </div>
-        <div className="flex flex-col gap-6 md:pt-60 px-4 md:px-0 md:pr-4">
+        <div className="flex flex-col gap-6 md:pt-36 px-4 md:px-0 md:pr-4">
           <div className="flex flex-col">
             <div className="flex flex-row gap-4 items-end">
               <h3 className="font-bold">ПОДОБРАТЬ АУДИО-КНИГУ</h3>

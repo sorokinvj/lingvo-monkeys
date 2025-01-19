@@ -1,3 +1,4 @@
+import { Link } from 'lucide-react';
 import Image from 'next/image';
 
 export function Hero() {
@@ -26,21 +27,23 @@ export function Hero() {
 
         {/* Main Button */}
         <div className="w-[120%] -z-1 -mt-12 md:max-w-[300px] md:mx-auto md:mb-6 md:hidden">
-          <div className="relative aspect-[2.33/1]">
-            <Image
-              src="/landing/Circle_new_2.png"
-              alt="Button background"
-              fill
-              className="object-contain"
-              priority
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <button className="font-heading text-4xl md:text-lg sm:text-2xl uppercase underline hover:text-fuchsia-500">
-                Начать
-                <br className="md:hidden" /> обезьянничать
-              </button>
+          <Link href="/sign-up">
+            <div className="relative aspect-[2.33/1]">
+              <Image
+                src="/landing/Circle_new_2.png"
+                alt="Button background"
+                fill
+                className="object-contain"
+                priority
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <button className="font-heading text-4xl md:text-lg sm:text-2xl uppercase underline hover:text-blue-900">
+                  Начать
+                  <br className="md:hidden" /> обезьянничать
+                </button>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* Desktop version hidden on mobile */}
@@ -85,21 +88,23 @@ export function Hero() {
             </div>
 
             <div className="w-[300px] mx-auto mb-6">
-              <div className="relative aspect-[2.33/1]">
-                <Image
-                  src="/landing/Circle_new_2.png"
-                  alt="Button background"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <button className="font-heading text-4xl md:text-2xl sm:text-2xl uppercase underline hover:text-fuchsia-500">
-                    Начать
-                    <br className="md:hidden" /> обезьянничать
-                  </button>
+              <Link href="/sign-up">
+                <div className="relative aspect-[2.33/1]">
+                  <Image
+                    src="/landing/Circle_new_2.png"
+                    alt="Button background"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <button className="font-heading text-4xl md:text-2xl sm:text-2xl uppercase underline hover:text-blue-900">
+                      Начать
+                      <br className="md:hidden" /> обезьянничать
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

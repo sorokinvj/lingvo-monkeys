@@ -4,9 +4,7 @@ import { Video } from './Video';
 import { Benefits } from './Benefits';
 import { FC } from 'react';
 import { WhatToDo } from './WhatToDo';
-
-// import { WhatsNext } from './WhatsNext';
-// import { Footer } from './Footer';
+import { CallToAction } from './CallToAction';
 
 export const LandingPage: FC = () => {
   return (
@@ -18,9 +16,7 @@ export const LandingPage: FC = () => {
       />
       <Benefits />
       <WhatToDo />
-      {/* 
-      <WhatsNext />
-      <Footer /> */}
+      <CallToAction />
     </div>
   );
 };
