@@ -3,7 +3,7 @@ import Image from 'next/image';
 export const WhatToDo = () => {
   return (
     <>
-      <section className="w-full flex flex-col md:flex-row gap-4 md:gap-16">
+      <section className="mt-8 md:mt-0 w-full flex flex-col md:flex-row gap-4 md:gap-16">
         <div className="w-full flex gap-4 pr-4 md:pr-0 relative">
           <Image
             src="/landing/Monkey_HEADPHONES_and_BOOK.jpg"
