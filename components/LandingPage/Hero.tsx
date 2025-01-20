@@ -8,7 +8,7 @@ export function Hero() {
       <div className="w-full flex flex-col items-center mb-6">
         {/* Mobile Title + Hand */}
         <div className="flex items-start justify-between w-full relative md:hidden">
-          <h1 className="absolute top-0 left-0 mt-4 text-3xl font-heading uppercase text-left md:hidden">
+          <h1 className="absolute top-0 left-0 mt-4 text-4xl font-heading uppercase text-left md:hidden">
             <span>Простой</span> <span>способ</span>
             <br />
             <span>выучить язык</span>
@@ -18,18 +18,19 @@ export function Hero() {
               className="mt-2 w-full max-w-[150px]"
             />
           </h1>
-          <button className="absolute bottom-16 right-0 left-0 font-heading text-blue-900 text-4xl uppercase underline hover:text-blue-600">
+          <button className="absolute bottom-16 right-0 left-0 font-heading text-blue-900 text-3xl uppercase underline hover:text-blue-600">
             Начать
             <br className="md:hidden" /> обезьянничать
           </button>
           <Image
             src="/landing/Hand_down_mobile.png"
             alt="Hand"
-            className="z-10 w-full mt-48"
+            className="z-10 w-full mt-36"
             width={1408}
             height={1154}
             priority
             sizes="100vw"
+            style={{ transform: 'scaleX(-1)' }}
           />
         </div>
 

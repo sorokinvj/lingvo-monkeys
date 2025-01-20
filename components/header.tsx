@@ -56,7 +56,7 @@ export const Header: FC = () => {
         </h1>
       </Link>
 
-      <div className="flex items-center gap-8">
+      <div className="md:items-center md:gap-8 hidden md:flex">
         {Object.entries(navConfig).map(
           ([key, value]) =>
             ('enabled' in value ? value.enabled : true) && (
