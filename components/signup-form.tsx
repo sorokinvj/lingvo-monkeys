@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { signUpAction } from '@/app/actions';
 import { parseErrorMessage } from '@/lib/utils';
-import { Input, Label } from '@headlessui/react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { SubmitButton } from './submit-button';
 
