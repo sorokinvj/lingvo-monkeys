@@ -43,13 +43,13 @@ export const Header: FC = () => {
     <header
       className={`
       bg-white z-20 shadow-header md:relative w-full md:max-w-6xl md:mx-auto md:translate-x-0 md:right-auto rounded-full mx-auto
-      transition-all duration-300 ease-in-out flex items-center justify-between px-6 py-4 md:py-8
+      transition-all duration-300 ease-in-out flex items-center justify-between px-4 py-4 md:py-8
       ${isCollapsed ? 'max-md:!w-14 max-md:!right-4 max-md:!left-auto max-md:!translate-x-0 max-md:!mx-0 max-md:!p-0' : ''}
     `}
     >
       <Link href="/">
         <h1
-          className={`text-3xl  text-black
+          className={`text-3xl  text-black whitespace-nowrap
           ${isCollapsed ? 'max-md:hidden' : ''}`}
         >
           Lingvo Monkeys
