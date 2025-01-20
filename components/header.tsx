@@ -2,6 +2,7 @@
 import { FC, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '@/hooks/useUser';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export const Header: FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -19,15 +20,16 @@ export const Header: FC = () => {
   }, []);
 
   const { data: user } = useUser();
+  const pathname = usePathname();
 
   const navConfig = {
     signIn: {
-      title: 'Sign In',
+      title: 'Войти',
       href: '/sign-in',
       enabled: !user,
     },
     files: {
-      title: 'Your Files',
+      title: 'Ваши файлы',
       href: '/upload',
       enabled: !!user,
     },
@@ -47,7 +49,7 @@ export const Header: FC = () => {
     >
       <Link href="/">
         <h1
-          className={`text-xl font-bold  text-black
+          className={`text-3xl  text-black
           ${isCollapsed ? 'max-md:hidden' : ''}`}
         >
           Lingvo Monkeys
@@ -59,7 +61,13 @@ export const Header: FC = () => {
           ([key, value]) =>
             ('enabled' in value ? value.enabled : true) && (
               <Link href={value.href} key={key}>
-                <div className="text-base text-gray-90 hover:text-violet-500">
+                <div
+                  className={`text-base hover:text-blue-600 hover:underline hover:underline-offset-4 hover:decoration-blue-600 hover:decoration-2 ${
+                    pathname?.includes(value.href)
+                      ? 'text-blue-900 decoration-blue-900 decoration-2 underline underline-offset-8'
+                      : ''
+                  }`}
+                >
                   {value.title}
                 </div>
               </Link>
