@@ -5,7 +5,7 @@ export const Benefits: FC = () => {
   return (
     <>
       {/* Перенос части лэйаута в мобильную версию после видео */}
-      <div className="flex gap-24 md:gap-36 justify-center">
+      <div className="flex gap-24 md:gap-52 justify-center">
         <img
           src="/landing/2_Arrow_1.jpg"
           alt="Arrow"
@@ -22,15 +22,8 @@ export const Benefits: FC = () => {
           className="h-12 md:h-24"
         />
       </div>
-      <h2 className="md:hidden text-center text-3xl uppercase font-heading flex items-center justify-center gap-2">
-        <span className="">Загружай язык прямо в</span>
-        <Image
-          src="/landing/Brain.png"
-          alt="Brain icon"
-          width={135}
-          height={138}
-          className="w-12"
-        />
+      <h2 className="text-center text-3xl md:text-5xl uppercase font-heading flex items-center justify-center gap-2">
+        <span>Загружай язык прямо в мозг</span>
       </h2>
       {/* ============================ */}
       <section className="flex flex-col gap-8 px-4 md:px-0">
@@ -114,7 +107,7 @@ export const Benefits: FC = () => {
             <div className="w-full md:w-1/2">
               <div className="flex items-center gap-2">
                 <h3 className="inline-block bg-blue-900 text-white font-heading text-4xl leading-none">
-                  ПОНИМАНИЕ НА СЛУХ
+                  ПОНИМАНИЕ
                 </h3>
                 <Image
                   src="/landing/BLOCK 3_ Arrow 3-left-2.png"

@@ -3,14 +3,14 @@ import Image from 'next/image';
 
 export function Hero() {
   return (
-    <section className="w-full flex flex-col items-center px-4 md:px-0">
+    <section className="w-full flex flex-col items-center px-4 md:px-0 md:mt-16">
       {/* Top Section - Title and Hand */}
       <div className="w-full flex flex-col items-center mb-6">
         {/* Mobile Title + Hand */}
-        <div className="flex items-start justify-between w-full md:hidden">
-          <h1 className="mt-4 text-3xl font-heading uppercase text-left md:hidden">
-            <span>Простой</span> <br />
-            <span>способ</span> <br />
+        <div className="flex items-start justify-between w-full relative md:hidden">
+          <h1 className="absolute top-0 left-0 mt-4 text-3xl font-heading uppercase text-left md:hidden">
+            <span>Простой</span> <span>способ</span>
+            <br />
             <span>выучить язык</span>
             <img
               src="/landing/bez_skykoti.jpg"
@@ -18,33 +18,19 @@ export function Hero() {
               className="mt-2 w-full max-w-[150px]"
             />
           </h1>
-          <img
-            src="/landing/Lingvomonkeys_PAW_down.png"
+          <button className="absolute bottom-16 right-0 left-0 font-heading text-blue-900 text-4xl uppercase underline hover:text-blue-600">
+            Начать
+            <br className="md:hidden" /> обезьянничать
+          </button>
+          <Image
+            src="/landing/Hand_down_mobile.png"
             alt="Hand"
-            className="z-10 w-1/2"
+            className="z-10 w-full mt-48"
+            width={1408}
+            height={1154}
+            priority
+            sizes="100vw"
           />
-        </div>
-
-        {/* Main Button */}
-        <div className="w-[120%] -z-1 -mt-12 md:max-w-[300px] md:mx-auto md:mb-6 md:hidden">
-          <Link href="/sign-up">
-            <div className="relative aspect-[2.33/1]">
-              <Image
-                src="/landing/Circle_new_2.png"
-                alt="Button background"
-                fill
-                sizes="100vw"
-                className="object-contain"
-                priority
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button className="font-heading text-4xl md:text-lg sm:text-2xl uppercase underline hover:text-blue-900">
-                  Начать
-                  <br className="md:hidden" /> обезьянничать
-                </button>
-              </div>
-            </div>
-          </Link>
         </div>
 
         {/* Desktop version hidden on mobile */}
@@ -126,7 +112,7 @@ export function Hero() {
       </div>
 
       {/* Icons Section */}
-      <div className="flex justify-center items-center gap-4 mb-8">
+      <div className="flex justify-center items-center gap-4 mb-8 md:my-16">
         {/* Each icon group */}
         <div className="flex flex-col md:flex-row items-center">
           <img
@@ -182,12 +168,9 @@ export function Hero() {
         <span className="bg-blue-900 text-white uppercase font-heading text-2xl sm:text-4xl tracking-widest px-2 py-1">
           О д н о в р е м е н н о
         </span>
-        <p className="hidden md:block text-8xl font-heading">=</p>
       </div>
-      <h2 className="hidden md:block text-6xl uppercase font-heading mb-8">
-        Загружай язык прямо в мозг
-      </h2>
-      <div className="mt-4 md:mt-0 flex gap-12 md:gap-40 md:justify-center">
+
+      <div className="mt-4 md:mt-16 flex gap-24 md:gap-48 md:justify-center">
         <img
           src="/landing/2_Arrow_1.jpg"
           alt="Arrow"
