@@ -26,7 +26,7 @@ export const metadata = {
     image: '/landing/lingvomonkeys_og.jpg',
   },
   telegram: {
-    ogImage: '/landing/lingvomonkeys_og.jpg',
+    ogImage: '/landing/lingvomonkeys_og.jpg?v=2',
   },
   linkedin: {
     ogImage: '/landing/lingvomonkeys_og.jpg',
