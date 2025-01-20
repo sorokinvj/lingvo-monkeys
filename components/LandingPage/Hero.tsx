@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export function Hero() {
   return (
-    <section className="w-full flex flex-col items-center px-4 md:px-0 md:mt-16">
+    <section className="w-full flex flex-col items-center px-4 md:px-0">
       {/* Top Section - Title and Hand */}
       <div className="w-full flex flex-col items-center mb-6">
         {/* Mobile Title + Hand */}
@@ -112,7 +112,7 @@ export function Hero() {
       </div>
 
       {/* Icons Section */}
-      <div className="flex justify-center items-center gap-4 mb-8 md:my-16">
+      <div className="flex justify-center items-center gap-4 my-8">
         {/* Each icon group */}
         <div className="flex flex-col md:flex-row items-center">
           <img
