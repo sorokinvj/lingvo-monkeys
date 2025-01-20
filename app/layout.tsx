@@ -10,7 +10,27 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'Lingvo Monkeys',
-  description: 'The fastest way to learn new languages',
+  description: 'Простой способ выучить язык без скукоты.',
+  ogImage: '/landing/lingvomonkeys_og.jpg',
+  og: {
+    type: 'website',
+    url: defaultUrl,
+    title: 'Lingvo Monkeys',
+    description: 'Простой способ выучить язык без скукоты.',
+    image: '/landing/lingvomonkeys_og.jpg',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Lingvo Monkeys',
+    description: 'Простой способ выучить язык без скукоты.',
+    image: '/landing/lingvomonkeys_og.jpg',
+  },
+  telegram: {
+    ogImage: '/landing/lingvomonkeys_og.jpg',
+  },
+  linkedin: {
+    ogImage: '/landing/lingvomonkeys_og.jpg',
+  },
 };
 
 export default function RootLayout({
