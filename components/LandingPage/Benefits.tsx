@@ -118,8 +118,8 @@ export const Benefits: FC = () => {
                 />
               </div>
               <p className="text-lg font-sans leading-tight mt-2">
-                Активное слушание, подкрепленное визуально чтением, прокачивает
-                listening, как говорил тренер Рокки, Микки.
+                Активное слушание + одновременное чтение тренируют ухо и
+                прокачивают listening.
               </p>
             </div>
           </div>
