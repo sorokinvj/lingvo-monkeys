@@ -3,33 +3,34 @@ import './globals.css';
 import Providers from './providers';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-const defaultUrl = process.env.VERCEL_URL
+
+const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000';
+  : process.env.NEXT_PUBLIC_VERCEL_URL
+    ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+    : 'http://localhost:3000';
 
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
+  metadataBase: new URL(baseUrl),
   title: 'Lingvo Monkeys',
   description: 'Простой способ выучить язык без скукоты.',
-  ogImage: '/landing/lingvomonkeys_og.jpg',
-  og: {
+  openGraph: {
     type: 'website',
-    url: defaultUrl,
     title: 'Lingvo Monkeys',
     description: 'Простой способ выучить язык без скукоты.',
-    image: '/landing/lingvomonkeys_og.jpg',
+    images: [
+      {
+        url: '/landing/lingvomonkeys_og.jpg?v=2',
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Lingvo Monkeys',
     description: 'Простой способ выучить язык без скукоты.',
-    image: '/landing/lingvomonkeys_og.jpg',
-  },
-  telegram: {
-    ogImage: '/landing/lingvomonkeys_og.jpg?v=2',
-  },
-  linkedin: {
-    ogImage: '/landing/lingvomonkeys_og.jpg',
+    images: ['/landing/lingvomonkeys_og.jpg?v=3'],
   },
 };
 
