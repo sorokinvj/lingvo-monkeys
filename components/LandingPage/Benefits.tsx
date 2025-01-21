@@ -4,7 +4,7 @@ import Image from 'next/image';
 export const Benefits: FC = () => {
   return (
     <>
-      <div className="flex gap-24 md:gap-52 justify-center">
+      <div className="flex gap-24 md:gap-36 justify-center">
         <img
           src="/landing/2_Arrow_1.jpg"
           alt="Arrow"

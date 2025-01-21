@@ -176,7 +176,7 @@ export function Hero() {
         </span>
       </div>
 
-      <div className="mt-4 md:mt-6 flex gap-24 md:gap-48 md:justify-center">
+      <div className="mt-4 md:mt-6 flex gap-24 md:gap-36 md:justify-center">
         <img
           src="/landing/2_Arrow_1.jpg"
           alt="Arrow"
