@@ -27,18 +27,11 @@ export const WhatToDo = () => {
             </h2>
             <div className="flex items-center">
               <Image
-                src="/landing/popodrobnej.jpg"
-                width={1984}
+                src="/landing/Popodrobnej_pogaluysta_MOBILE.jpg"
+                width={3463}
                 height={406}
                 alt="Поподробнее"
-                className="w-1/2 md:hidden"
-              />
-              <Image
-                src="/landing/pojaluysta.jpg"
-                width={1984}
-                height={370}
-                alt="пожалуйста!"
-                className="w-1/2 md:hidden"
+                className="w-full md:hidden"
               />
               <Image
                 src="/landing/Popodrobnej_pozhlujsta.jpg"
