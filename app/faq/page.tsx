@@ -1,7 +1,7 @@
 import FAQPage from './components/FAQPage';
 
 export const metadata = {
-  title: 'LM | FAQ',
+  title: 'FAQ | Lingvomonkeys',
 };
 
 export default async function FAQ() {

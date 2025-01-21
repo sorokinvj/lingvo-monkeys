@@ -1,13 +1,10 @@
 'use client';
 import { FC, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Drawer } from '@/components/ui/drawer';
-
-import Image from 'next/image';
 import { useUser } from '@/hooks/useUser';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-const Header: FC = () => {
+export const Header: FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -23,15 +20,16 @@ const Header: FC = () => {
   }, []);
 
   const { data: user } = useUser();
+  const pathname = usePathname();
 
   const navConfig = {
     signIn: {
-      title: 'Sign In',
+      title: 'Войти',
       href: '/sign-in',
       enabled: !user,
     },
     files: {
-      title: 'Your Files',
+      title: 'Ваши файлы',
       href: '/upload',
       enabled: !!user,
     },
@@ -44,45 +42,38 @@ const Header: FC = () => {
   return (
     <header
       className={`
-      bg-white z-20 shadow-header fixed md:relative top-4 md:top-8 
-      w-[calc(100%-2rem)] right-1/2 translate-x-1/2 md:max-w-6xl md:mx-auto md:translate-x-0 md:right-auto rounded-full mx-auto
-      transition-all duration-300 ease-in-out
+      bg-white z-20 shadow-header md:relative w-full md:max-w-6xl md:mx-auto md:translate-x-0 md:right-auto rounded-full mx-auto
+      transition-all duration-300 ease-in-out flex items-center justify-between px-4 py-4 md:py-8
       ${isCollapsed ? 'max-md:!w-14 max-md:!right-4 max-md:!left-auto max-md:!translate-x-0 max-md:!mx-0 max-md:!p-0' : ''}
     `}
     >
-      <nav
-        className={`w-full flex flex-col items-center px-6 py-4 justify-center gap-4
-        transition-all duration-300 ease-in-out
-        ${isCollapsed ? 'max-md:!p-4' : ''}
-      `}
-      >
-        <div
-          className={`
-          transition-all duration-300 ease-in-out
-          ${isCollapsed ? 'max-md:w-0 max-md:opacity-0' : 'w-auto opacity-100'}
-        `}
+      <Link href="/">
+        <h1
+          className={`text-3xl font-bold text-black whitespace-nowrap
+          ${isCollapsed ? 'max-md:hidden' : ''}`}
         >
-          <Link href="/">
-            <h1 className="text-xl font-bold bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-transparent bg-clip-text">
-              Lingvo Monkeys
-            </h1>
-          </Link>
-        </div>
-        <div className="flex items-center gap-8">
-          {Object.entries(navConfig).map(
-            ([key, value]) =>
-              ('enabled' in value ? value.enabled : true) && (
-                <Link href={value.href} key={key}>
-                  <div className="text-base text-gray-90 hover:text-violet-500">
-                    {value.title}
-                  </div>
-                </Link>
-              )
-          )}
-        </div>
-      </nav>
+          Lingvo Monkeys
+        </h1>
+      </Link>
+
+      <div className="md:items-center md:gap-8 hidden md:flex">
+        {Object.entries(navConfig).map(
+          ([key, value]) =>
+            ('enabled' in value ? value.enabled : true) && (
+              <Link href={value.href} key={key}>
+                <div
+                  className={`text-base hover:text-blue-600 hover:underline hover:underline-offset-4 hover:decoration-blue-600 hover:decoration-2 ${
+                    pathname?.includes(value.href)
+                      ? 'text-blue-900 decoration-blue-900 decoration-2 underline underline-offset-8'
+                      : ''
+                  }`}
+                >
+                  {value.title}
+                </div>
+              </Link>
+            )
+        )}
+      </div>
     </header>
   );
 };
-
-export default Header;

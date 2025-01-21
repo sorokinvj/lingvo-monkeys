@@ -44,40 +44,40 @@ const FAQItem: FC<FAQItemProps> = ({
 const FAQ: FC = () => {
   const faqs = [
     {
-      question: 'What is language shadowing?',
+      question: 'Что такое shadowing?',
       answer:
-        'Language shadowing is a learning technique where you listen to native speaker audio and repeat what you hear simultaneously with as little delay as possible. This method helps you master pronunciation, intonation, and natural speech patterns of English.',
+        'Shadowing (читается как "ша-до-уинь") - это техника изучения языка, при которой вы слушаете речь носителя языка и одновременно повторяете услышанное с минимальной задержкой. Этот метод помогает освоить произношение, интонацию и естественные речевые паттерны английского языка.',
       defaultOpen: true,
     },
     {
-      question: 'Who invented shadowing?',
+      question: 'Кто изобрел метод?',
       answer:
-        'Language shadowing was developed by linguist and polyglot Alexander Arguelles. He created the structured method where students listen to target language audio and simultaneously echo what they hear, while walking briskly with good posture and speaking in a clear, loud voice.',
+        'Метод был разработан лингвистом и полиглотом Александром Аргуэльесом. Он создал структурированный метод, при котором учащиеся слушают аудио на изучаемом языке и одновременно повторяют услышанное, быстро шагая с правильной осанкой и говоря четким, громким голосом.',
     },
     {
-      question: 'How do I practice language shadowing on this platform?',
+      question: 'Как практиковать shadowing на этой платформе?',
       answer: (
         <div>
-          <p>The process is simple:</p>
+          <p>Очень просто:</p>
           <ul className="list-disc pl-5">
-            <li>Upload your audio file with an English native speaker.</li>
-            <li>Wait a couple of minutes for the transcription to complete.</li>
+            <li>Загрузите аудиофайл с записью носителя английского языка.</li>
+            <li>Подождите несколько минут, пока завершится транскрипция.</li>
             <li>
-              Once the status shows "Ready", click Play and start practicing by
-              repeating what you hear.
+              Когда статус покажет "Готово", нажмите Воспроизвести и начинайте
+              практиковаться, повторяя то, что слышите.
             </li>
           </ul>
           <p>
-            The transcription helps you follow along and understand the content
-            better.
+            Транскрипция помогает следить за текстом и лучше понимать
+            содержание.
           </p>
         </div>
       ),
     },
     {
-      question: 'What are the main benefits of language shadowing?',
+      question: 'Каковы основные преимущества этого метода?',
       answer:
-        "Language shadowing offers several benefits: it improves your pronunciation and accent, develops natural speech patterns and intonation, enhances listening comprehension, exercises your working memory, and helps you absorb vocabulary and grammar structures naturally. It's particularly effective for developing fluency and reducing foreign accent.",
+        'Shadowing предлагает несколько преимуществ: улучшает произношение и акцент, развивает естественные речевые паттерны и интонацию, повышает понимание на слух, тренирует рабочую память и помогает естественным образом усваивать словарный запас и грамматические структуры. Этот метод особенно эффективен для развития беглости речи и уменьшения иностранного акцента.',
     },
   ];
 

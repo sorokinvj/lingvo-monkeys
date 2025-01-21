@@ -6,6 +6,7 @@ import { parseErrorMessage } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser } from '@/hooks/useUser';
 import { createClient } from '@/utils/supabase/client';
+import { useFiles } from '@/hooks/useFiles';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -13,13 +14,23 @@ const UploadPage: React.FC = () => {
   const [message, setMessage] = useState<string>('');
   const queryClient = useQueryClient();
   const { data: user } = useUser();
+  const { refetch } = useFiles(user?.id);
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (!file) return;
 
+      const maxSize = 50 * 1024 * 1024; // 50MB
+      if (file.size > maxSize) {
+        setError(
+          `Файл слишком большой. Максимальный размер: 50МБ, размер вашего файла: ${(file.size / (1024 * 1024)).toFixed(1)}МБ`
+        );
+        return;
+      }
+
       try {
+        setError(null);
         setMessage('Uploading file...');
         setProgress(10);
         const supabase = createClient();
@@ -82,8 +93,8 @@ const UploadPage: React.FC = () => {
             }
           }
         }
-        console.log('invalidating files');
-        queryClient.invalidateQueries({ queryKey: ['files', user?.id] });
+        refetch();
+        queryClient.invalidateQueries({ queryKey: ['files'] });
       } catch (error) {
         setError(parseErrorMessage(error));
       }
@@ -104,18 +115,23 @@ const UploadPage: React.FC = () => {
       <div
         {...getRootProps()}
         className={`border-2 border-dashed p-8 text-center cursor-pointer ${
-          isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+          isDragActive
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-blue-300 rounded-lg'
         }`}
       >
-        <h1 className="text-base font-bold mb-4 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 text-transparent bg-clip-text">
-          Upload MP3 File
+        <h1 className="text-base font-bold mb-4 text-blue-900">
+          Загрузить MP3 Файл
         </h1>
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p>Drop the MP3 file here...</p>
+          <p>Отпустите MP3 файл здесь...</p>
         ) : (
-          <p>Drag and drop an MP3 file here, or click to select a file</p>
+          <p>Перетащите MP3 файл сюда или нажмите для выбора</p>
         )}
+        <p className="text-sm text-gray-500 mt-4">
+          Максимальный размер файла: 50МБ
+        </p>
         {progress > 0 && progress < 100 && (
           <div className="mt-4">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
