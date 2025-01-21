@@ -7,25 +7,27 @@ export function Hero() {
       {/* Top Section - Title and Hand */}
       <div className="w-full flex flex-col items-center mb-6">
         {/* Mobile Title + Hand */}
-        <div className="flex items-start justify-between w-full relative md:hidden">
-          <h1 className="absolute top-0 left-0 mt-4 text-4xl font-heading uppercase text-left md:hidden">
-            <span>Простой</span> <span>способ</span>
+        <div className="flex flex-col items-start justify-between w-full relative md:hidden">
+          <h1 className="top-0 left-0 mt-4 text-3xl font-heading uppercase text-left md:hidden text-nowrap">
+            <span>Простой способ</span>
             <br />
             <span>выучить язык</span>
-            <img
-              src="/landing/bez_skykoti.jpg"
-              alt="Blue text"
-              className="mt-2 w-full max-w-[150px]"
+            <Image
+              src="/landing/Bez_Skukoti_MOBILE.jpg"
+              alt="Без скукоты"
+              className="left-[180px] w-24 -mt-7 relative"
+              width={469}
+              height={305}
             />
           </h1>
-          <button className="absolute bottom-16 right-0 left-0 font-heading text-blue-900 text-3xl uppercase underline hover:text-blue-600">
+          <button className="absolute bottom-16 right-0 left-0 font-heading text-3xl uppercase underline hover:text-blue-600">
             Начать
             <br className="md:hidden" /> обезьянничать
           </button>
           <Image
             src="/landing/Hand_down_mobile.png"
             alt="Hand"
-            className="z-10 w-full mt-36"
+            className="relative z-10 w-full mt-2"
             width={1408}
             height={1154}
             priority
@@ -102,7 +104,7 @@ export function Hero() {
       {/* Description */}
 
       <div className="w-full md:max-w-[600px] md:mx-auto">
-        <p className="mt-4 mb-8 md:my-8 text-base sm:text-xl font-sans leading-tight">
+        <p className="mt-4 mb-8 md:my-8 text-base md:text-xl font-sans leading-[21px] font-light">
           Языковая <span className="text-blue-600">"техника обезьяны"</span> -
           это способ учить язык так же, как{' '}
           <span className="text-blue-600">это делают дети</span>, слушая и

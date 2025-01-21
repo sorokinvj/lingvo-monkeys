@@ -55,7 +55,7 @@ export const WhatToDo = () => {
                 className="w-12 md:hidden"
               />
             </div>
-            <p className="text-base font-sans leading-tight">
+            <p className="text-base font-sans leading-[21px] font-light">
               Для уже владеющих языком подойдут любые оригинальные аудио-тексты.
               Если это пока слишком сложно, просто бери адаптированные книги
               (Beginner/Elementary - для начинающих, Intermediate - для среднего
@@ -77,7 +77,7 @@ export const WhatToDo = () => {
               />
               <h3 className="font-bold">ЗАНИМАТЬСЯ В НАУШНИКАХ</h3>
             </div>
-            <p className="text-base font-sans leading-tight">
+            <p className="text-base font-sans leading-[21px] font-light">
               В наушниках меньше слышно собственный голос, и проще
               сконцентрироваться на голосе диктора. Попробуй заниматься и в
               наушниках, и без - проверь, как удобней тебе?
@@ -99,7 +99,7 @@ export const WhatToDo = () => {
                 className="w-12 md:hidden"
               />
             </div>
-            <p className="text-base font-sans leading-tight">
+            <p className="text-base font-sans leading-[21px] font-light">
               Важно стремиться к одновременному, синхронному чтению. Первое
               время будет сложно, но со временем, обязательно начнет получаться.
               В нашем плеере можно понизить скорость аудио. И постепенно
@@ -129,7 +129,7 @@ export const WhatToDo = () => {
       <section className="px-4 md:px-0 md:mt-8 flex md:items-start md:gap-12 md:justify-between md:max-w-5xl md:mx-auto">
         <div className="flex flex-col">
           <h3 className="font-bold">ОБЕЗЬЯННИЧАТЬ!</h3>
-          <p className="text-base font-sans leading-tight">
+          <p className="text-base font-sans leading-[21px] font-light">
             Кое-где существует вредное мнение, что обезьянничать неприлично. Это
             не правда! Это самая естественная способность человека, благодаря
             которой он в принципе разговаривает! Поэтому обезьянничай вволю.

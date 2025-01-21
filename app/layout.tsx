@@ -1,4 +1,4 @@
-import { didactGothic, oswald } from '@/lib/fonts';
+import { roboto, oswald, didactGothic } from '@/lib/fonts';
 import './globals.css';
 import Providers from './providers';
 import { Header } from '@/components/header';
@@ -41,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${didactGothic.variable} ${oswald.variable}`}>
+      <body className={`${roboto.variable} ${oswald.variable}`}>
         <Providers>
           <main className="min-h-screen flex flex-col items-start w-full overflow-hidden md:max-w-6xl md:mx-auto">
             <Header />

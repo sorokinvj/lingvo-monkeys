@@ -19,7 +19,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-didact)'],
+        sans: ['var(--font-roboto)'],
         heading: ['var(--font-oswald)'],
       },
       colors: {

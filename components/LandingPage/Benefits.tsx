@@ -33,7 +33,7 @@ export const Benefits: FC = () => {
             height={276}
             className="w-32 hidden md:block"
           />
-          <p className="text-xl font-sans">
+          <p className="text-base md:text-xl font-sans font-light leading-[21px]">
             Практика активирует сразу все речевые центры, отвечающие за
             восприятие, воспроизведение и понимание речи. Язык начинает
             прорастать в сознании естественным образом.
@@ -95,7 +95,7 @@ export const Benefits: FC = () => {
                   className="w-12 md:hidden"
                 />
               </div>
-              <p className="text-lg font-sans leading-tight mt-2">
+              <p className="text-base md:text-lg font-sans font-light leading-[21px] mt-2">
                 Чтение вслух - это уже говорение. Речевые центры нарабатывают
                 новые нейронные связи. А грамматические конструкции сами собой
                 встраиваются в речь. Именно поэтому практика также поможет
@@ -115,7 +115,7 @@ export const Benefits: FC = () => {
                   className="w-12 md:hidden"
                 />
               </div>
-              <p className="text-lg font-sans leading-tight mt-2">
+              <p className="text-base md:text-lg font-sans font-light leading-[21px] mt-2">
                 Активное слушание + одновременное чтение тренируют ухо и
                 прокачивают listening.
               </p>
@@ -156,7 +156,7 @@ export const Benefits: FC = () => {
                     АРТИКУЛЯЦИОННУЮ БАЗУ
                   </h3>
                 </div>
-                <p className="text-lg font-sans leading-tight mt-2">
+                <p className="text-base md:text-lg font-sans font-light leading-[21px] mt-2">
                   У каждого языка своя активная группа мышц лица и ротовой
                   полости. Наши мышцы прокачены под родной язык. А мы пытаемся
                   говорить ими же на иностранном - и получаем акцент. Выход один
@@ -176,7 +176,7 @@ export const Benefits: FC = () => {
                     ИНТОНАЦИЮ
                   </h3>
                 </div>
-                <p className="text-lg font-sans leading-tight mt-2">
+                <p className="text-base md:text-lg font-sans font-light leading-[21px] mt-2">
                   Именно по интонации носители языка понимают, что с ними
                   говорит иностранец. Перенять правильную интонацию можно только
                   постоянным копированием.
