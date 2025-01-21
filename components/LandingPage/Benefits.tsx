@@ -4,7 +4,6 @@ import Image from 'next/image';
 export const Benefits: FC = () => {
   return (
     <>
-      {/* Перенос части лэйаута в мобильную версию после видео */}
       <div className="flex gap-24 md:gap-52 justify-center">
         <img
           src="/landing/2_Arrow_1.jpg"
@@ -25,7 +24,6 @@ export const Benefits: FC = () => {
       <h2 className="text-center text-3xl md:text-5xl uppercase font-heading flex items-center justify-center gap-2">
         <span>Загружай язык прямо в мозг</span>
       </h2>
-      {/* ============================ */}
       <section className="flex flex-col gap-8 px-4 md:px-0">
         <div className="flex items-center gap-4">
           <Image
@@ -54,7 +52,7 @@ export const Benefits: FC = () => {
           </div>
         </div>
         <div className="hidden md:flex relative">
-          <div className="relative left-48 flex">
+          <div className="relative left-48 flex -top-6">
             <Image
               src="/landing/3_ Arrow_1.jpg"
               width={418}
@@ -76,13 +74,13 @@ export const Benefits: FC = () => {
                   width={198}
                   height={176}
                   alt="Arrow"
-                  className="w-28 "
+                  className="w-28"
                 />
               </div>
             </div>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row md:items-start md:gap-8 md:mt-8 md:px-4">
+        <div className="flex flex-col md:flex-row md:items-start md:gap-8 md:px-4">
           <div className="w-full md:w-1/2 flex flex-col gap-8 md:flex-row items-start md:gap-4">
             <div className="w-full md:w-1/2">
               <div className="flex items-center gap-2">

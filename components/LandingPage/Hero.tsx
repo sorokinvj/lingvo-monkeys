@@ -75,7 +75,7 @@ export function Hero() {
               />
             </div>
 
-            <div className="w-[300px] mx-auto mb-6">
+            <div className="w-[300px] md:w-[400px] mx-auto mb-6">
               <Link href="/sign-up">
                 <div className="relative aspect-[2.33/1]">
                   <Image
@@ -87,7 +87,7 @@ export function Hero() {
                     sizes="100vw"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <button className="font-heading text-4xl md:text-2xl sm:text-2xl uppercase underline hover:text-blue-900">
+                    <button className="md:-mt-4 font-heading text-4xl md:text-2xl sm:text-2xl uppercase underline hover:text-blue-900">
                       Начать
                       <br className="md:hidden" /> обезьянничать
                     </button>
@@ -171,7 +171,7 @@ export function Hero() {
         </span>
       </div>
 
-      <div className="mt-4 md:mt-16 flex gap-24 md:gap-48 md:justify-center">
+      <div className="mt-4 md:mt-6 flex gap-24 md:gap-48 md:justify-center">
         <img
           src="/landing/2_Arrow_1.jpg"
           alt="Arrow"

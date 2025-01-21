@@ -49,7 +49,7 @@ export const Header: FC = () => {
     >
       <Link href="/">
         <h1
-          className={`text-3xl  text-black whitespace-nowrap
+          className={`text-3xl font-bold text-black whitespace-nowrap
           ${isCollapsed ? 'max-md:hidden' : ''}`}
         >
           Lingvo Monkeys
