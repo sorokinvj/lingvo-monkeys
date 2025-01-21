@@ -94,9 +94,9 @@ export const WhatToDo = () => {
           <div className="flex flex-col">
             <div className="flex gap-8 items-end">
               <h3 className="font-bold inline">
-                <span>ЧИТАТЬ ОДНОВРЕМЕННО</span>
-                <br />
-                <span className="whitespace-nowrap">С ДИКТОРОМ</span>
+                <span className="whitespace-nowrap">
+                  ЧИТАТЬ ОДНОВРЕМЕННО С ДИКТОРОМ
+                </span>
               </h3>
               <Image
                 src="/landing/Lingvomonkeys_PAW_down_small.png"
