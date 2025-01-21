@@ -110,7 +110,10 @@ export function Hero() {
           <span className="text-blue-600">это делают дети</span>, слушая и
           повторяя за окружающими. Суть в том, что ты слушаешь и одновременно
           читаешь вслух интересную книгу, а всю работу выполняют{' '}
-          <span className="text-blue-600">зеркальные нейроны</span>!
+          <span className="text-blue-600 md:whitespace-nowrap">
+            зеркальные нейроны
+          </span>
+          !
         </p>
       </div>
 
