@@ -103,7 +103,7 @@ export function Hero() {
 
       {/* Description */}
 
-      <div className="w-full md:max-w-[600px] md:mx-auto">
+      <div className="w-full md:max-w-[700px] md:mx-auto">
         <p className="mt-4 mb-8 md:my-8 text-base md:text-xl font-sans leading-[21px] font-light">
           Языковая <span className="text-blue-600">"техника обезьяны"</span> -
           это способ учить язык так же, как{' '}
