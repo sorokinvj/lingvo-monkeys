@@ -176,6 +176,33 @@ const Settings: React.FC = () => {
           </div>
         </div>
       </div>
+      <div className="space-y-4">
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium flex items-center gap-2">
+            <Type className="h-6 w-6" />
+            Highlight Timing
+          </h3>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600 dark:text-gray-400">
+              Highlight Delay (seconds)
+            </label>
+            <input
+              type="range"
+              min="-2"
+              max="2"
+              step="0.1"
+              value={settings.highlightDelay}
+              onChange={(e) =>
+                updateSetting('highlightDelay', parseFloat(e.target.value))
+              }
+              className="w-full"
+            />
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {settings.highlightDelay.toFixed(1)}s
+            </div>
+          </div>
+        </div>
+      </div>
       <button
         onClick={resetSettings}
         className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
