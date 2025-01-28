@@ -49,9 +49,9 @@ const Transcription: FC<Props> = ({
         case 'current':
           return index === activeWordIndex;
         case 'all past':
-          return index < activeWordIndex;
+          return index <= activeWordIndex;
         case 'past row': {
-          if (index >= activeWordIndex) return false;
+          if (activeWordIndex === -1) return false;
 
           const activeWordElement = document.querySelector(
             `[data-word-index="${activeWordIndex}"]`
@@ -60,10 +60,8 @@ const Transcription: FC<Props> = ({
 
           const activeWordRect = activeWordElement.getBoundingClientRect();
           const currentWordRect = spanRef.getBoundingClientRect();
-          return (
-            isInSameRow(activeWordRect, currentWordRect) &&
-            index < activeWordIndex
-          );
+
+          return isInSameRow(activeWordRect, currentWordRect);
         }
         default:
           return false;
