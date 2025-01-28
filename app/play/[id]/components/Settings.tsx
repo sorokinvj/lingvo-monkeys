@@ -185,7 +185,7 @@ const Settings: React.FC = () => {
         <div className="space-y-4">
           <h3 className="text-xl font-medium flex items-center gap-2">
             <Type className="h-6 w-6" />
-            Время выделения
+            Задержка выделения
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Иногда выделение сходит с ума и начинает обгонять голос (примерно
