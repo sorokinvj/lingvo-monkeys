@@ -110,7 +110,7 @@ const Settings: React.FC = () => {
         </h3>
         <div className="flex flex-col gap-2">
           <label className="text-base font-medium text-gray-600 dark:text-gray-400">
-            Режим выделения
+            Режим маркера
           </label>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             По отношению к текущей позиции плеера, выделять:
@@ -130,7 +130,7 @@ const Settings: React.FC = () => {
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
             <h4 className="text-base font-medium text-gray-600">
-              Цвет выделения
+              Цвет маркера
             </h4>
             <div className="flex items-center gap-6">
               <div className="flex flex-col gap-2">
@@ -185,16 +185,16 @@ const Settings: React.FC = () => {
         <div className="space-y-4">
           <h3 className="text-xl font-medium flex items-center gap-2">
             <Type className="h-6 w-6" />
-            Задержка выделения
+            Задержка маркера
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Иногда выделение сходит с ума и начинает обгонять голос (примерно
-            как перила обгоняют ступеньки эскалатора в метро). В таких случаях
-            бывает полезно замедлить выделение.
+            Иногда маркер сходит с ума и начинает обгонять голос (примерно как
+            перила обгоняют ступеньки эскалатора в метро). В таких случаях
+            бывает полезно приструнить маркер.
           </p>
           <div className="flex flex-col gap-2">
             <label className="text-sm text-gray-600 dark:text-gray-400">
-              Задержка выделения по отношению к голосу (секунды)
+              Задержка маркера по отношению к голосу (секунды)
             </label>
             <input
               type="range"
