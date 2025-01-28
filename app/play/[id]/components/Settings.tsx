@@ -31,7 +31,7 @@ const Settings: React.FC = () => {
         <div className="space-y-4">
           <h3 className="text-xl font-medium flex items-center gap-2">
             <Sun className="h-6 w-6" />
-            Theme
+            Тема
           </h3>
           <div className="flex items-center">
             <ThemeSwitcher
@@ -44,13 +44,13 @@ const Settings: React.FC = () => {
         <div className="space-y-4">
           <h3 className="text-xl font-medium flex items-center gap-2">
             <Type className="h-6 w-6" />
-            Font Settings
+            Настройки шрифта
           </h3>
 
           <div className="space-y-4">
             <div className="flex flex-col gap-2">
               <label className="text-sm text-gray-600 dark:text-gray-400">
-                Font Size
+                Размер
               </label>
               <input
                 type="range"
@@ -70,7 +70,7 @@ const Settings: React.FC = () => {
 
             <div className="flex flex-col gap-2">
               <label className="text-sm text-gray-600 dark:text-gray-400">
-                Line Height
+                Межстрочный интервал
               </label>
               <input
                 type="range"
@@ -90,7 +90,7 @@ const Settings: React.FC = () => {
 
             <div className="flex flex-col gap-2">
               <label className="text-sm text-gray-600 dark:text-gray-400">
-                Font Family
+                Шрифт
               </label>
               <FontSelector
                 value={settings.fontFamily}
@@ -106,12 +106,15 @@ const Settings: React.FC = () => {
       <div className="space-y-6">
         <h3 className="text-xl font-medium flex items-center gap-2">
           <Type className="h-6 w-6" />
-          Text Appearance
+          Внешний вид текста
         </h3>
         <div className="flex flex-col gap-2">
           <label className="text-base font-medium text-gray-600 dark:text-gray-400">
-            Highlight Mode
+            Режим маркера
           </label>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            По отношению к текущей позиции плеера, выделять:
+          </p>
           <select
             className="w-full rounded-md border border-gray-200 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 dark:text-gray-200"
             value={settings.highlightMode}
@@ -119,26 +122,26 @@ const Settings: React.FC = () => {
               updateSetting('highlightMode', e.target.value as HighlightMode)
             }
           >
-            <option value="current">Current word</option>
-            <option value="all past">All previous words</option>
-            <option value="past row">Previous words in the same row</option>
+            <option value="current">Текущее слово</option>
+            <option value="past row">Текущую строку</option>
+            <option value="all past">Все предыдущие слова</option>
           </select>
         </div>
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
             <h4 className="text-base font-medium text-gray-600">
-              Highlight Color
+              Цвет маркера
             </h4>
             <div className="flex items-center gap-6">
               <div className="flex flex-col gap-2">
-                <p className="text-sm text-gray-600">Text</p>
+                <p className="text-sm text-gray-600">Текст</p>
                 <ColorPickerPopover
                   color={settings.pastWordsColor}
                   onChange={handleColorChange('pastWordsColor')}
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <p className="text-sm text-gray-600">Background</p>
+                <p className="text-sm text-gray-600">Фон</p>
                 <div className="flex items-center gap-2">
                   <div className="relative bg-white rounded-md w-12 h-8 border border-gray-200">
                     <div
@@ -146,7 +149,7 @@ const Settings: React.FC = () => {
                       style={{
                         background: `linear-gradient(to right top, transparent calc(50% - 2px), red calc(50% - 2px), red calc(50% + 2px), transparent calc(50% + 2px))`,
                       }}
-                      title="Transparent"
+                      title="Прозрачный"
                       onClick={() =>
                         handleColorChange('pastWordsHighlightColor')(
                           'transparent'
@@ -165,13 +168,47 @@ const Settings: React.FC = () => {
         </div>
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
-            <h4 className="text-base font-medium text-gray-600">Main Text</h4>
+            <h4 className="text-base font-medium text-gray-600">
+              Основной текст
+            </h4>
             <div className="flex flex-col gap-2">
-              <p className="text-sm text-gray-600">Text</p>
+              <p className="text-sm text-gray-600">Текст</p>
               <ColorPickerPopover
                 color={settings.currentWordColor}
                 onChange={handleColorChange('currentWordColor')}
               />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="space-y-4">
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium flex items-center gap-2">
+            <Type className="h-6 w-6" />
+            Задержка маркера
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Иногда маркер сходит с ума и начинает обгонять голос (примерно как
+            перила обгоняют ступеньки эскалатора в метро). В таких случаях
+            бывает полезно приструнить маркер.
+          </p>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600 dark:text-gray-400">
+              Задержка маркера по отношению к голосу (секунды)
+            </label>
+            <input
+              type="range"
+              min="-2"
+              max="2"
+              step="0.1"
+              value={settings.highlightDelay}
+              onChange={(e) =>
+                updateSetting('highlightDelay', parseFloat(e.target.value))
+              }
+              className="w-full"
+            />
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {settings.highlightDelay.toFixed(1)}s
             </div>
           </div>
         </div>
@@ -181,7 +218,7 @@ const Settings: React.FC = () => {
         className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
       >
         <RotateCcw className="h-4 w-4" />
-        Reset to Defaults
+        Сбросить настройки
       </button>
     </div>
   );

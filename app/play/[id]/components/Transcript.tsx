@@ -17,15 +17,24 @@ const Transcription: FC<Props> = ({
   const { settings } = useSettings();
   const [activeWordIndex, setActiveWordIndex] = useState(-1);
 
-  const findActiveWordIndex = useCallback((words: any[], timeMS: number) => {
-    return words.findIndex((word, index) => {
-      const nextWord = words[index + 1];
-      if (nextWord) {
-        return timeMS >= word.start * 1000 && timeMS < nextWord.start * 1000;
-      }
-      return timeMS >= word.start * 1000 && timeMS <= word.end * 1000;
-    });
-  }, []);
+  const findActiveWordIndex = useCallback(
+    (words: any[], timeMS: number) => {
+      const adjustedTime = timeMS - settings.highlightDelay * 1000;
+      return words.findIndex((word, index) => {
+        const nextWord = words[index + 1];
+        if (nextWord) {
+          return (
+            adjustedTime >= word.start * 1000 &&
+            adjustedTime < nextWord.start * 1000
+          );
+        }
+        return (
+          adjustedTime >= word.start * 1000 && adjustedTime <= word.end * 1000
+        );
+      });
+    },
+    [settings.highlightDelay]
+  );
 
   const isInSameRow = useCallback((word1: DOMRect, word2: DOMRect) => {
     const threshold = 5;
@@ -40,9 +49,9 @@ const Transcription: FC<Props> = ({
         case 'current':
           return index === activeWordIndex;
         case 'all past':
-          return index < activeWordIndex;
+          return index <= activeWordIndex;
         case 'past row': {
-          if (index >= activeWordIndex) return false;
+          if (activeWordIndex === -1) return false;
 
           const activeWordElement = document.querySelector(
             `[data-word-index="${activeWordIndex}"]`
@@ -51,10 +60,8 @@ const Transcription: FC<Props> = ({
 
           const activeWordRect = activeWordElement.getBoundingClientRect();
           const currentWordRect = spanRef.getBoundingClientRect();
-          return (
-            isInSameRow(activeWordRect, currentWordRect) &&
-            index < activeWordIndex
-          );
+
+          return isInSameRow(activeWordRect, currentWordRect);
         }
         default:
           return false;

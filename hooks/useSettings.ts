@@ -13,6 +13,7 @@ export interface UserSettings {
   highlightMode: HighlightMode;
   fontFamily: FontOption;
   theme: 'light' | 'dark' | 'system';
+  highlightDelay: number;
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -26,6 +27,7 @@ const DEFAULT_SETTINGS: UserSettings = {
   highlightMode: 'all past',
   fontFamily: 'System Native',
   theme: 'system',
+  highlightDelay: 0,
 };
 
 const STORAGE_KEY = 'user_transcript_settings';
