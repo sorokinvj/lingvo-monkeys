@@ -19,12 +19,10 @@ const FileList: FC = () => {
   const supabase = createClient();
 
   const { data: user } = useUser();
-  const { data: files, isLoading, error, refetch } = useFiles(user?.id);
+  const { data: files, isLoading, error } = useFiles(user?.id);
 
   useEffect(() => {
     if (!user) return;
-
-    console.log('Setting up realtime channels for user:', user.id);
 
     const channel: RealtimeChannel = supabase
       .channel('file_changes')
@@ -36,21 +34,11 @@ const FileList: FC = () => {
           table: 'File',
           filter: `userId=eq.${user.id}`,
         },
-        (payload) => {
-          console.log('🔥 File changed event received:', payload);
-          if (payload.eventType === 'UPDATE') {
-            console.log('File updated:', {
-              old: payload.old,
-              new: payload.new,
-            });
-            queryClient.invalidateQueries({ queryKey: ['files'] });
-            refetch();
-          }
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['files'] });
         }
       )
-      .subscribe((status) => {
-        console.log('File channel status:', status);
-      });
+      .subscribe();
 
     const transcriptionChannel: RealtimeChannel = supabase
       .channel('transcription_changes')
@@ -62,28 +50,17 @@ const FileList: FC = () => {
           table: 'Transcription',
           filter: `userId=eq.${user.id}`,
         },
-        (payload) => {
-          console.log('📝 Transcription changed event received:', payload);
-          if (payload.eventType === 'UPDATE') {
-            console.log('Transcription updated:', {
-              old: payload.old,
-              new: payload.new,
-            });
-            queryClient.invalidateQueries({ queryKey: ['files'] });
-            refetch();
-          }
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['files'] });
         }
       )
-      .subscribe((status) => {
-        console.log('Transcription channel status:', status);
-      });
+      .subscribe();
 
     return () => {
-      console.log('Cleaning up realtime channels');
       supabase.removeChannel(channel);
       supabase.removeChannel(transcriptionChannel);
     };
-  }, [user, queryClient, refetch]);
+  }, [user, queryClient]);
 
   const columns = [
     {
@@ -91,13 +68,19 @@ const FileList: FC = () => {
       header: 'Название',
       accessorKey: 'name',
       width: 200,
+      cell: (info: CellContext<File, string>) => (
+        <span key={info.row.original.id}>{info.getValue()}</span>
+      ),
     },
     {
       id: 'status',
       header: 'Статус',
       accessorKey: 'status',
       cell: (info: CellContext<File, string>) => (
-        <FileStatus status={info.getValue() as Status} />
+        <FileStatus
+          key={info.row.original.id}
+          status={info.getValue() as Status}
+        />
       ),
     },
     {
