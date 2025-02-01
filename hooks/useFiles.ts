@@ -5,7 +5,7 @@ import { File } from '@/schema/models';
 export const useFiles = (userId: string | undefined) => {
   const supabase = createClient();
   return useQuery<File[]>({
-    queryKey: ['files', userId],
+    queryKey: ['files'],
     queryFn: async () => {
       if (!userId) throw new Error('User ID is required');
       const { data, error } = await supabase

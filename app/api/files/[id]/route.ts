@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
 export async function DELETE(
   _: NextRequest,
@@ -7,6 +8,23 @@ export async function DELETE(
 ) {
   const supabase = createClient();
   const fileId = params.id;
+  if (
+    !process.env.AWS_REGION ||
+    !process.env.AWS_ACCESS_KEY_ID ||
+    !process.env.AWS_SECRET_ACCESS_KEY
+  ) {
+    return NextResponse.json(
+      { error: 'AWS credentials are not set' },
+      { status: 500 }
+    );
+  }
+  const s3Client = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+  });
 
   console.log('Received DELETE request for file ID:', fileId);
 
@@ -29,19 +47,23 @@ export async function DELETE(
 
   console.log('File details fetched:', file);
 
-  // Delete the file from storage
-  const { error: storageError } = await supabase.storage
-    .from('audio-files')
-    .remove([file.path]);
-
-  if (storageError) {
-    console.log('Error deleting file from storage:', storageError);
-    return NextResponse.json({ error: storageError.message }, { status: 500 });
+  // Delete the file from S3
+  try {
+    const deleteCommand = new DeleteObjectCommand({
+      Bucket: process.env.AWS_BUCKET_NAME!,
+      Key: file.path,
+    });
+    await s3Client.send(deleteCommand);
+    console.log('File deleted from S3');
+  } catch (error) {
+    console.log('Error deleting file from S3:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete file from storage' },
+      { status: 500 }
+    );
   }
 
-  console.log('File deleted from storage');
-
-  // Delete the file record first
+  // Delete the file record
   const { error: fileError } = await supabase
     .from('File')
     .delete()

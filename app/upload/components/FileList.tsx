@@ -24,6 +24,8 @@ const FileList: FC = () => {
   useEffect(() => {
     if (!user) return;
 
+    console.log('Setting up realtime channels for user:', user.id);
+
     const channel: RealtimeChannel = supabase
       .channel('file_changes')
       .on(
@@ -34,22 +36,61 @@ const FileList: FC = () => {
           table: 'File',
           filter: `userId=eq.${user.id}`,
         },
-        () => {
-          refetch();
+        (payload) => {
+          console.log('🔥 File changed event received:', payload);
+          if (payload.eventType === 'UPDATE') {
+            console.log('File updated:', {
+              old: payload.old,
+              new: payload.new,
+            });
+            queryClient.invalidateQueries({ queryKey: ['files'] });
+            refetch();
+          }
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('File channel status:', status);
+      });
+
+    const transcriptionChannel: RealtimeChannel = supabase
+      .channel('transcription_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'Transcription',
+          filter: `userId=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log('📝 Transcription changed event received:', payload);
+          if (payload.eventType === 'UPDATE') {
+            console.log('Transcription updated:', {
+              old: payload.old,
+              new: payload.new,
+            });
+            queryClient.invalidateQueries({ queryKey: ['files'] });
+            refetch();
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log('Transcription channel status:', status);
+      });
 
     return () => {
+      console.log('Cleaning up realtime channels');
       supabase.removeChannel(channel);
+      supabase.removeChannel(transcriptionChannel);
     };
-  }, [user, queryClient]);
+  }, [user, queryClient, refetch]);
 
   const columns = [
     {
       id: 'name',
       header: 'Название',
       accessorKey: 'name',
+      width: 200,
     },
     {
       id: 'status',
