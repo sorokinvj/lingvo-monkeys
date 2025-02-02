@@ -18,23 +18,37 @@ export const useUploadProgress = ({
 
   const updateProgress = useCallback(
     (stage: UploadStage, current: number = 100) => {
+      const stages = Object.keys(UPLOAD_STAGES) as UploadStage[];
+      const currentIndex = stages.indexOf(stage);
       const currentStageValue = UPLOAD_STAGES[stage];
       const prevStageValue =
-        stage === 'PRESIGN' ? 0 : UPLOAD_STAGES[getPreviousStage(stage)];
+        currentIndex > 0 ? UPLOAD_STAGES[stages[currentIndex - 1]] : 0;
 
-      const calculatedProgress =
-        prevStageValue + (current * (currentStageValue - prevStageValue)) / 100;
+      // Для этапа UPLOAD используем прямой процент от XHR
+      if (stage === 'UPLOAD') {
+        const uploadStartProgress = UPLOAD_STAGES.PREPARING;
+        const uploadEndProgress = UPLOAD_STAGES.UPLOAD;
+        const uploadRange = uploadEndProgress - uploadStartProgress;
+        setProgress(
+          Math.round(uploadStartProgress + (current * uploadRange) / 100)
+        );
+        return;
+      }
+
+      // Для остальных этапов используем диапазон между этапами
+      const range = currentStageValue - prevStageValue;
+      const calculatedProgress = prevStageValue + (range * current) / 100;
       setProgress(Math.round(calculatedProgress));
     },
     []
   );
 
   useEffect(() => {
-    if (progress === UPLOAD_STAGES.COMPLETED && onComplete) {
+    if (progress === UPLOAD_STAGES.COMPLETED) {
       const timer = setTimeout(() => {
         reset();
-        onComplete();
-      }, 1000);
+        onComplete?.();
+      }, 1500); // Увеличил время до сброса
 
       return () => clearTimeout(timer);
     }

@@ -29,17 +29,20 @@ const UploadPage: React.FC = () => {
       try {
         // Этап 1: Получаем presigned URL
         setMessage('Подготовка к загрузке...');
-        updateProgress('PRESIGN', UPLOAD_STAGES.PRESIGN);
-
+        updateProgress('PRESIGN');
         const { url, fields, key, publicUrl } = await getPresignedUrl(file);
 
-        // Этап 2: Загружаем в S3
+        // Этап 2: Подготовка
+        setMessage('Начинаем загрузку...');
+        updateProgress('PREPARING');
+
+        // Этап 3: Загружаем в S3
         setMessage('Загрузка файла...');
         await uploadToS3(url, fields, file, (uploadProgress) => {
           updateProgress('UPLOAD', uploadProgress);
         });
 
-        // Этап 3: Обработка
+        // Этап 4: Обработка
         setMessage('Файл загружен, начинаем обработку...');
         await processFile(
           {
@@ -54,6 +57,10 @@ const UploadPage: React.FC = () => {
             setMessage(processMessage);
           }
         );
+
+        // Завершение
+        updateProgress('COMPLETED');
+        setMessage('Загрузка завершена!');
       } catch (error) {
         console.error('Upload error:', error);
         reset();

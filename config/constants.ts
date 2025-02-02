@@ -13,11 +13,11 @@ export const ALLOWED_AUDIO_TYPES = {
 
 // Upload stages
 export const UPLOAD_STAGES = {
-  PRESIGN: 10,
-  PREPARING: 30,
-  UPLOAD: 50,
-  PROCESSING: 80,
-  COMPLETED: 100,
+  PRESIGN: 10, // 0-10%: Получение presigned URL
+  PREPARING: 20, // 10-20%: Подготовка загрузки
+  UPLOAD: 60, // 20-60%: Загрузка файла (XHR)
+  PROCESSING: 90, // 60-90%: Обработка файла
+  COMPLETED: 100, // 90-100%: Завершение
 } as const;
 
 export type UploadStage = keyof typeof UPLOAD_STAGES;
