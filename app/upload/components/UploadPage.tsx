@@ -151,7 +151,7 @@ const UploadPage: React.FC = () => {
           </div>
         )}
         {error && (
-          <p className="text-red-500 text-center max-w-prose mx-auto">
+          <p className="text-red-500 text-center max-w-prose mx-auto mt-2">
             {error}
           </p>
         )}
