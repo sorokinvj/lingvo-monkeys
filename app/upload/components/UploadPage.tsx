@@ -10,7 +10,6 @@ import {
   MAX_FILE_SIZE,
   MAX_FILE_SIZE_TEXT,
   ALLOWED_AUDIO_TYPES,
-  UPLOAD_STAGES,
 } from '@/config/constants';
 
 const UploadPage: React.FC = () => {
