@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FileList from './FileList';
 import { parseErrorMessage } from '@/lib/utils';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useUploadProgress } from '@/hooks/useUploadProgress';
 import { getPresignedUrl, processFile, uploadToS3 } from './upload.utils';
 import {
@@ -14,14 +14,9 @@ import {
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
-  const queryClient = useQueryClient();
 
   const { progress, message, setMessage, updateProgress, reset } =
-    useUploadProgress({
-      onComplete: () => {
-        queryClient.invalidateQueries({ queryKey: ['files'] });
-      },
-    });
+    useUploadProgress();
 
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {

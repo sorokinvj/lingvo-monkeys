@@ -1,13 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { UPLOAD_STAGES, type UploadStage } from '@/config/constants';
 
-interface UseUploadProgressProps {
-  onComplete?: () => void;
-}
-
-export const useUploadProgress = ({
-  onComplete,
-}: UseUploadProgressProps = {}) => {
+export const useUploadProgress = () => {
   const [progress, setProgress] = useState<number>(0);
   const [message, setMessage] = useState<string>('');
 
@@ -24,7 +18,6 @@ export const useUploadProgress = ({
       const prevStageValue =
         currentIndex > 0 ? UPLOAD_STAGES[stages[currentIndex - 1]] : 0;
 
-      // Для этапа UPLOAD используем прямой процент от XHR
       if (stage === 'UPLOAD') {
         const uploadStartProgress = UPLOAD_STAGES.PREPARING;
         const uploadEndProgress = UPLOAD_STAGES.UPLOAD;
@@ -35,19 +28,16 @@ export const useUploadProgress = ({
         return;
       }
 
-      // Для остальных этапов используем диапазон между этапами
       const range = currentStageValue - prevStageValue;
       const calculatedProgress = prevStageValue + (range * current) / 100;
       setProgress(Math.round(calculatedProgress));
-
-      // Если это последний этап, вызываем onComplete
-      if (stage === 'COMPLETED') {
-        onComplete?.();
-        reset();
-      }
     },
-    [onComplete, reset]
+    []
   );
+
+  const complete = useCallback(() => {
+    reset();
+  }, [reset]);
 
   return {
     progress,
@@ -55,5 +45,6 @@ export const useUploadProgress = ({
     setMessage,
     updateProgress,
     reset,
+    complete,
   };
 };

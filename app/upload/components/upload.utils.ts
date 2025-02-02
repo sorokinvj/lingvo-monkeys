@@ -86,8 +86,14 @@ export const processFile = async (
   return new Promise((resolve, reject) => {
     const eventSource = createSSEConnection('/api/upload', {
       onProgress: (progress, message) => onProgress(progress, message),
-      onError: (error) => reject(error),
-      onComplete: (data) => resolve(data),
+      onError: (error) => {
+        eventSource.close();
+        reject(error);
+      },
+      onComplete: (data) => {
+        eventSource.close();
+        resolve(data);
+      },
     });
 
     fetch('/api/upload', {
