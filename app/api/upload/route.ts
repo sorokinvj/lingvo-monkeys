@@ -169,3 +169,38 @@ export async function POST(request: NextRequest) {
     },
   });
 }
+
+export async function GET(request: NextRequest) {
+  // Проверяем авторизацию
+  const supabase = createClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError || !user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Создаем SSE соединение
+  const encoder = new TextEncoder();
+  const stream = new ReadableStream({
+    start(controller) {
+      // Отправляем начальное событие
+      controller.enqueue(
+        encoder.encode(
+          'event: connected\ndata: ' +
+            JSON.stringify({ message: 'SSE connection established' }) +
+            '\n\n'
+        )
+      );
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    },
+  });
+}

@@ -108,26 +108,9 @@ const UploadPage: React.FC = () => {
         setMessage('Файл загружен, начинаем обработку...');
 
         // Этап 3: Запускаем обработку через существующий API
-        // Используем publicUrl, полученный от сервера
-
-        const eventSource = new EventSource(`/api/upload`, {
-          withCredentials: true, // для передачи cookies с авторизацией
-        });
-
-        // Сначала отправляем данные
-        await fetch('/api/upload', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: file.name,
-            path: key,
-            size: file.size,
-            mimeType: file.type,
-            publicUrl,
-          }),
-        });
-
         return new Promise((resolve, reject) => {
+          const eventSource = new EventSource('/api/upload');
+
           eventSource.onmessage = (event) => {
             const data = JSON.parse(event.data);
             setProgress(data.progress);
@@ -138,6 +121,22 @@ const UploadPage: React.FC = () => {
             eventSource.close();
             reject(new Error('Processing failed'));
           };
+
+          // Отправляем POST запрос после установки EventSource
+          fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: file.name,
+              path: key,
+              size: file.size,
+              mimeType: file.type,
+              publicUrl,
+            }),
+          }).catch((error) => {
+            eventSource.close();
+            reject(error);
+          });
 
           eventSource.addEventListener('complete', (event) => {
             eventSource.close();
