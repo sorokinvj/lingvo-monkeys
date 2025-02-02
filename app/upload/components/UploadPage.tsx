@@ -37,7 +37,8 @@ const UploadPage: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Upload failed');
+        const res = await response.json();
+        throw new Error(res.error);
       }
 
       const reader = response.body?.getReader();
