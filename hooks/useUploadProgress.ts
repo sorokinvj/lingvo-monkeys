@@ -57,10 +57,3 @@ export const useUploadProgress = ({
     reset,
   };
 };
-
-// Вспомогательная функция для получения предыдущего этапа
-const getPreviousStage = (stage: UploadStage): UploadStage => {
-  const stages = Object.keys(UPLOAD_STAGES) as UploadStage[];
-  const currentIndex = stages.indexOf(stage);
-  return currentIndex > 0 ? stages[currentIndex - 1] : stage;
-};
