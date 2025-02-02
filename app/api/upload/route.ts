@@ -35,6 +35,22 @@ export async function POST(request: NextRequest) {
     async start(controller) {
       try {
         const { name, path, size, mimeType, publicUrl } = await request.json();
+
+        // Добавляем четкие логи на каждом этапе
+        console.log('[API] Starting file processing:', { name, path });
+
+        // Отправляем начальное событие клиенту
+        controller.enqueue(
+          encoder.encode(
+            'event: progress\ndata: ' +
+              JSON.stringify({
+                progress: 0,
+                message: 'Starting processing...',
+              }) +
+              '\n\n'
+          )
+        );
+
         // Create File record in database
         const { data: newFile, error: insertError } = await supabase
           .from('File')
@@ -156,11 +172,27 @@ export async function POST(request: NextRequest) {
               '\n\n'
           )
         );
-        controller.close();
-      } catch (error) {
+
+        // Отправляем событие завершения
         controller.enqueue(
           encoder.encode(
-            'event: error\ndata: ' + JSON.stringify({ error }) + '\n\n'
+            'event: complete\ndata: ' +
+              JSON.stringify({ success: true }) +
+              '\n\n'
+          )
+        );
+
+        console.log('[API] Processing completed');
+        controller.close();
+      } catch (error) {
+        console.error('[API] Error:', error);
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
+        controller.enqueue(
+          encoder.encode(
+            'event: error\ndata: ' +
+              JSON.stringify({ error: errorMessage }) +
+              '\n\n'
           )
         );
         controller.close();
