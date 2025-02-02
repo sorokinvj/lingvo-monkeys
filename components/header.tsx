@@ -2,10 +2,9 @@
 import { FC, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '@/hooks/useUser';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export const Header: FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {

@@ -3,111 +3,92 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FileList from './FileList';
 import { parseErrorMessage } from '@/lib/utils';
-import { useQueryClient } from '@tanstack/react-query';
-import { useUser } from '@/hooks/useUser';
-import { createClient } from '@/utils/supabase/client';
-import { useFiles } from '@/hooks/useFiles';
+import { useMutation } from '@tanstack/react-query';
+import { useUploadProgress } from '@/hooks/useUploadProgress';
+import { getPresignedUrl, processFile, uploadToS3 } from './upload.utils';
+import {
+  MAX_FILE_SIZE,
+  MAX_FILE_SIZE_TEXT,
+  ALLOWED_AUDIO_TYPES,
+} from '@/config/constants';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState<number>(0);
-  const [message, setMessage] = useState<string>('');
-  const queryClient = useQueryClient();
-  const { data: user } = useUser();
-  const { refetch } = useFiles(user?.id);
 
-  const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-      if (!file) return;
+  const { progress, message, setMessage, updateProgress, reset, complete } =
+    useUploadProgress();
 
-      const maxSize = 50 * 1024 * 1024; // 50MB
-      if (file.size > maxSize) {
-        setError(
-          `Файл слишком большой. Максимальный размер: 50МБ, размер вашего файла: ${(file.size / (1024 * 1024)).toFixed(1)}МБ`
-        );
-        return;
-      }
-
+  const uploadMutation = useMutation({
+    mutationFn: async (file: File) => {
       try {
-        setError(null);
-        setMessage('Uploading file...');
-        setProgress(10);
-        const supabase = createClient();
-        const { data, error: uploadError } = await supabase.storage
-          .from('audio-files')
-          .upload(`${user?.id}/${Date.now()}_${file.name}`, file, {
-            cacheControl: '3600',
-            upsert: false,
-          });
+        // Этап 1: Получаем presigned URL
+        setMessage('Подготовка к загрузке...');
+        updateProgress('PRESIGN');
+        const { url, fields, key, publicUrl } = await getPresignedUrl(file);
 
-        if (uploadError) throw uploadError;
-        setMessage('Getting public URL...');
-        setProgress(20);
-        // Get public URL
-        const {
-          data: { publicUrl },
-        } = supabase.storage.from('audio-files').getPublicUrl(data.path);
+        // Этап 2: Подготовка
+        setMessage('Начинаем загрузку...');
+        updateProgress('PREPARING');
 
-        setMessage('Creating record in database...');
-        setProgress(30);
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        // Этап 3: Загружаем в S3
+        setMessage('Загрузка файла...');
+        await uploadToS3(url, fields, file, (uploadProgress) => {
+          updateProgress('UPLOAD', uploadProgress);
+        });
+
+        // Этап 4: Обработка
+        await processFile(
+          {
             name: file.name,
-            path: data.path,
+            path: key,
             size: file.size,
             mimeType: file.type,
             publicUrl,
-          }),
-        });
-        setProgress(40);
-        if (!response.ok) {
-          throw new Error('Upload process failed');
-        }
-
-        const reader = response.body?.getReader();
-        if (!reader) throw new Error('Unable to read response');
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const text = new TextDecoder().decode(value);
-          const events = text.split('\n\n').filter(Boolean);
-
-          for (const event of events) {
-            const [eventType, data] = event.split('\n');
-            if (eventType === 'event: progress') {
-              const { progress: newProgress, message: newMessage } = JSON.parse(
-                data.replace('data: ', '')
-              );
-              setProgress(newProgress);
-              setMessage(newMessage);
-            } else if (eventType === 'event: error') {
-              const { error: errorMessage } = JSON.parse(
-                data.replace('data: ', '')
-              );
-              setError(errorMessage);
-            }
+          },
+          (processProgress, processMessage) => {
+            updateProgress('PROCESSING', processProgress);
+            setMessage(processMessage);
           }
-        }
-        refetch();
-        queryClient.invalidateQueries({ queryKey: ['files'] });
+        );
+
+        // Завершение
+        updateProgress('COMPLETED');
+        setMessage('Загрузка завершена!');
+        complete();
       } catch (error) {
-        setError(parseErrorMessage(error));
+        console.error('❌ Upload error:', error);
+        reset();
+        throw error;
       }
     },
-    [user]
-  );
+    onError: (error) => {
+      setError(parseErrorMessage(error));
+      reset();
+    },
+  });
+
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    if (!file) return;
+
+    if (file.size > MAX_FILE_SIZE) {
+      setError(
+        `Файл слишком большой. Максимальный размер: ${MAX_FILE_SIZE_TEXT}, размер вашего файла: ${(
+          file.size /
+          (1024 * 1024)
+        ).toFixed(1)}МБ`
+      );
+      return;
+    }
+
+    setError(null);
+    uploadMutation.mutate(file);
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'audio/mpeg': ['.mp3'],
-    },
-    maxSize: 50 * 1024 * 1024, // 50MB max size
+    accept: ALLOWED_AUDIO_TYPES,
+    maxSize: MAX_FILE_SIZE,
   });
 
   return (
@@ -120,7 +101,7 @@ const UploadPage: React.FC = () => {
             : 'border-blue-300 rounded-lg'
         }`}
       >
-        <h1 className="text-base font-bold mb-4 text-blue-900">
+        <h1 className="text-xl font-bold mb-4 text-blue-900">
           Загрузить MP3 Файл
         </h1>
         <input {...getInputProps()} />
@@ -130,9 +111,9 @@ const UploadPage: React.FC = () => {
           <p>Перетащите MP3 файл сюда или нажмите для выбора</p>
         )}
         <p className="text-sm text-gray-500 mt-4">
-          Максимальный размер файла: 50МБ
+          Максимальный размер файла: {MAX_FILE_SIZE_TEXT}
         </p>
-        {progress > 0 && progress < 100 && (
+        {progress > 0 && (
           <div className="mt-4">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
               <div
@@ -144,7 +125,7 @@ const UploadPage: React.FC = () => {
           </div>
         )}
         {error && (
-          <p className="text-red-500 text-center max-w-prose mx-auto">
+          <p className="text-red-500 text-center max-w-prose mx-auto mt-2">
             {error}
           </p>
         )}

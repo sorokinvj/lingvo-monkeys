@@ -9,18 +9,17 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useFiles } from '@/hooks/useFiles';
 import { useUser } from '@/hooks/useUser';
-import Link from 'next/link';
 import FileStatus from './FileStatus';
 import { Status } from '@/schema/models';
 import { Spinner } from '@/components/ui/spinner';
-import { Button } from '@/components/ui/button';
+import FileActions from './FileActions';
 
 const FileList: FC = () => {
   const queryClient = useQueryClient();
   const supabase = createClient();
 
   const { data: user } = useUser();
-  const { data: files, isLoading, error, refetch } = useFiles(user?.id);
+  const { data: files, isLoading, error } = useFiles(user?.id);
 
   useEffect(() => {
     if (!user) return;
@@ -36,13 +35,30 @@ const FileList: FC = () => {
           filter: `userId=eq.${user.id}`,
         },
         () => {
-          refetch();
+          queryClient.invalidateQueries({ queryKey: ['files'] });
+        }
+      )
+      .subscribe();
+
+    const transcriptionChannel: RealtimeChannel = supabase
+      .channel('transcription_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'Transcription',
+          filter: `userId=eq.${user.id}`,
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['files'] });
         }
       )
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
+      supabase.removeChannel(transcriptionChannel);
     };
   }, [user, queryClient]);
 
@@ -51,13 +67,20 @@ const FileList: FC = () => {
       id: 'name',
       header: 'Название',
       accessorKey: 'name',
+      width: 200,
+      cell: (info: CellContext<File, string>) => (
+        <span key={info.row.original.id}>{info.getValue()}</span>
+      ),
     },
     {
       id: 'status',
       header: 'Статус',
       accessorKey: 'status',
       cell: (info: CellContext<File, string>) => (
-        <FileStatus status={info.getValue() as Status} />
+        <FileStatus
+          key={info.row.original.id}
+          status={info.getValue() as Status}
+        />
       ),
     },
     {
@@ -75,20 +98,12 @@ const FileList: FC = () => {
     {
       id: 'actions',
       header: 'Действия',
-      cell: (info: CellContext<File, string>) => {
-        if (info.row.original.status === 'transcribed') {
-          return (
-            <Link
-              href={`/play/${info.row.original.id}`}
-              className="flex items-center gap-2"
-            >
-              <Button variant="outline" size="sm">
-                Открыть
-              </Button>
-            </Link>
-          );
-        }
-      },
+      cell: (info: CellContext<File, string>) => (
+        <FileActions
+          fileId={info.row.original.id}
+          status={info.row.original.status}
+        />
+      ),
     },
   ];
 

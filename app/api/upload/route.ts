@@ -5,6 +5,7 @@ import {
   createClient as createDeepgramClient,
   CallbackUrl,
 } from '@deepgram/sdk';
+import { UPLOAD_STAGES } from '@/config/constants';
 
 export async function POST(request: NextRequest) {
   if (
@@ -34,6 +35,22 @@ export async function POST(request: NextRequest) {
     async start(controller) {
       try {
         const { name, path, size, mimeType, publicUrl } = await request.json();
+
+        // Добавляем четкие логи на каждом этапе
+        console.log('[API] Starting file processing:', { name, path });
+
+        // Отправляем начальное событие клиенту
+        controller.enqueue(
+          encoder.encode(
+            'event: progress\ndata: ' +
+              JSON.stringify({
+                progress: 0,
+                message: 'Starting processing...',
+              }) +
+              '\n\n'
+          )
+        );
+
         // Create File record in database
         const { data: newFile, error: insertError } = await supabase
           .from('File')
@@ -58,7 +75,10 @@ export async function POST(request: NextRequest) {
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
-              JSON.stringify({ progress: 50, message: 'File record created' }) +
+              JSON.stringify({
+                progress: UPLOAD_STAGES.PRESIGN,
+                message: 'File record created',
+              }) +
               '\n\n'
           )
         );
@@ -71,7 +91,7 @@ export async function POST(request: NextRequest) {
           encoder.encode(
             'event: progress\ndata: ' +
               JSON.stringify({
-                progress: 60,
+                progress: UPLOAD_STAGES.PREPARING,
                 message: 'Preparing transcription',
               }) +
               '\n\n'
@@ -102,7 +122,7 @@ export async function POST(request: NextRequest) {
           encoder.encode(
             'event: progress\ndata: ' +
               JSON.stringify({
-                progress: 80,
+                progress: UPLOAD_STAGES.PROCESSING,
                 message: 'Transcription process started',
               }) +
               '\n\n'
@@ -145,15 +165,34 @@ export async function POST(request: NextRequest) {
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
-              JSON.stringify({ progress: 100, message: 'Process completed' }) +
+              JSON.stringify({
+                progress: UPLOAD_STAGES.COMPLETED,
+                message: 'Process completed',
+              }) +
               '\n\n'
           )
         );
-        controller.close();
-      } catch (error) {
+
+        // Отправляем событие завершения
         controller.enqueue(
           encoder.encode(
-            'event: error\ndata: ' + JSON.stringify({ error }) + '\n\n'
+            'event: complete\ndata: ' +
+              JSON.stringify({ success: true }) +
+              '\n\n'
+          )
+        );
+
+        console.log('[API] Processing completed');
+        controller.close();
+      } catch (error) {
+        console.error('[API] Error:', error);
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
+        controller.enqueue(
+          encoder.encode(
+            'event: error\ndata: ' +
+              JSON.stringify({ error: errorMessage }) +
+              '\n\n'
           )
         );
         controller.close();
