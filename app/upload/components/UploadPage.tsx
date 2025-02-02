@@ -4,8 +4,6 @@ import { useDropzone } from 'react-dropzone';
 import FileList from './FileList';
 import { parseErrorMessage } from '@/lib/utils';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
-import { useUser } from '@/hooks/useUser';
-import { useFiles } from '@/hooks/useFiles';
 import { useUploadProgress } from '@/hooks/useUploadProgress';
 import { getPresignedUrl, processFile, uploadToS3 } from './upload.utils';
 import {
@@ -18,14 +16,11 @@ import {
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const queryClient = useQueryClient();
-  const { data: user } = useUser();
-  const { refetch } = useFiles(user?.id);
 
   const { progress, message, setMessage, updateProgress, reset } =
     useUploadProgress({
       onComplete: () => {
         queryClient.invalidateQueries({ queryKey: ['files'] });
-        refetch();
       },
     });
 
@@ -41,7 +36,7 @@ const UploadPage: React.FC = () => {
         // Этап 2: Загружаем в S3
         setMessage('Загрузка файла...');
         await uploadToS3(url, fields, file, (uploadProgress) => {
-          updateProgress('UPLOAD', UPLOAD_STAGES.UPLOAD);
+          updateProgress('UPLOAD', uploadProgress);
         });
 
         // Этап 3: Обработка
