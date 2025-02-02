@@ -19,58 +19,90 @@ const UploadPage: React.FC = () => {
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
       const fileId = uuidv4();
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append(
-        'metadata',
-        JSON.stringify({
-          id: fileId,
-          name: file.name,
-          size: file.size,
-          mimeType: file.type,
-        })
-      );
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      try {
+        // Этап 1: Получаем presigned URL
+        setMessage('Подготовка к загрузке...');
+        setProgress(10);
 
-      if (!response.ok) {
-        const res = await response.json();
-        throw new Error(res.error);
-      }
+        const presignResponse = await fetch('/api/upload/presign', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filename: file.name,
+            contentType: file.type,
+            fileId,
+          }),
+        });
 
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error('Unable to read response');
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const text = new TextDecoder().decode(value);
-        const events = text.split('\n\n').filter(Boolean);
-
-        for (const event of events) {
-          const [eventType, data] = event.split('\n');
-          if (eventType === 'event: progress') {
-            const { progress: newProgress, message: newMessage } = JSON.parse(
-              data.replace('data: ', '')
-            );
-            setProgress(newProgress);
-            setMessage(newMessage);
-            console.log('Progress:', newProgress, 'Message:', newMessage);
-
-            if (newProgress === 100) {
-              return;
-            }
-          } else if (eventType === 'event: error') {
-            const { error: errorMessage } = JSON.parse(
-              data.replace('data: ', '')
-            );
-            throw new Error(errorMessage);
-          }
+        if (!presignResponse.ok) {
+          const error = await presignResponse.json();
+          throw new Error(error.message || 'Failed to get upload URL');
         }
+
+        const { url, fields, key } = await presignResponse.json();
+
+        // Этап 2: Загружаем в S3
+        setProgress(20);
+        setMessage('Загрузка файла...');
+        const formData = new FormData();
+        Object.entries(fields).forEach(([key, value]) => {
+          formData.append(key, value as string);
+        });
+        formData.append('file', file);
+
+        const uploadResponse = await fetch(url, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload to S3');
+        }
+
+        setProgress(50);
+        setMessage('Файл загружен, начинаем обработку...');
+
+        // Этап 3: Запускаем обработку через существующий API
+        const publicUrl = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${key}`;
+
+        const eventSource = new EventSource(`/api/upload`, {
+          withCredentials: true, // для передачи cookies с авторизацией
+        });
+
+        // Сначала отправляем данные
+        await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: file.name,
+            path: key,
+            size: file.size,
+            mimeType: file.type,
+            publicUrl,
+          }),
+        });
+
+        return new Promise((resolve, reject) => {
+          eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            setProgress(data.progress);
+            setMessage(data.message);
+          };
+
+          eventSource.onerror = (error) => {
+            eventSource.close();
+            reject(new Error('Processing failed'));
+          };
+
+          eventSource.addEventListener('complete', (event) => {
+            eventSource.close();
+            resolve(JSON.parse(event.data));
+          });
+        });
+      } catch (error) {
+        console.error('Upload error:', error);
+        throw error;
       }
     },
     onSuccess: () => {

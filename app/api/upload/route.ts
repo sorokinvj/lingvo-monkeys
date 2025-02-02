@@ -5,20 +5,13 @@ import {
   createClient as createDeepgramClient,
   CallbackUrl,
 } from '@deepgram/sdk';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { formatFileName } from '@/utils/utils';
 
 export async function POST(request: NextRequest) {
-  console.log('[Upload] Starting new file upload');
-
   if (
-    !process.env.DEEPGRAM_API_KEY ||
-    !process.env.AWS_BUCKET_NAME ||
-    !process.env.AWS_REGION ||
-    !process.env.AWS_ACCESS_KEY_ID ||
-    !process.env.AWS_SECRET_ACCESS_KEY
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    !process.env.DEEPGRAM_API_KEY
   ) {
-    console.error('[Upload] Missing environment variables');
     return NextResponse.json(
       { error: '3rd parties credentials are not set' },
       { status: 500 }
@@ -33,86 +26,20 @@ export async function POST(request: NextRequest) {
     error: userError,
   } = await supabase.auth.getUser();
   if (userError || !user) {
-    console.error('[Upload] Authentication error:', userError);
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-
-  console.log('[Upload] User authenticated:', user.id);
-
-  const s3Client = new S3Client({
-    region: process.env.AWS_REGION,
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    },
-  });
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        const formData = await request.formData();
-        const file = formData.get('file') as File;
-        const metadata = JSON.parse(formData.get('metadata') as string);
-        const { id, name, path, size, mimeType } = metadata;
-
-        console.log('[Upload] File details:', { id, name, size, mimeType });
-
-        // Форматируем имя файла, заменяя пробелы и всякую ерунду на дефисы
-        const key = `${user.id}/${formatFileName(name)}`;
-        console.log('[Upload] Generated S3 key:', key);
-
-        // Преобразуем файл в Buffer
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-
-        // Перед загрузкой в S3
-        controller.enqueue(
-          encoder.encode(
-            'event: progress\ndata: ' +
-              JSON.stringify({
-                progress: 20,
-                message: 'Загрузка файла в хранилище...',
-              }) +
-              '\n\n'
-          )
-        );
-
-        // Загружаем файл в S3
-        const command = new PutObjectCommand({
-          Bucket: process.env.AWS_BUCKET_NAME!,
-          Key: key,
-          Body: buffer,
-          ContentType: mimeType,
-        });
-
-        await s3Client.send(command);
-        console.log('[Upload] S3 upload successful');
-
-        // После загрузки в S3
-        controller.enqueue(
-          encoder.encode(
-            'event: progress\ndata: ' +
-              JSON.stringify({
-                progress: 40,
-                message: 'Файл успешно загружен',
-              }) +
-              '\n\n'
-          )
-        );
-
-        // После успешной загрузки формируем публичный URL
-        const publicUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
-
-        console.log('File uploaded successfully:', publicUrl);
-
+        const { name, path, size, mimeType, publicUrl } = await request.json();
         // Create File record in database
         const { data: newFile, error: insertError } = await supabase
           .from('File')
           .insert({
-            id,
             name,
-            path: key, // Using S3 key as path
+            path,
             size,
             mimeType,
             userId: user.id,
@@ -122,47 +49,34 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (insertError) {
-          console.error('[Upload] Database insert failed:', insertError);
-          throw insertError;
+          return NextResponse.json(
+            { error: insertError.message },
+            { status: 500 }
+          );
         }
 
-        console.log('[Upload] File record created:', newFile.id);
-
-        // После создания записи в БД
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
-              JSON.stringify({
-                progress: 50,
-                message: 'Запись создана в базе данных',
-              }) +
+              JSON.stringify({ progress: 50, message: 'File record created' }) +
               '\n\n'
           )
         );
 
         // Prepare the callback URL
         const origin = request.headers.get('origin') || request.nextUrl.origin;
-        console.log('Origin:', origin);
-        const callbackUrl = `https://5891-2001-8a0-7207-eb00-bdec-197a-2d1a-328b.ngrok-free.app/api/transcription-callback`;
-
-        console.log('Callback URL prepared:', callbackUrl);
+        const callbackUrl = `${origin}/api/transcription-callback`;
 
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
               JSON.stringify({
                 progress: 60,
-                message: 'Подготовка к расшифровке',
+                message: 'Preparing transcription',
               }) +
               '\n\n'
           )
         );
-
-        // При отправке в Deepgram
-        console.log('Sending to Deepgram:', {
-          url: publicUrl,
-          callbackUrl,
-        });
 
         const { result, error: deepgramError } =
           await deepgram.listen.prerecorded.transcribeUrlCallback(
@@ -179,18 +93,17 @@ export async function POST(request: NextRequest) {
           );
 
         if (deepgramError) {
-          console.error('[Upload] Deepgram request failed:', deepgramError);
-          throw deepgramError;
+          return NextResponse.json(
+            { error: 'Transcription request failed' },
+            { status: 500 }
+          );
         }
-
-        console.log('[Upload] Transcription started:', result.request_id);
-
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
               JSON.stringify({
                 progress: 80,
-                message: 'Процесс расшифровки запущен',
+                message: 'Transcription process started',
               }) +
               '\n\n'
           )
@@ -210,14 +123,11 @@ export async function POST(request: NextRequest) {
             .single();
 
         if (transcriptionError) {
-          console.error(
-            '[Upload] Error creating transcription record:',
-            transcriptionError
+          return NextResponse.json(
+            { error: transcriptionError.message },
+            { status: 500 }
           );
-          throw transcriptionError;
         }
-
-        console.log('Transcription record created:', transcriptionData.id);
 
         // Update the File record with the new transcriptionId
         const { error: updateFileError } = await supabase
@@ -226,28 +136,21 @@ export async function POST(request: NextRequest) {
           .eq('id', newFile.id);
 
         if (updateFileError) {
-          console.error('Error updating File record:', updateFileError);
-          throw updateFileError;
+          return NextResponse.json(
+            { error: 'Error updating File record' },
+            { status: 500 }
+          );
         }
-
-        console.log(
-          'File record updated with transcriptionId:',
-          transcriptionData.id
-        );
 
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
-              JSON.stringify({
-                progress: 100,
-                message: 'Готово!',
-              }) +
+              JSON.stringify({ progress: 100, message: 'Process completed' }) +
               '\n\n'
           )
         );
         controller.close();
       } catch (error) {
-        console.error('[Upload] Unexpected error:', error);
         controller.enqueue(
           encoder.encode(
             'event: error\ndata: ' + JSON.stringify({ error }) + '\n\n'
