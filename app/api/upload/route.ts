@@ -5,6 +5,7 @@ import {
   createClient as createDeepgramClient,
   CallbackUrl,
 } from '@deepgram/sdk';
+import { UPLOAD_STAGES } from '@/config/constants';
 
 export async function POST(request: NextRequest) {
   if (
@@ -58,7 +59,10 @@ export async function POST(request: NextRequest) {
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
-              JSON.stringify({ progress: 50, message: 'File record created' }) +
+              JSON.stringify({
+                progress: UPLOAD_STAGES.PRESIGN,
+                message: 'File record created',
+              }) +
               '\n\n'
           )
         );
@@ -71,7 +75,7 @@ export async function POST(request: NextRequest) {
           encoder.encode(
             'event: progress\ndata: ' +
               JSON.stringify({
-                progress: 60,
+                progress: UPLOAD_STAGES.PREPARING,
                 message: 'Preparing transcription',
               }) +
               '\n\n'
@@ -102,7 +106,7 @@ export async function POST(request: NextRequest) {
           encoder.encode(
             'event: progress\ndata: ' +
               JSON.stringify({
-                progress: 80,
+                progress: UPLOAD_STAGES.PROCESSING,
                 message: 'Transcription process started',
               }) +
               '\n\n'
@@ -145,7 +149,10 @@ export async function POST(request: NextRequest) {
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
-              JSON.stringify({ progress: 100, message: 'Process completed' }) +
+              JSON.stringify({
+                progress: UPLOAD_STAGES.COMPLETED,
+                message: 'Process completed',
+              }) +
               '\n\n'
           )
         );

@@ -6,161 +6,68 @@ import { parseErrorMessage } from '@/lib/utils';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useUser } from '@/hooks/useUser';
 import { useFiles } from '@/hooks/useFiles';
-import { v4 as uuidv4 } from 'uuid';
+import { useUploadProgress } from '@/hooks/useUploadProgress';
+import { getPresignedUrl, processFile, uploadToS3 } from './upload.utils';
+import {
+  MAX_FILE_SIZE,
+  MAX_FILE_SIZE_TEXT,
+  ALLOWED_AUDIO_TYPES,
+  UPLOAD_STAGES,
+} from '@/config/constants';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
-  const [progress, setProgress] = useState<number>(0);
-  const [message, setMessage] = useState<string>('');
   const queryClient = useQueryClient();
   const { data: user } = useUser();
   const { refetch } = useFiles(user?.id);
 
+  const { progress, message, setMessage, updateProgress, reset } =
+    useUploadProgress({
+      onComplete: () => {
+        queryClient.invalidateQueries({ queryKey: ['files'] });
+        refetch();
+      },
+    });
+
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
-      const fileId = uuidv4();
-
       try {
         // Этап 1: Получаем presigned URL
         setMessage('Подготовка к загрузке...');
-        setProgress(10);
+        updateProgress('PRESIGN', UPLOAD_STAGES.PRESIGN);
 
-        const presignResponse = await fetch('/api/upload/presign', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            filename: file.name,
-            contentType: file.type,
-            fileId,
-          }),
-        });
+        const { url, fields, key, publicUrl } = await getPresignedUrl(file);
 
-        if (!presignResponse.ok) {
-          const error = await presignResponse.json();
-          throw new Error(error.message || 'Failed to get upload URL');
-        }
-
-        const { url, fields, key, publicUrl } = await presignResponse.json();
-
-        // Этап 2: Загружаем в S3 с отслеживанием прогресса
+        // Этап 2: Загружаем в S3
         setMessage('Загрузка файла...');
-        const formData = new FormData();
-        Object.entries(fields).forEach(([key, value]) => {
-          formData.append(key, value as string);
-        });
-        formData.append('file', file);
-
-        // Используем XMLHttpRequest для отслеживания прогресса
-        await new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-
-          // Таймаут 5 минут (presigned URL живет 10)
-          xhr.timeout = 300000;
-
-          xhr.upload.onprogress = (event) => {
-            if (event.lengthComputable) {
-              const percentComplete = Math.round(
-                (event.loaded / event.total) * 40
-              );
-              setProgress(20 + percentComplete);
-              setMessage(
-                `Загружено ${Math.round((event.loaded / event.total) * 100)}%`
-              );
-            }
-          };
-
-          xhr.onload = () => {
-            if (xhr.status === 204) {
-              resolve(null);
-            } else {
-              reject(new Error(`Upload failed with status: ${xhr.status}`));
-            }
-          };
-
-          xhr.onerror = () => {
-            reject(new Error('Network error during upload'));
-          };
-
-          xhr.ontimeout = () => {
-            reject(new Error('Upload timed out'));
-          };
-
-          xhr.onabort = () => {
-            reject(new Error('Upload was aborted'));
-          };
-
-          try {
-            xhr.open('POST', url);
-            xhr.send(formData);
-          } catch (error) {
-            const errorMessage =
-              error instanceof Error ? error.message : 'Unknown error';
-            reject(new Error(`Failed to start upload: ${errorMessage}`));
-          }
-        }).catch((error) => {
-          console.error('Upload error:', error);
-          setProgress(0);
-          setMessage('');
-          throw new Error(`File upload failed: ${error.message}`);
+        await uploadToS3(url, fields, file, (uploadProgress) => {
+          updateProgress('UPLOAD', UPLOAD_STAGES.UPLOAD);
         });
 
-        setProgress(50);
+        // Этап 3: Обработка
         setMessage('Файл загружен, начинаем обработку...');
-
-        // Этап 3: Запускаем обработку через существующий API
-        return new Promise((resolve, reject) => {
-          const eventSource = new EventSource('/api/upload');
-
-          eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            setProgress(data.progress);
-            setMessage(data.message);
-          };
-
-          eventSource.onerror = (error) => {
-            eventSource.close();
-            reject(new Error('Processing failed'));
-          };
-
-          // Отправляем POST запрос после установки EventSource
-          fetch('/api/upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              name: file.name,
-              path: key,
-              size: file.size,
-              mimeType: file.type,
-              publicUrl,
-            }),
-          }).catch((error) => {
-            eventSource.close();
-            reject(error);
-          });
-
-          eventSource.addEventListener('complete', (event) => {
-            eventSource.close();
-            resolve(JSON.parse(event.data));
-          });
-        });
+        await processFile(
+          {
+            name: file.name,
+            path: key,
+            size: file.size,
+            mimeType: file.type,
+            publicUrl,
+          },
+          (processProgress, processMessage) => {
+            updateProgress('PROCESSING', processProgress);
+            setMessage(processMessage);
+          }
+        );
       } catch (error) {
         console.error('Upload error:', error);
+        reset();
         throw error;
       }
     },
-    onSuccess: () => {
-      console.log('Upload completed, updating file list...');
-      queryClient.invalidateQueries({ queryKey: ['files'] });
-      refetch();
-      setTimeout(() => {
-        setProgress(0);
-        setMessage('');
-      }, 1000);
-    },
     onError: (error) => {
       setError(parseErrorMessage(error));
-      setProgress(0);
-      setMessage('');
+      reset();
     },
   });
 
@@ -168,10 +75,9 @@ const UploadPage: React.FC = () => {
     const file = acceptedFiles[0];
     if (!file) return;
 
-    const maxSize = 50 * 1024 * 1024; // 50MB
-    if (file.size > maxSize) {
+    if (file.size > MAX_FILE_SIZE) {
       setError(
-        `Файл слишком большой. Максимальный размер: 50МБ, размер вашего файла: ${(
+        `Файл слишком большой. Максимальный размер: ${MAX_FILE_SIZE_TEXT}, размер вашего файла: ${(
           file.size /
           (1024 * 1024)
         ).toFixed(1)}МБ`
@@ -185,10 +91,8 @@ const UploadPage: React.FC = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      'audio/mpeg': ['.mp3'],
-    },
-    maxSize: 50 * 1024 * 1024, // 50MB max size
+    accept: ALLOWED_AUDIO_TYPES,
+    maxSize: MAX_FILE_SIZE,
   });
 
   return (

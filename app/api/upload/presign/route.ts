@@ -3,6 +3,11 @@ import { createClient } from '@/utils/supabase/server';
 import { S3Client } from '@aws-sdk/client-s3';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { formatFileName } from '@/utils/utils';
+import {
+  MAX_FILE_SIZE,
+  UPLOAD_TIMEOUT_SEC,
+  ALLOWED_AUDIO_TYPES,
+} from '@/config/constants';
 
 export async function POST(request: NextRequest) {
   // Проверяем авторизацию
@@ -37,13 +42,13 @@ export async function POST(request: NextRequest) {
       Bucket: process.env.AWS_BUCKET_NAME!,
       Key: key,
       Conditions: [
-        ['content-length-range', 0, 1024 * 1024 * 1024], // до 1GB
+        ['content-length-range', 0, MAX_FILE_SIZE],
         ['starts-with', '$Content-Type', 'audio/'],
       ],
       Fields: {
         'Content-Type': contentType,
       },
-      Expires: 600, // 10 минут
+      Expires: UPLOAD_TIMEOUT_SEC,
     });
 
     const publicUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
