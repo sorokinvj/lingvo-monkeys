@@ -37,8 +37,6 @@ const UploadPage: React.FC = () => {
         });
 
         // Этап 4: Обработка
-        console.log('🎯 Starting processFile');
-        setMessage('Файл загружен, начинаем обработку...');
         await processFile(
           {
             name: file.name,
@@ -48,21 +46,15 @@ const UploadPage: React.FC = () => {
             publicUrl,
           },
           (processProgress, processMessage) => {
-            console.log('⏳ Process Progress:', {
-              processProgress,
-              processMessage,
-            });
             updateProgress('PROCESSING', processProgress);
             setMessage(processMessage);
           }
         );
 
         // Завершение
-        console.log('🏁 Upload completed, calling complete()');
         updateProgress('COMPLETED');
         setMessage('Загрузка завершена!');
         complete();
-        console.log('✨ Complete called');
       } catch (error) {
         console.error('❌ Upload error:', error);
         reset();
