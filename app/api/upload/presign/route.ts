@@ -46,7 +46,8 @@ export async function POST(request: NextRequest) {
       Expires: 600, // 10 минут
     });
 
-    return NextResponse.json({ url, fields, key });
+    const publicUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+    return NextResponse.json({ url, fields, key, publicUrl });
   } catch (error) {
     console.error('[Presign] Error:', error);
     return NextResponse.json(

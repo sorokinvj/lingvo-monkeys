@@ -40,10 +40,9 @@ const UploadPage: React.FC = () => {
           throw new Error(error.message || 'Failed to get upload URL');
         }
 
-        const { url, fields, key } = await presignResponse.json();
+        const { url, fields, key, publicUrl } = await presignResponse.json();
 
-        // Этап 2: Загружаем в S3
-        setProgress(20);
+        // Этап 2: Загружаем в S3 с отслеживанием прогресса
         setMessage('Загрузка файла...');
         const formData = new FormData();
         Object.entries(fields).forEach(([key, value]) => {
@@ -51,20 +50,41 @@ const UploadPage: React.FC = () => {
         });
         formData.append('file', file);
 
-        const uploadResponse = await fetch(url, {
-          method: 'POST',
-          body: formData,
-        });
+        // Используем XMLHttpRequest для отслеживания прогресса
+        await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
 
-        if (!uploadResponse.ok) {
-          throw new Error('Failed to upload to S3');
-        }
+          xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+              const percentComplete = Math.round(
+                (event.loaded / event.total) * 40
+              ); // 40% для этапа загрузки
+              setProgress(20 + percentComplete); // 20% начальный прогресс + процент загрузки
+              setMessage(
+                `Загружено ${Math.round((event.loaded / event.total) * 100)}%`
+              );
+            }
+          };
+
+          xhr.onload = () => {
+            if (xhr.status === 204) {
+              resolve(null);
+            } else {
+              reject(new Error('Failed to upload to S3'));
+            }
+          };
+
+          xhr.onerror = () => reject(new Error('Failed to upload to S3'));
+
+          xhr.open('POST', url);
+          xhr.send(formData);
+        });
 
         setProgress(50);
         setMessage('Файл загружен, начинаем обработку...');
 
         // Этап 3: Запускаем обработку через существующий API
-        const publicUrl = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${key}`;
+        // Используем publicUrl, полученный от сервера
 
         const eventSource = new EventSource(`/api/upload`, {
           withCredentials: true, // для передачи cookies с авторизацией
