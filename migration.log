@@ -1,0 +1,618 @@
+2025-02-02T11:51:09.699Z: Starting DRY RUN migration
+2025-02-02T11:51:09.700Z: Processing file: 27 - Part 3, Chapter 8.mp3 (1d8321a4-e272-418e-8737-7512ae30ea01)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730759913791_27 - Part 3, Chapter 8.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/27 - Part 3, Chapter 8.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/27 - Part 3, Chapter 8.mp3
+2025-02-02T11:51:09.700Z: Processing file: 02 - Part 1, Chapter 1.mp3 (5f7b2714-6098-4b07-8f96-935e81b09e15)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1729524180968_02 - Part 1, Chapter 1.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02 - Part 1, Chapter 1.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02 - Part 1, Chapter 1.mp3
+2025-02-02T11:51:09.700Z: Processing file: 26 - Part 3, Chapter 7.mp3 (de18858d-b929-4244-a0e3-34e49f6e61d4)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: df4e5659-8f56-4b95-9248-07ec92aceadb/1729461848108_26 - Part 3, Chapter 7.mp3 -> df4e5659-8f56-4b95-9248-07ec92aceadb/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/df4e5659-8f56-4b95-9248-07ec92aceadb/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:51:09.700Z: Processing file: 26 - Part 3, Chapter 7.mp3 (af866496-27ba-4e8b-925b-3d5a45034abd)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1730054781761_26 - Part 3, Chapter 7.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:51:09.700Z: Processing file: 30 - Part 4, Chapter 1.mp3 (9d2f212b-cdb5-433f-b65c-375782d9b38a)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730907594957_30 - Part 4, Chapter 1.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/30 - Part 4, Chapter 1.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/30 - Part 4, Chapter 1.mp3
+2025-02-02T11:51:09.700Z: Processing file: 28 - Part 3, Chapter 9.mp3 (49aefe9f-c61a-4955-b154-95d21ae85d8b)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730408916639_28 - Part 3, Chapter 9.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/28 - Part 3, Chapter 9.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/28 - Part 3, Chapter 9.mp3
+2025-02-02T11:51:09.700Z: Processing file: 29 - Part 3, Chapter 10.mp3 (2b1c608d-2594-45e0-ad65-61b9d16256b9)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730816707885_29 - Part 3, Chapter 10.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/29 - Part 3, Chapter 10.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/29 - Part 3, Chapter 10.mp3
+2025-02-02T11:51:09.700Z: Processing file: 31 - Part 4, Chapter 2.mp3 (7aa05db0-c659-4f85-957f-fa600d32b7f7)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730918135404_31 - Part 4, Chapter 2.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/31 - Part 4, Chapter 2.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/31 - Part 4, Chapter 2.mp3
+2025-02-02T11:51:09.700Z: Processing file: 32 - Part 4, Chapter 3.mp3 (430673b2-53df-4de6-9041-0bb1a231af00)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730979646458_32 - Part 4, Chapter 3.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/32 - Part 4, Chapter 3.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/32 - Part 4, Chapter 3.mp3
+2025-02-02T11:51:09.700Z: Processing file: 33 - Part 4, Chapter 4.mp3 (6eb2cc93-97fe-4dc3-82cc-d29ef2c73ca2)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731004852182_33 - Part 4, Chapter 4.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/33 - Part 4, Chapter 4.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/33 - Part 4, Chapter 4.mp3
+2025-02-02T11:51:09.700Z: Processing file: 34 - Part 4, Chapter 5.mp3 (a5b55a05-bc39-499c-8264-21a015ba9321)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731008735514_34 - Part 4, Chapter 5.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:51:09.700Z: Processing file: 34 - Part 4, Chapter 5.mp3 (831bb19c-46fc-4c93-8e32-78d17e6ed598)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731067742726_34 - Part 4, Chapter 5.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:51:09.700Z: Processing file: 40 - Part 4, Chapter 11.mp3 (68286f74-ccad-4041-bfde-aced51bb5689)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731263540164_40 - Part 4, Chapter 11.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/40 - Part 4, Chapter 11.mp3
+2025-02-02T11:51:09.700Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/40 - Part 4, Chapter 11.mp3
+2025-02-02T11:51:09.700Z: Processing file: 35 - Part 4, Chapter 6.mp3 (2bfdf28a-8d9b-4efa-80ea-518bce5f61f4)
+2025-02-02T11:51:09.700Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731077423007_35 - Part 4, Chapter 6.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/35 - Part 4, Chapter 6.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/35 - Part 4, Chapter 6.mp3
+2025-02-02T11:51:09.701Z: Processing file: 36 - Part 4, Chapter 7.mp3 (af811bdb-9be3-4d95-b7a3-c0d698179b3a)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731145679340_36 - Part 4, Chapter 7.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/36 - Part 4, Chapter 7.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/36 - Part 4, Chapter 7.mp3
+2025-02-02T11:51:09.701Z: Processing file: 37 - Part 4, Chapter 8.mp3 (ce73b3bf-99ab-4c46-b38d-ade603b23d17)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731171878295_37 - Part 4, Chapter 8.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/37 - Part 4, Chapter 8.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/37 - Part 4, Chapter 8.mp3
+2025-02-02T11:51:09.701Z: Processing file: 41 - Part 4, Chapter 12.mp3 (e24a7450-f899-4f35-b599-45a2b4b32984)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731276841934_41 - Part 4, Chapter 12.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/41 - Part 4, Chapter 12.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/41 - Part 4, Chapter 12.mp3
+2025-02-02T11:51:09.701Z: Processing file: 38 - Part 4, Chapter 9.mp3 (83c15ab1-75ca-44d7-90f0-b3d93be254e5)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731235728387_38 - Part 4, Chapter 9.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/38 - Part 4, Chapter 9.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/38 - Part 4, Chapter 9.mp3
+2025-02-02T11:51:09.701Z: Processing file: 39 - Part 4, Chapter 10.mp3 (b5547739-df2c-4281-a3e0-1a980e3ad0d4)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731240484456_39 - Part 4, Chapter 10.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/39 - Part 4, Chapter 10.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/39 - Part 4, Chapter 10.mp3
+2025-02-02T11:51:09.701Z: Processing file: The-Fisherman-and-his-Wife.mp3 (4b51773e-4eaa-4b98-90fc-81c807894834)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: ba651789-8dd9-47a4-b173-a8e820fb8d65/1731561295305_The-Fisherman-and-his-Wife.mp3 -> ba651789-8dd9-47a4-b173-a8e820fb8d65/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/ba651789-8dd9-47a4-b173-a8e820fb8d65/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:51:09.701Z: Processing file: 01.The Silkworm.mp3 (01d7b2b4-d7c6-43fb-ab12-28a51985581e)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731328869760_01.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: Processing file: Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3 (9f7f498a-348b-4389-b66e-5eb7e697f3f0)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: f91cba79-d56f-41b8-af1e-250c4da5f947/1731402446036_Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3 -> f91cba79-d56f-41b8-af1e-250c4da5f947/Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/f91cba79-d56f-41b8-af1e-250c4da5f947/Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3
+2025-02-02T11:51:09.701Z: Processing file: 02.The Silkworm.mp3 (af6ffc62-296e-41de-b964-323d1ff02b85)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731608002611_02.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: Processing file: ZOOM0008.MP3 (0e93fe3f-c1d7-4e21-9cd0-546cce4d535e)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738022131007_ZOOM0008.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0008.MP3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0008.MP3
+2025-02-02T11:51:09.701Z: Processing file: Level 0_A_pretty_face_2.mp3 (83753812-a550-40c8-ba35-7f32d47d3f25)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731946104986_Level 0_A_pretty_face_2.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Level 0_A_pretty_face_2.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Level 0_A_pretty_face_2.mp3
+2025-02-02T11:51:09.701Z: Processing file: 01 - Prologue.mp3 (21a86a81-a0a0-4b21-8605-54672695976c)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: f91cba79-d56f-41b8-af1e-250c4da5f947/1732102766930_01 - Prologue.mp3 -> f91cba79-d56f-41b8-af1e-250c4da5f947/01 - Prologue.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/f91cba79-d56f-41b8-af1e-250c4da5f947/01 - Prologue.mp3
+2025-02-02T11:51:09.701Z: Processing file: 03.The Silkworm.mp3 (03c291e5-48e5-4c52-a7b5-b99c8089c5e8)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1732480579359_03.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/03.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/03.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: Processing file: 04.The Silkworm.mp3 (5b86d921-ef6a-4ccd-ad83-5d976ac2865a)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733417513245_04.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/04.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/04.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: Processing file: Harry Potter and the Phylosopher Stone_d1_02.MP3 (6307577e-77e3-40e7-9332-340cf9c9c9e5)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1734105189971_Harry Potter and the Phylosopher Stone_d1_02.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Phylosopher Stone_d1_02.MP3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Phylosopher Stone_d1_02.MP3
+2025-02-02T11:51:09.701Z: Processing file: 05.The Silkworm.mp3 (565b3b7e-208a-4f7c-ad39-b89a08ee07aa)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733426829574_05.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/05.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/05.The Silkworm.mp3
+2025-02-02T11:51:09.701Z: Processing file: 01 - Prologue.mp3 (fb025e6a-6976-44be-b593-b0cd272c0235)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733427308131_01 - Prologue.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01 - Prologue.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01 - Prologue.mp3
+2025-02-02T11:51:09.701Z: Processing file: robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3 (6f6c9c15-c1f3-4e52-95d6-855de06b5b3b)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733604439940_robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3
+2025-02-02T11:51:09.701Z: Processing file: Harry Potter and the Philosopher Stone _D1_part 01.MP3 (3c8236a7-3c4d-4dcb-b0ee-4b6da012c4ba)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733956640709_Harry Potter and the Philosopher Stone _D1_part 01.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosopher Stone _D1_part 01.MP3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosopher Stone _D1_part 01.MP3
+2025-02-02T11:51:09.701Z: Processing file: The-Fisherman-and-his-Wife.mp3 (2378dffd-2453-4a1f-a1e8-6fd20c8b2f52)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: e25468d7-8816-4333-8cd8-1084bf8e4252/1734605310852_The-Fisherman-and-his-Wife.mp3 -> e25468d7-8816-4333-8cd8-1084bf8e4252/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/e25468d7-8816-4333-8cd8-1084bf8e4252/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:51:09.701Z: Processing file: 05 Cahier 05.mp3 (828e39df-dc3d-48b1-83cc-9aa904c573e7)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: e25468d7-8816-4333-8cd8-1084bf8e4252/1734513563415_05 Cahier 05.mp3 -> e25468d7-8816-4333-8cd8-1084bf8e4252/05 Cahier 05.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/e25468d7-8816-4333-8cd8-1084bf8e4252/05 Cahier 05.mp3
+2025-02-02T11:51:09.701Z: Processing file: stateoftheunion1790-1816_01_various_128kb.mp3 (d9a1dc9f-df4f-441d-9914-26077860a0c5)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: bedf2487-8285-44b9-95f8-38039e8fff45/1734626181850_stateoftheunion1790-1816_01_various_128kb.mp3 -> bedf2487-8285-44b9-95f8-38039e8fff45/stateoftheunion1790-1816_01_various_128kb.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bedf2487-8285-44b9-95f8-38039e8fff45/stateoftheunion1790-1816_01_various_128kb.mp3
+2025-02-02T11:51:09.701Z: Processing file: Harry Potter and the Philosophers Stone 6.mp3 (f62b998a-8d0a-4f61-835d-722d46b534c6)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736365867615_Harry Potter and the Philosophers Stone 6.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosophers Stone 6.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosophers Stone 6.mp3
+2025-02-02T11:51:09.701Z: Processing file: Interesting book__04.mp3 (e247eebd-a68a-4f10-9b7a-753245249f1e)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736768409166_Interesting book__04.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__04.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__04.mp3
+2025-02-02T11:51:09.701Z: Processing file: ZOOM0009.MP3 (c7b9cf3d-e3a3-468c-9ad1-039636728701)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738100057879_ZOOM0009.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0009.MP3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0009.MP3
+2025-02-02T11:51:09.701Z: Processing file: 13. 'Take Off your Mask, Senor'.mp3 (397bf5a8-44ee-449e-8b28-60b024091d7f)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736539693678_13. 'Take Off your Mask, Senor'.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:51:09.701Z: Processing file: 11. At the Jail.mp3 (cbcbb345-3dbe-452b-ba7a-69876603230e)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736525986689_11. At the Jail.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/11. At the Jail.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/11. At the Jail.mp3
+2025-02-02T11:51:09.701Z: Processing file: 12. The Mark of Zorro.mp3 (91ae0667-7315-49ae-a6ac-fa56759b9a33)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736529545450_12. The Mark of Zorro.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/12. The Mark of Zorro.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/12. The Mark of Zorro.mp3
+2025-02-02T11:51:09.701Z: Processing file: Interesting book.mp3 (465c9d1c-fb3c-4c64-8767-0bfcfeebb2ca)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736706854791_Interesting book.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book.mp3
+2025-02-02T11:51:09.701Z: Processing file: 13. 'Take Off your Mask, Senor'.mp3 (6f005140-8860-4368-961b-ac25be083618)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736539644211_13. 'Take Off your Mask, Senor'.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:51:09.701Z: Processing file: Track 01.mp3 (04bf8e01-3bf9-4833-81db-30e5b0e754c8)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736632698117_Track 01.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/Track 01.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/Track 01.mp3
+2025-02-02T11:51:09.701Z: Processing file: Interesting book__03.mp3 (097569d2-9ac1-4d74-bebc-ead80acdb211)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736707822439_Interesting book__03.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__03.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__03.mp3
+2025-02-02T11:51:09.701Z: Processing file: Interesting book__02.mp3 (bc319f18-35fc-45a8-abf1-fae5944ca7d1)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736707131488_Interesting book__02.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__02.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__02.mp3
+2025-02-02T11:51:09.701Z: Processing file: Track 02.mp3 (f9f998a7-33a8-432a-9bc2-a0ca9e3f7c9d)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736796687835_Track 02.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/Track 02.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/Track 02.mp3
+2025-02-02T11:51:09.701Z: Processing file: HP and the Chamber of Secrets_Chapter 02.mp3 (0c0e9efc-20cb-4d56-84de-73ab949a344e)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736890320253_HP and the Chamber of Secrets_Chapter 02.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 02.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 02.mp3
+2025-02-02T11:51:09.701Z: Processing file: HP and the Chamber of Secrets_Chapter 05.mp3 (554b6dbf-73ba-4cde-951e-7c1d4ae3d7eb)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737142068983_HP and the Chamber of Secrets_Chapter 05.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 05.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 05.mp3
+2025-02-02T11:51:09.701Z: Processing file: HP and the Chamber of Secrets_Chapter 03.mp3 (1ff43b1b-bc4a-4e31-b3f6-b77dc5efb74b)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736892445996_HP and the Chamber of Secrets_Chapter 03.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:51:09.701Z: Processing file: HP and the Chamber of Secrets_Chapter 03.mp3 (caaec9fa-60e3-4dc4-b532-3260901a6c60)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736976129129_HP and the Chamber of Secrets_Chapter 03.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:51:09.701Z: Processing file: HP and the Chamber of Secrets_Chapter 08.mp3 (88c0bbb5-f63c-401a-9780-e03abf788eb8)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737413157890_HP and the Chamber of Secrets_Chapter 08.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 08.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 08.mp3
+2025-02-02T11:51:09.701Z: Processing file: HP and the Chamber of Secrets_Chapter 04.mp3 (ecc0f87e-5361-4b1b-8b9c-e5fba67e8f3c)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737051260268_HP and the Chamber of Secrets_Chapter 04.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 04.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 04.mp3
+2025-02-02T11:51:09.701Z: Processing file: HP and the Chamber of Secrets_Chapter 06.mp3 (7e3dbbf0-76c8-49d5-a252-9b5dd17fd467)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737231399807_HP and the Chamber of Secrets_Chapter 06.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 06.mp3
+2025-02-02T11:51:09.701Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 06.mp3
+2025-02-02T11:51:09.701Z: Processing file: speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3 (22c85736-77b8-4532-b6b4-fcc4c47c0565)
+2025-02-02T11:51:09.701Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737117825486_speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 10.mp3 (87570dd4-c3df-4310-8686-851bcee6e331)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737588501324_HP and the Chamber of Secrets_Chapter 10.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 10.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 10.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 07.mp3 (0404b692-e6cc-479d-a45f-bdf14fa617d8)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737310875552_HP and the Chamber of Secrets_Chapter 07.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 07.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 07.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 09.mp3 (0b8eec22-3788-4dab-bd11-7563e928927c)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737488349562_HP and the Chamber of Secrets_Chapter 09.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 09.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 09.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 11.mp3 (e16ff71c-056c-492b-81bc-c21dc0f371cb)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737668134964_HP and the Chamber of Secrets_Chapter 11.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 11.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 11.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 12.mp3 (d7853527-8d7a-43cd-b149-516489df72d5)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737749035377_HP and the Chamber of Secrets_Chapter 12.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 12.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 12.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 13.mp3 (0d8983cd-0b74-4973-b15d-d7a83a6f07c2)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737841941145_HP and the Chamber of Secrets_Chapter 13.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 13.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 13.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 14.mp3 (ab7b0ffd-f2e8-4d82-b545-92c67cd633d5)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738015839811_HP and the Chamber of Secrets_Chapter 14.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 14.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 14.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 15.mp3 (c8757b0e-99b0-44ca-a475-1593751a7e02)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738100232868_HP and the Chamber of Secrets_Chapter 15.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 15.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 15.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 16.mp3 (20b1833e-65e4-484f-aecd-8cff6cb89bbe)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738161805890_HP and the Chamber of Secrets_Chapter 16.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 16.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 16.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 17.mp3 (ccfaa487-af27-4e72-ac67-b67ff1402e55)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738279823645_HP and the Chamber of Secrets_Chapter 17.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 17.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 17.mp3
+2025-02-02T11:51:09.702Z: Processing file: HP and the Chamber of Secrets_Chapter 18.mp3 (64574829-73e1-4c3f-ab74-a5bb97465104)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738350685454_HP and the Chamber of Secrets_Chapter 18.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 18.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 18.mp3
+2025-02-02T11:51:09.702Z: Processing file: Hitchikers Guide to the Galaxy.mp3 (14502f31-9eb3-4c4d-905a-5c153decc896)
+2025-02-02T11:51:09.702Z: [DRY RUN] Would migrate file: bedf2487-8285-44b9-95f8-38039e8fff45/hitchikers-guide-to-the-galaxy.mp3 -> bedf2487-8285-44b9-95f8-38039e8fff45/Hitchikers Guide to the Galaxy.mp3
+2025-02-02T11:51:09.702Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bedf2487-8285-44b9-95f8-38039e8fff45/Hitchikers Guide to the Galaxy.mp3
+2025-02-02T11:51:09.702Z: Migration simulation completed!
+2025-02-02T11:52:58.886Z: Starting DRY RUN migration
+2025-02-02T11:52:58.887Z: Processing file: 27 - Part 3, Chapter 8.mp3 (1d8321a4-e272-418e-8737-7512ae30ea01)
+2025-02-02T11:52:58.887Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730759913791_27 - Part 3, Chapter 8.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/27 - Part 3, Chapter 8.mp3
+2025-02-02T11:52:58.887Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/27 - Part 3, Chapter 8.mp3
+2025-02-02T11:52:58.887Z: Processing file: 02 - Part 1, Chapter 1.mp3 (5f7b2714-6098-4b07-8f96-935e81b09e15)
+2025-02-02T11:52:58.887Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1729524180968_02 - Part 1, Chapter 1.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02 - Part 1, Chapter 1.mp3
+2025-02-02T11:52:58.887Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02 - Part 1, Chapter 1.mp3
+2025-02-02T11:52:58.887Z: Processing file: 26 - Part 3, Chapter 7.mp3 (de18858d-b929-4244-a0e3-34e49f6e61d4)
+2025-02-02T11:52:58.887Z: [DRY RUN] Would migrate file: df4e5659-8f56-4b95-9248-07ec92aceadb/1729461848108_26 - Part 3, Chapter 7.mp3 -> df4e5659-8f56-4b95-9248-07ec92aceadb/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:52:58.887Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/df4e5659-8f56-4b95-9248-07ec92aceadb/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:52:58.887Z: Processing file: 26 - Part 3, Chapter 7.mp3 (af866496-27ba-4e8b-925b-3d5a45034abd)
+2025-02-02T11:52:58.887Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1730054781761_26 - Part 3, Chapter 7.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:52:58.887Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:52:58.887Z: Processing file: 30 - Part 4, Chapter 1.mp3 (9d2f212b-cdb5-433f-b65c-375782d9b38a)
+2025-02-02T11:52:58.887Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730907594957_30 - Part 4, Chapter 1.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/30 - Part 4, Chapter 1.mp3
+2025-02-02T11:52:58.887Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/30 - Part 4, Chapter 1.mp3
+2025-02-02T11:52:58.887Z: Processing file: 28 - Part 3, Chapter 9.mp3 (49aefe9f-c61a-4955-b154-95d21ae85d8b)
+2025-02-02T11:52:58.887Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730408916639_28 - Part 3, Chapter 9.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/28 - Part 3, Chapter 9.mp3
+2025-02-02T11:52:58.887Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/28 - Part 3, Chapter 9.mp3
+2025-02-02T11:52:58.887Z: Processing file: 29 - Part 3, Chapter 10.mp3 (2b1c608d-2594-45e0-ad65-61b9d16256b9)
+2025-02-02T11:52:58.887Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730816707885_29 - Part 3, Chapter 10.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/29 - Part 3, Chapter 10.mp3
+2025-02-02T11:52:58.887Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/29 - Part 3, Chapter 10.mp3
+2025-02-02T11:52:58.888Z: Processing file: 31 - Part 4, Chapter 2.mp3 (7aa05db0-c659-4f85-957f-fa600d32b7f7)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730918135404_31 - Part 4, Chapter 2.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/31 - Part 4, Chapter 2.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/31 - Part 4, Chapter 2.mp3
+2025-02-02T11:52:58.888Z: Processing file: 32 - Part 4, Chapter 3.mp3 (430673b2-53df-4de6-9041-0bb1a231af00)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730979646458_32 - Part 4, Chapter 3.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/32 - Part 4, Chapter 3.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/32 - Part 4, Chapter 3.mp3
+2025-02-02T11:52:58.888Z: Processing file: 33 - Part 4, Chapter 4.mp3 (6eb2cc93-97fe-4dc3-82cc-d29ef2c73ca2)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731004852182_33 - Part 4, Chapter 4.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/33 - Part 4, Chapter 4.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/33 - Part 4, Chapter 4.mp3
+2025-02-02T11:52:58.888Z: Processing file: 34 - Part 4, Chapter 5.mp3 (a5b55a05-bc39-499c-8264-21a015ba9321)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731008735514_34 - Part 4, Chapter 5.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:52:58.888Z: Processing file: 34 - Part 4, Chapter 5.mp3 (831bb19c-46fc-4c93-8e32-78d17e6ed598)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731067742726_34 - Part 4, Chapter 5.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:52:58.888Z: Processing file: 40 - Part 4, Chapter 11.mp3 (68286f74-ccad-4041-bfde-aced51bb5689)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731263540164_40 - Part 4, Chapter 11.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/40 - Part 4, Chapter 11.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/40 - Part 4, Chapter 11.mp3
+2025-02-02T11:52:58.888Z: Processing file: 35 - Part 4, Chapter 6.mp3 (2bfdf28a-8d9b-4efa-80ea-518bce5f61f4)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731077423007_35 - Part 4, Chapter 6.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/35 - Part 4, Chapter 6.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/35 - Part 4, Chapter 6.mp3
+2025-02-02T11:52:58.888Z: Processing file: 36 - Part 4, Chapter 7.mp3 (af811bdb-9be3-4d95-b7a3-c0d698179b3a)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731145679340_36 - Part 4, Chapter 7.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/36 - Part 4, Chapter 7.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/36 - Part 4, Chapter 7.mp3
+2025-02-02T11:52:58.888Z: Processing file: 37 - Part 4, Chapter 8.mp3 (ce73b3bf-99ab-4c46-b38d-ade603b23d17)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731171878295_37 - Part 4, Chapter 8.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/37 - Part 4, Chapter 8.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/37 - Part 4, Chapter 8.mp3
+2025-02-02T11:52:58.888Z: Processing file: 41 - Part 4, Chapter 12.mp3 (e24a7450-f899-4f35-b599-45a2b4b32984)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731276841934_41 - Part 4, Chapter 12.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/41 - Part 4, Chapter 12.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/41 - Part 4, Chapter 12.mp3
+2025-02-02T11:52:58.888Z: Processing file: 38 - Part 4, Chapter 9.mp3 (83c15ab1-75ca-44d7-90f0-b3d93be254e5)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731235728387_38 - Part 4, Chapter 9.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/38 - Part 4, Chapter 9.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/38 - Part 4, Chapter 9.mp3
+2025-02-02T11:52:58.888Z: Processing file: 39 - Part 4, Chapter 10.mp3 (b5547739-df2c-4281-a3e0-1a980e3ad0d4)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731240484456_39 - Part 4, Chapter 10.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/39 - Part 4, Chapter 10.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/39 - Part 4, Chapter 10.mp3
+2025-02-02T11:52:58.888Z: Processing file: The-Fisherman-and-his-Wife.mp3 (4b51773e-4eaa-4b98-90fc-81c807894834)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: ba651789-8dd9-47a4-b173-a8e820fb8d65/1731561295305_The-Fisherman-and-his-Wife.mp3 -> ba651789-8dd9-47a4-b173-a8e820fb8d65/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/ba651789-8dd9-47a4-b173-a8e820fb8d65/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:52:58.888Z: Processing file: 01.The Silkworm.mp3 (01d7b2b4-d7c6-43fb-ab12-28a51985581e)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731328869760_01.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: Processing file: Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3 (9f7f498a-348b-4389-b66e-5eb7e697f3f0)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: f91cba79-d56f-41b8-af1e-250c4da5f947/1731402446036_Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3 -> f91cba79-d56f-41b8-af1e-250c4da5f947/Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/f91cba79-d56f-41b8-af1e-250c4da5f947/Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3
+2025-02-02T11:52:58.888Z: Processing file: 02.The Silkworm.mp3 (af6ffc62-296e-41de-b964-323d1ff02b85)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731608002611_02.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: Processing file: ZOOM0008.MP3 (0e93fe3f-c1d7-4e21-9cd0-546cce4d535e)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738022131007_ZOOM0008.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0008.MP3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0008.MP3
+2025-02-02T11:52:58.888Z: Processing file: Level 0_A_pretty_face_2.mp3 (83753812-a550-40c8-ba35-7f32d47d3f25)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731946104986_Level 0_A_pretty_face_2.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Level 0_A_pretty_face_2.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Level 0_A_pretty_face_2.mp3
+2025-02-02T11:52:58.888Z: Processing file: 01 - Prologue.mp3 (21a86a81-a0a0-4b21-8605-54672695976c)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: f91cba79-d56f-41b8-af1e-250c4da5f947/1732102766930_01 - Prologue.mp3 -> f91cba79-d56f-41b8-af1e-250c4da5f947/01 - Prologue.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/f91cba79-d56f-41b8-af1e-250c4da5f947/01 - Prologue.mp3
+2025-02-02T11:52:58.888Z: Processing file: 03.The Silkworm.mp3 (03c291e5-48e5-4c52-a7b5-b99c8089c5e8)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1732480579359_03.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/03.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/03.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: Processing file: 04.The Silkworm.mp3 (5b86d921-ef6a-4ccd-ad83-5d976ac2865a)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733417513245_04.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/04.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/04.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: Processing file: Harry Potter and the Phylosopher Stone_d1_02.MP3 (6307577e-77e3-40e7-9332-340cf9c9c9e5)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1734105189971_Harry Potter and the Phylosopher Stone_d1_02.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Phylosopher Stone_d1_02.MP3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Phylosopher Stone_d1_02.MP3
+2025-02-02T11:52:58.888Z: Processing file: 05.The Silkworm.mp3 (565b3b7e-208a-4f7c-ad39-b89a08ee07aa)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733426829574_05.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/05.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/05.The Silkworm.mp3
+2025-02-02T11:52:58.888Z: Processing file: 01 - Prologue.mp3 (fb025e6a-6976-44be-b593-b0cd272c0235)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733427308131_01 - Prologue.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01 - Prologue.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01 - Prologue.mp3
+2025-02-02T11:52:58.888Z: Processing file: robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3 (6f6c9c15-c1f3-4e52-95d6-855de06b5b3b)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733604439940_robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3
+2025-02-02T11:52:58.888Z: Processing file: Harry Potter and the Philosopher Stone _D1_part 01.MP3 (3c8236a7-3c4d-4dcb-b0ee-4b6da012c4ba)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733956640709_Harry Potter and the Philosopher Stone _D1_part 01.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosopher Stone _D1_part 01.MP3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosopher Stone _D1_part 01.MP3
+2025-02-02T11:52:58.888Z: Processing file: The-Fisherman-and-his-Wife.mp3 (2378dffd-2453-4a1f-a1e8-6fd20c8b2f52)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: e25468d7-8816-4333-8cd8-1084bf8e4252/1734605310852_The-Fisherman-and-his-Wife.mp3 -> e25468d7-8816-4333-8cd8-1084bf8e4252/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/e25468d7-8816-4333-8cd8-1084bf8e4252/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:52:58.888Z: Processing file: 05 Cahier 05.mp3 (828e39df-dc3d-48b1-83cc-9aa904c573e7)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: e25468d7-8816-4333-8cd8-1084bf8e4252/1734513563415_05 Cahier 05.mp3 -> e25468d7-8816-4333-8cd8-1084bf8e4252/05 Cahier 05.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/e25468d7-8816-4333-8cd8-1084bf8e4252/05 Cahier 05.mp3
+2025-02-02T11:52:58.888Z: Processing file: stateoftheunion1790-1816_01_various_128kb.mp3 (d9a1dc9f-df4f-441d-9914-26077860a0c5)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: bedf2487-8285-44b9-95f8-38039e8fff45/1734626181850_stateoftheunion1790-1816_01_various_128kb.mp3 -> bedf2487-8285-44b9-95f8-38039e8fff45/stateoftheunion1790-1816_01_various_128kb.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bedf2487-8285-44b9-95f8-38039e8fff45/stateoftheunion1790-1816_01_various_128kb.mp3
+2025-02-02T11:52:58.888Z: Processing file: Harry Potter and the Philosophers Stone 6.mp3 (f62b998a-8d0a-4f61-835d-722d46b534c6)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736365867615_Harry Potter and the Philosophers Stone 6.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosophers Stone 6.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosophers Stone 6.mp3
+2025-02-02T11:52:58.888Z: Processing file: Interesting book__04.mp3 (e247eebd-a68a-4f10-9b7a-753245249f1e)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736768409166_Interesting book__04.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__04.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__04.mp3
+2025-02-02T11:52:58.888Z: Processing file: ZOOM0009.MP3 (c7b9cf3d-e3a3-468c-9ad1-039636728701)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738100057879_ZOOM0009.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0009.MP3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0009.MP3
+2025-02-02T11:52:58.888Z: Processing file: 13. 'Take Off your Mask, Senor'.mp3 (397bf5a8-44ee-449e-8b28-60b024091d7f)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736539693678_13. 'Take Off your Mask, Senor'.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:52:58.888Z: Processing file: 11. At the Jail.mp3 (cbcbb345-3dbe-452b-ba7a-69876603230e)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736525986689_11. At the Jail.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/11. At the Jail.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/11. At the Jail.mp3
+2025-02-02T11:52:58.888Z: Processing file: 12. The Mark of Zorro.mp3 (91ae0667-7315-49ae-a6ac-fa56759b9a33)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736529545450_12. The Mark of Zorro.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/12. The Mark of Zorro.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/12. The Mark of Zorro.mp3
+2025-02-02T11:52:58.888Z: Processing file: Interesting book.mp3 (465c9d1c-fb3c-4c64-8767-0bfcfeebb2ca)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736706854791_Interesting book.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book.mp3
+2025-02-02T11:52:58.888Z: Processing file: 13. 'Take Off your Mask, Senor'.mp3 (6f005140-8860-4368-961b-ac25be083618)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736539644211_13. 'Take Off your Mask, Senor'.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:52:58.888Z: Processing file: Track 01.mp3 (04bf8e01-3bf9-4833-81db-30e5b0e754c8)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736632698117_Track 01.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/Track 01.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/Track 01.mp3
+2025-02-02T11:52:58.888Z: Processing file: Interesting book__03.mp3 (097569d2-9ac1-4d74-bebc-ead80acdb211)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736707822439_Interesting book__03.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__03.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__03.mp3
+2025-02-02T11:52:58.888Z: Processing file: Interesting book__02.mp3 (bc319f18-35fc-45a8-abf1-fae5944ca7d1)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736707131488_Interesting book__02.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__02.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__02.mp3
+2025-02-02T11:52:58.888Z: Processing file: Track 02.mp3 (f9f998a7-33a8-432a-9bc2-a0ca9e3f7c9d)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736796687835_Track 02.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/Track 02.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/Track 02.mp3
+2025-02-02T11:52:58.888Z: Processing file: HP and the Chamber of Secrets_Chapter 02.mp3 (0c0e9efc-20cb-4d56-84de-73ab949a344e)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736890320253_HP and the Chamber of Secrets_Chapter 02.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 02.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 02.mp3
+2025-02-02T11:52:58.888Z: Processing file: HP and the Chamber of Secrets_Chapter 05.mp3 (554b6dbf-73ba-4cde-951e-7c1d4ae3d7eb)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737142068983_HP and the Chamber of Secrets_Chapter 05.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 05.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 05.mp3
+2025-02-02T11:52:58.888Z: Processing file: HP and the Chamber of Secrets_Chapter 03.mp3 (1ff43b1b-bc4a-4e31-b3f6-b77dc5efb74b)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736892445996_HP and the Chamber of Secrets_Chapter 03.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:52:58.888Z: Processing file: HP and the Chamber of Secrets_Chapter 03.mp3 (caaec9fa-60e3-4dc4-b532-3260901a6c60)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736976129129_HP and the Chamber of Secrets_Chapter 03.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:52:58.888Z: Processing file: HP and the Chamber of Secrets_Chapter 08.mp3 (88c0bbb5-f63c-401a-9780-e03abf788eb8)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737413157890_HP and the Chamber of Secrets_Chapter 08.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 08.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 08.mp3
+2025-02-02T11:52:58.888Z: Processing file: HP and the Chamber of Secrets_Chapter 04.mp3 (ecc0f87e-5361-4b1b-8b9c-e5fba67e8f3c)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737051260268_HP and the Chamber of Secrets_Chapter 04.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 04.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 04.mp3
+2025-02-02T11:52:58.888Z: Processing file: HP and the Chamber of Secrets_Chapter 06.mp3 (7e3dbbf0-76c8-49d5-a252-9b5dd17fd467)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737231399807_HP and the Chamber of Secrets_Chapter 06.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 06.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 06.mp3
+2025-02-02T11:52:58.888Z: Processing file: speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3 (22c85736-77b8-4532-b6b4-fcc4c47c0565)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737117825486_speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3
+2025-02-02T11:52:58.888Z: Processing file: HP and the Chamber of Secrets_Chapter 10.mp3 (87570dd4-c3df-4310-8686-851bcee6e331)
+2025-02-02T11:52:58.888Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737588501324_HP and the Chamber of Secrets_Chapter 10.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 10.mp3
+2025-02-02T11:52:58.888Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 10.mp3
+2025-02-02T11:52:58.888Z: Processing file: HP and the Chamber of Secrets_Chapter 07.mp3 (0404b692-e6cc-479d-a45f-bdf14fa617d8)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737310875552_HP and the Chamber of Secrets_Chapter 07.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 07.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 07.mp3
+2025-02-02T11:52:58.889Z: Processing file: HP and the Chamber of Secrets_Chapter 09.mp3 (0b8eec22-3788-4dab-bd11-7563e928927c)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737488349562_HP and the Chamber of Secrets_Chapter 09.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 09.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 09.mp3
+2025-02-02T11:52:58.889Z: Processing file: HP and the Chamber of Secrets_Chapter 11.mp3 (e16ff71c-056c-492b-81bc-c21dc0f371cb)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737668134964_HP and the Chamber of Secrets_Chapter 11.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 11.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 11.mp3
+2025-02-02T11:52:58.889Z: Processing file: HP and the Chamber of Secrets_Chapter 12.mp3 (d7853527-8d7a-43cd-b149-516489df72d5)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737749035377_HP and the Chamber of Secrets_Chapter 12.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 12.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 12.mp3
+2025-02-02T11:52:58.889Z: Processing file: HP and the Chamber of Secrets_Chapter 13.mp3 (0d8983cd-0b74-4973-b15d-d7a83a6f07c2)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737841941145_HP and the Chamber of Secrets_Chapter 13.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 13.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 13.mp3
+2025-02-02T11:52:58.889Z: Processing file: HP and the Chamber of Secrets_Chapter 14.mp3 (ab7b0ffd-f2e8-4d82-b545-92c67cd633d5)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738015839811_HP and the Chamber of Secrets_Chapter 14.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 14.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 14.mp3
+2025-02-02T11:52:58.889Z: Processing file: HP and the Chamber of Secrets_Chapter 15.mp3 (c8757b0e-99b0-44ca-a475-1593751a7e02)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738100232868_HP and the Chamber of Secrets_Chapter 15.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 15.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 15.mp3
+2025-02-02T11:52:58.889Z: Processing file: HP and the Chamber of Secrets_Chapter 16.mp3 (20b1833e-65e4-484f-aecd-8cff6cb89bbe)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738161805890_HP and the Chamber of Secrets_Chapter 16.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 16.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 16.mp3
+2025-02-02T11:52:58.889Z: Processing file: HP and the Chamber of Secrets_Chapter 17.mp3 (ccfaa487-af27-4e72-ac67-b67ff1402e55)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738279823645_HP and the Chamber of Secrets_Chapter 17.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 17.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 17.mp3
+2025-02-02T11:52:58.889Z: Processing file: HP and the Chamber of Secrets_Chapter 18.mp3 (64574829-73e1-4c3f-ab74-a5bb97465104)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738350685454_HP and the Chamber of Secrets_Chapter 18.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 18.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 18.mp3
+2025-02-02T11:52:58.889Z: Processing file: Hitchikers Guide to the Galaxy.mp3 (14502f31-9eb3-4c4d-905a-5c153decc896)
+2025-02-02T11:52:58.889Z: [DRY RUN] Would migrate file: bedf2487-8285-44b9-95f8-38039e8fff45/hitchikers-guide-to-the-galaxy.mp3 -> bedf2487-8285-44b9-95f8-38039e8fff45/Hitchikers Guide to the Galaxy.mp3
+2025-02-02T11:52:58.889Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bedf2487-8285-44b9-95f8-38039e8fff45/Hitchikers Guide to the Galaxy.mp3
+2025-02-02T11:52:58.889Z: Migration simulation completed!
+2025-02-02T11:57:49.376Z: Starting DRY RUN migration
+2025-02-02T11:57:49.378Z: Processing file: 27 - Part 3, Chapter 8.mp3 (1d8321a4-e272-418e-8737-7512ae30ea01)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730759913791_27 - Part 3, Chapter 8.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/27 - Part 3, Chapter 8.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/27 - Part 3, Chapter 8.mp3
+2025-02-02T11:57:49.378Z: Processing file: 02 - Part 1, Chapter 1.mp3 (5f7b2714-6098-4b07-8f96-935e81b09e15)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1729524180968_02 - Part 1, Chapter 1.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02 - Part 1, Chapter 1.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02 - Part 1, Chapter 1.mp3
+2025-02-02T11:57:49.378Z: Processing file: 26 - Part 3, Chapter 7.mp3 (de18858d-b929-4244-a0e3-34e49f6e61d4)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: df4e5659-8f56-4b95-9248-07ec92aceadb/1729461848108_26 - Part 3, Chapter 7.mp3 -> df4e5659-8f56-4b95-9248-07ec92aceadb/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/df4e5659-8f56-4b95-9248-07ec92aceadb/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:57:49.378Z: Processing file: 26 - Part 3, Chapter 7.mp3 (af866496-27ba-4e8b-925b-3d5a45034abd)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1730054781761_26 - Part 3, Chapter 7.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/26 - Part 3, Chapter 7.mp3
+2025-02-02T11:57:49.378Z: Processing file: 30 - Part 4, Chapter 1.mp3 (9d2f212b-cdb5-433f-b65c-375782d9b38a)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730907594957_30 - Part 4, Chapter 1.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/30 - Part 4, Chapter 1.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/30 - Part 4, Chapter 1.mp3
+2025-02-02T11:57:49.378Z: Processing file: 28 - Part 3, Chapter 9.mp3 (49aefe9f-c61a-4955-b154-95d21ae85d8b)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730408916639_28 - Part 3, Chapter 9.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/28 - Part 3, Chapter 9.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/28 - Part 3, Chapter 9.mp3
+2025-02-02T11:57:49.378Z: Processing file: 29 - Part 3, Chapter 10.mp3 (2b1c608d-2594-45e0-ad65-61b9d16256b9)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730816707885_29 - Part 3, Chapter 10.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/29 - Part 3, Chapter 10.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/29 - Part 3, Chapter 10.mp3
+2025-02-02T11:57:49.378Z: Processing file: 31 - Part 4, Chapter 2.mp3 (7aa05db0-c659-4f85-957f-fa600d32b7f7)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730918135404_31 - Part 4, Chapter 2.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/31 - Part 4, Chapter 2.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/31 - Part 4, Chapter 2.mp3
+2025-02-02T11:57:49.378Z: Processing file: 32 - Part 4, Chapter 3.mp3 (430673b2-53df-4de6-9041-0bb1a231af00)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1730979646458_32 - Part 4, Chapter 3.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/32 - Part 4, Chapter 3.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/32 - Part 4, Chapter 3.mp3
+2025-02-02T11:57:49.378Z: Processing file: 33 - Part 4, Chapter 4.mp3 (6eb2cc93-97fe-4dc3-82cc-d29ef2c73ca2)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731004852182_33 - Part 4, Chapter 4.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/33 - Part 4, Chapter 4.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/33 - Part 4, Chapter 4.mp3
+2025-02-02T11:57:49.378Z: Processing file: 34 - Part 4, Chapter 5.mp3 (a5b55a05-bc39-499c-8264-21a015ba9321)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731008735514_34 - Part 4, Chapter 5.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:57:49.378Z: Processing file: 34 - Part 4, Chapter 5.mp3 (831bb19c-46fc-4c93-8e32-78d17e6ed598)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731067742726_34 - Part 4, Chapter 5.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/34 - Part 4, Chapter 5.mp3
+2025-02-02T11:57:49.378Z: Processing file: 40 - Part 4, Chapter 11.mp3 (68286f74-ccad-4041-bfde-aced51bb5689)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731263540164_40 - Part 4, Chapter 11.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/40 - Part 4, Chapter 11.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/40 - Part 4, Chapter 11.mp3
+2025-02-02T11:57:49.378Z: Processing file: 35 - Part 4, Chapter 6.mp3 (2bfdf28a-8d9b-4efa-80ea-518bce5f61f4)
+2025-02-02T11:57:49.378Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731077423007_35 - Part 4, Chapter 6.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/35 - Part 4, Chapter 6.mp3
+2025-02-02T11:57:49.378Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/35 - Part 4, Chapter 6.mp3
+2025-02-02T11:57:49.379Z: Processing file: 36 - Part 4, Chapter 7.mp3 (af811bdb-9be3-4d95-b7a3-c0d698179b3a)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731145679340_36 - Part 4, Chapter 7.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/36 - Part 4, Chapter 7.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/36 - Part 4, Chapter 7.mp3
+2025-02-02T11:57:49.379Z: Processing file: 37 - Part 4, Chapter 8.mp3 (ce73b3bf-99ab-4c46-b38d-ade603b23d17)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 48f72233-2292-4cb3-9264-435f3e98ebfc/1731171878295_37 - Part 4, Chapter 8.mp3 -> 48f72233-2292-4cb3-9264-435f3e98ebfc/37 - Part 4, Chapter 8.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/48f72233-2292-4cb3-9264-435f3e98ebfc/37 - Part 4, Chapter 8.mp3
+2025-02-02T11:57:49.379Z: Processing file: 41 - Part 4, Chapter 12.mp3 (e24a7450-f899-4f35-b599-45a2b4b32984)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731276841934_41 - Part 4, Chapter 12.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/41 - Part 4, Chapter 12.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/41 - Part 4, Chapter 12.mp3
+2025-02-02T11:57:49.379Z: Processing file: 38 - Part 4, Chapter 9.mp3 (83c15ab1-75ca-44d7-90f0-b3d93be254e5)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731235728387_38 - Part 4, Chapter 9.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/38 - Part 4, Chapter 9.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/38 - Part 4, Chapter 9.mp3
+2025-02-02T11:57:49.379Z: Processing file: 39 - Part 4, Chapter 10.mp3 (b5547739-df2c-4281-a3e0-1a980e3ad0d4)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731240484456_39 - Part 4, Chapter 10.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/39 - Part 4, Chapter 10.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/39 - Part 4, Chapter 10.mp3
+2025-02-02T11:57:49.379Z: Processing file: The-Fisherman-and-his-Wife.mp3 (4b51773e-4eaa-4b98-90fc-81c807894834)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: ba651789-8dd9-47a4-b173-a8e820fb8d65/1731561295305_The-Fisherman-and-his-Wife.mp3 -> ba651789-8dd9-47a4-b173-a8e820fb8d65/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/ba651789-8dd9-47a4-b173-a8e820fb8d65/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:57:49.379Z: Processing file: 01.The Silkworm.mp3 (01d7b2b4-d7c6-43fb-ab12-28a51985581e)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731328869760_01.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: Processing file: Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3 (9f7f498a-348b-4389-b66e-5eb7e697f3f0)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: f91cba79-d56f-41b8-af1e-250c4da5f947/1731402446036_Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3 -> f91cba79-d56f-41b8-af1e-250c4da5f947/Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/f91cba79-d56f-41b8-af1e-250c4da5f947/Mister Modo & Ugly Mac Beer (Modonut) 2009 - Not Afraid with Jessica Fitoussi.mp3
+2025-02-02T11:57:49.379Z: Processing file: 02.The Silkworm.mp3 (af6ffc62-296e-41de-b964-323d1ff02b85)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731608002611_02.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/02.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: Processing file: ZOOM0008.MP3 (0e93fe3f-c1d7-4e21-9cd0-546cce4d535e)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738022131007_ZOOM0008.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0008.MP3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0008.MP3
+2025-02-02T11:57:49.379Z: Processing file: Level 0_A_pretty_face_2.mp3 (83753812-a550-40c8-ba35-7f32d47d3f25)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1731946104986_Level 0_A_pretty_face_2.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Level 0_A_pretty_face_2.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Level 0_A_pretty_face_2.mp3
+2025-02-02T11:57:49.379Z: Processing file: 01 - Prologue.mp3 (21a86a81-a0a0-4b21-8605-54672695976c)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: f91cba79-d56f-41b8-af1e-250c4da5f947/1732102766930_01 - Prologue.mp3 -> f91cba79-d56f-41b8-af1e-250c4da5f947/01 - Prologue.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/f91cba79-d56f-41b8-af1e-250c4da5f947/01 - Prologue.mp3
+2025-02-02T11:57:49.379Z: Processing file: 03.The Silkworm.mp3 (03c291e5-48e5-4c52-a7b5-b99c8089c5e8)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1732480579359_03.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/03.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/03.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: Processing file: 04.The Silkworm.mp3 (5b86d921-ef6a-4ccd-ad83-5d976ac2865a)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733417513245_04.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/04.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/04.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: Processing file: Harry Potter and the Phylosopher Stone_d1_02.MP3 (6307577e-77e3-40e7-9332-340cf9c9c9e5)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1734105189971_Harry Potter and the Phylosopher Stone_d1_02.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Phylosopher Stone_d1_02.MP3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Phylosopher Stone_d1_02.MP3
+2025-02-02T11:57:49.379Z: Processing file: 05.The Silkworm.mp3 (565b3b7e-208a-4f7c-ad39-b89a08ee07aa)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733426829574_05.The Silkworm.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/05.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/05.The Silkworm.mp3
+2025-02-02T11:57:49.379Z: Processing file: 01 - Prologue.mp3 (fb025e6a-6976-44be-b593-b0cd272c0235)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733427308131_01 - Prologue.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01 - Prologue.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/01 - Prologue.mp3
+2025-02-02T11:57:49.379Z: Processing file: robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3 (6f6c9c15-c1f3-4e52-95d6-855de06b5b3b)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733604439940_robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/robert-f-kennedy-speech-a-tiny-ripple-of-hope.mp3
+2025-02-02T11:57:49.379Z: Processing file: Harry Potter and the Philosopher Stone _D1_part 01.MP3 (3c8236a7-3c4d-4dcb-b0ee-4b6da012c4ba)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1733956640709_Harry Potter and the Philosopher Stone _D1_part 01.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosopher Stone _D1_part 01.MP3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosopher Stone _D1_part 01.MP3
+2025-02-02T11:57:49.379Z: Processing file: The-Fisherman-and-his-Wife.mp3 (2378dffd-2453-4a1f-a1e8-6fd20c8b2f52)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: e25468d7-8816-4333-8cd8-1084bf8e4252/1734605310852_The-Fisherman-and-his-Wife.mp3 -> e25468d7-8816-4333-8cd8-1084bf8e4252/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/e25468d7-8816-4333-8cd8-1084bf8e4252/The-Fisherman-and-his-Wife.mp3
+2025-02-02T11:57:49.379Z: Processing file: 05 Cahier 05.mp3 (828e39df-dc3d-48b1-83cc-9aa904c573e7)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: e25468d7-8816-4333-8cd8-1084bf8e4252/1734513563415_05 Cahier 05.mp3 -> e25468d7-8816-4333-8cd8-1084bf8e4252/05 Cahier 05.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/e25468d7-8816-4333-8cd8-1084bf8e4252/05 Cahier 05.mp3
+2025-02-02T11:57:49.379Z: Processing file: stateoftheunion1790-1816_01_various_128kb.mp3 (d9a1dc9f-df4f-441d-9914-26077860a0c5)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: bedf2487-8285-44b9-95f8-38039e8fff45/1734626181850_stateoftheunion1790-1816_01_various_128kb.mp3 -> bedf2487-8285-44b9-95f8-38039e8fff45/stateoftheunion1790-1816_01_various_128kb.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bedf2487-8285-44b9-95f8-38039e8fff45/stateoftheunion1790-1816_01_various_128kb.mp3
+2025-02-02T11:57:49.379Z: Processing file: Harry Potter and the Philosophers Stone 6.mp3 (f62b998a-8d0a-4f61-835d-722d46b534c6)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736365867615_Harry Potter and the Philosophers Stone 6.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosophers Stone 6.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/Harry Potter and the Philosophers Stone 6.mp3
+2025-02-02T11:57:49.379Z: Processing file: Interesting book__04.mp3 (e247eebd-a68a-4f10-9b7a-753245249f1e)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736768409166_Interesting book__04.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__04.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__04.mp3
+2025-02-02T11:57:49.379Z: Processing file: ZOOM0009.MP3 (c7b9cf3d-e3a3-468c-9ad1-039636728701)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738100057879_ZOOM0009.MP3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0009.MP3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/ZOOM0009.MP3
+2025-02-02T11:57:49.379Z: Processing file: 13. 'Take Off your Mask, Senor'.mp3 (397bf5a8-44ee-449e-8b28-60b024091d7f)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736539693678_13. 'Take Off your Mask, Senor'.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:57:49.379Z: Processing file: 11. At the Jail.mp3 (cbcbb345-3dbe-452b-ba7a-69876603230e)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736525986689_11. At the Jail.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/11. At the Jail.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/11. At the Jail.mp3
+2025-02-02T11:57:49.379Z: Processing file: 12. The Mark of Zorro.mp3 (91ae0667-7315-49ae-a6ac-fa56759b9a33)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736529545450_12. The Mark of Zorro.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/12. The Mark of Zorro.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/12. The Mark of Zorro.mp3
+2025-02-02T11:57:49.379Z: Processing file: Interesting book.mp3 (465c9d1c-fb3c-4c64-8767-0bfcfeebb2ca)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736706854791_Interesting book.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book.mp3
+2025-02-02T11:57:49.379Z: Processing file: 13. 'Take Off your Mask, Senor'.mp3 (6f005140-8860-4368-961b-ac25be083618)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736539644211_13. 'Take Off your Mask, Senor'.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/13. 'Take Off your Mask, Senor'.mp3
+2025-02-02T11:57:49.379Z: Processing file: Track 01.mp3 (04bf8e01-3bf9-4833-81db-30e5b0e754c8)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736632698117_Track 01.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/Track 01.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/Track 01.mp3
+2025-02-02T11:57:49.379Z: Processing file: Interesting book__03.mp3 (097569d2-9ac1-4d74-bebc-ead80acdb211)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736707822439_Interesting book__03.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__03.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__03.mp3
+2025-02-02T11:57:49.379Z: Processing file: Interesting book__02.mp3 (bc319f18-35fc-45a8-abf1-fae5944ca7d1)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 4f345102-f9ca-4192-987b-be7727c035b4/1736707131488_Interesting book__02.mp3 -> 4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__02.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/4f345102-f9ca-4192-987b-be7727c035b4/Interesting book__02.mp3
+2025-02-02T11:57:49.379Z: Processing file: Track 02.mp3 (f9f998a7-33a8-432a-9bc2-a0ca9e3f7c9d)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: bf0a9fd9-8709-4224-82d4-170905719b2e/1736796687835_Track 02.mp3 -> bf0a9fd9-8709-4224-82d4-170905719b2e/Track 02.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bf0a9fd9-8709-4224-82d4-170905719b2e/Track 02.mp3
+2025-02-02T11:57:49.379Z: Processing file: HP and the Chamber of Secrets_Chapter 02.mp3 (0c0e9efc-20cb-4d56-84de-73ab949a344e)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736890320253_HP and the Chamber of Secrets_Chapter 02.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 02.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 02.mp3
+2025-02-02T11:57:49.379Z: Processing file: HP and the Chamber of Secrets_Chapter 05.mp3 (554b6dbf-73ba-4cde-951e-7c1d4ae3d7eb)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737142068983_HP and the Chamber of Secrets_Chapter 05.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 05.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 05.mp3
+2025-02-02T11:57:49.379Z: Processing file: HP and the Chamber of Secrets_Chapter 03.mp3 (1ff43b1b-bc4a-4e31-b3f6-b77dc5efb74b)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736892445996_HP and the Chamber of Secrets_Chapter 03.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:57:49.379Z: Processing file: HP and the Chamber of Secrets_Chapter 03.mp3 (caaec9fa-60e3-4dc4-b532-3260901a6c60)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1736976129129_HP and the Chamber of Secrets_Chapter 03.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 03.mp3
+2025-02-02T11:57:49.379Z: Processing file: HP and the Chamber of Secrets_Chapter 08.mp3 (88c0bbb5-f63c-401a-9780-e03abf788eb8)
+2025-02-02T11:57:49.379Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737413157890_HP and the Chamber of Secrets_Chapter 08.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 08.mp3
+2025-02-02T11:57:49.379Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 08.mp3
+2025-02-02T11:57:49.379Z: Processing file: HP and the Chamber of Secrets_Chapter 04.mp3 (ecc0f87e-5361-4b1b-8b9c-e5fba67e8f3c)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737051260268_HP and the Chamber of Secrets_Chapter 04.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 04.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 04.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 06.mp3 (7e3dbbf0-76c8-49d5-a252-9b5dd17fd467)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737231399807_HP and the Chamber of Secrets_Chapter 06.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 06.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 06.mp3
+2025-02-02T11:57:49.380Z: Processing file: speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3 (22c85736-77b8-4532-b6b4-fcc4c47c0565)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737117825486_speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/speeches_American_robert-f-kennedy-speech-a-tiny-ripple-of-hope_.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 10.mp3 (87570dd4-c3df-4310-8686-851bcee6e331)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737588501324_HP and the Chamber of Secrets_Chapter 10.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 10.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 10.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 07.mp3 (0404b692-e6cc-479d-a45f-bdf14fa617d8)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737310875552_HP and the Chamber of Secrets_Chapter 07.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 07.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 07.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 09.mp3 (0b8eec22-3788-4dab-bd11-7563e928927c)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737488349562_HP and the Chamber of Secrets_Chapter 09.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 09.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 09.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 11.mp3 (e16ff71c-056c-492b-81bc-c21dc0f371cb)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737668134964_HP and the Chamber of Secrets_Chapter 11.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 11.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 11.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 12.mp3 (d7853527-8d7a-43cd-b149-516489df72d5)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737749035377_HP and the Chamber of Secrets_Chapter 12.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 12.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 12.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 13.mp3 (0d8983cd-0b74-4973-b15d-d7a83a6f07c2)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1737841941145_HP and the Chamber of Secrets_Chapter 13.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 13.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 13.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 14.mp3 (ab7b0ffd-f2e8-4d82-b545-92c67cd633d5)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738015839811_HP and the Chamber of Secrets_Chapter 14.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 14.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 14.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 15.mp3 (c8757b0e-99b0-44ca-a475-1593751a7e02)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738100232868_HP and the Chamber of Secrets_Chapter 15.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 15.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 15.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 16.mp3 (20b1833e-65e4-484f-aecd-8cff6cb89bbe)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738161805890_HP and the Chamber of Secrets_Chapter 16.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 16.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 16.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 17.mp3 (ccfaa487-af27-4e72-ac67-b67ff1402e55)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738279823645_HP and the Chamber of Secrets_Chapter 17.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 17.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 17.mp3
+2025-02-02T11:57:49.380Z: Processing file: HP and the Chamber of Secrets_Chapter 18.mp3 (64574829-73e1-4c3f-ab74-a5bb97465104)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/1738350685454_HP and the Chamber of Secrets_Chapter 18.mp3 -> 21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 18.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/21b3f4bc-f6f4-4908-a03a-cb08e8b3f586/HP and the Chamber of Secrets_Chapter 18.mp3
+2025-02-02T11:57:49.380Z: Processing file: Hitchikers Guide to the Galaxy.mp3 (14502f31-9eb3-4c4d-905a-5c153decc896)
+2025-02-02T11:57:49.380Z: [DRY RUN] Would migrate file: bedf2487-8285-44b9-95f8-38039e8fff45/hitchikers-guide-to-the-galaxy.mp3 -> bedf2487-8285-44b9-95f8-38039e8fff45/Hitchikers Guide to the Galaxy.mp3
+2025-02-02T11:57:49.380Z: [DRY RUN] Would update URL to: https://lm-audio.s3.eu-west-2.amazonaws.com/bedf2487-8285-44b9-95f8-38039e8fff45/Hitchikers Guide to the Galaxy.mp3
+2025-02-02T11:57:49.380Z: Migration simulation completed!

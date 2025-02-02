@@ -6,7 +6,7 @@ import {
   CallbackUrl,
 } from '@deepgram/sdk';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { formatFileName } from '@/utils/utils';
 
 export async function POST(request: NextRequest) {
   if (
@@ -62,20 +62,8 @@ export async function POST(request: NextRequest) {
           mimeType,
         });
 
-        // Форматируем имя файла, заменяя пробелы на дефисы
-        const formattedFileName = name
-          .replace(/[\s\n\r]+/g, '-') // заменяем пробелы и переносы строк на дефис
-          .replace(/[^a-zA-Z0-9-_.]/g, '') // оставляем только буквы, цифры, дефисы, точки и подчеркивания
-          .toLowerCase(); // приводим к нижнему регистру для единообразия
-
-        // Generate S3 key
-        const key = `${user.id}/${formattedFileName}`;
-
-        console.log('Formatted file name:', {
-          original: name,
-          formatted: formattedFileName,
-          key: key,
-        });
+        // Форматируем имя файла, заменяя пробелы и всякую ерунду на дефисы
+        const key = `${user.id}/${formatFileName(name)}`;
 
         // Преобразуем файл в Buffer
         const arrayBuffer = await file.arrayBuffer();
