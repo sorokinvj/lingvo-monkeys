@@ -9,6 +9,8 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { formatFileName } from '@/utils/utils';
 
 export async function POST(request: NextRequest) {
+  console.log('[Upload] Starting new file upload');
+
   if (
     !process.env.DEEPGRAM_API_KEY ||
     !process.env.AWS_BUCKET_NAME ||
@@ -16,7 +18,7 @@ export async function POST(request: NextRequest) {
     !process.env.AWS_ACCESS_KEY_ID ||
     !process.env.AWS_SECRET_ACCESS_KEY
   ) {
-    console.log('Missing 3rd party credentials');
+    console.error('[Upload] Missing environment variables');
     return NextResponse.json(
       { error: '3rd parties credentials are not set' },
       { status: 500 }
@@ -31,11 +33,11 @@ export async function POST(request: NextRequest) {
     error: userError,
   } = await supabase.auth.getUser();
   if (userError || !user) {
-    console.log('Unauthorized access attempt', userError);
+    console.error('[Upload] Authentication error:', userError);
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  console.log('User authenticated:', user.id);
+  console.log('[Upload] User authenticated:', user.id);
 
   const s3Client = new S3Client({
     region: process.env.AWS_REGION,
@@ -54,16 +56,11 @@ export async function POST(request: NextRequest) {
         const metadata = JSON.parse(formData.get('metadata') as string);
         const { id, name, path, size, mimeType } = metadata;
 
-        console.log('Received file upload request:', {
-          id,
-          name,
-          path,
-          size,
-          mimeType,
-        });
+        console.log('[Upload] File details:', { id, name, size, mimeType });
 
         // Форматируем имя файла, заменяя пробелы и всякую ерунду на дефисы
         const key = `${user.id}/${formatFileName(name)}`;
+        console.log('[Upload] Generated S3 key:', key);
 
         // Преобразуем файл в Buffer
         const arrayBuffer = await file.arrayBuffer();
@@ -90,6 +87,7 @@ export async function POST(request: NextRequest) {
         });
 
         await s3Client.send(command);
+        console.log('[Upload] S3 upload successful');
 
         // После загрузки в S3
         controller.enqueue(
@@ -124,14 +122,11 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (insertError) {
-          console.log('Error inserting file record:', insertError);
-          return NextResponse.json(
-            { error: insertError.message },
-            { status: 500 }
-          );
+          console.error('[Upload] Database insert failed:', insertError);
+          throw insertError;
         }
 
-        console.log('File record created:', newFile.id);
+        console.log('[Upload] File record created:', newFile.id);
 
         // После создания записи в БД
         controller.enqueue(
@@ -184,14 +179,11 @@ export async function POST(request: NextRequest) {
           );
 
         if (deepgramError) {
-          console.log('Error in transcription request:', deepgramError);
-          return NextResponse.json(
-            { error: 'Transcription request failed' },
-            { status: 500 }
-          );
+          console.error('[Upload] Deepgram request failed:', deepgramError);
+          throw deepgramError;
         }
 
-        console.log('Transcription process started:', result.request_id);
+        console.log('[Upload] Transcription started:', result.request_id);
 
         controller.enqueue(
           encoder.encode(
@@ -218,14 +210,11 @@ export async function POST(request: NextRequest) {
             .single();
 
         if (transcriptionError) {
-          console.log(
-            'Error creating transcription record:',
+          console.error(
+            '[Upload] Error creating transcription record:',
             transcriptionError
           );
-          return NextResponse.json(
-            { error: transcriptionError.message },
-            { status: 500 }
-          );
+          throw transcriptionError;
         }
 
         console.log('Transcription record created:', transcriptionData.id);
@@ -237,11 +226,8 @@ export async function POST(request: NextRequest) {
           .eq('id', newFile.id);
 
         if (updateFileError) {
-          console.log('Error updating File record:', updateFileError);
-          return NextResponse.json(
-            { error: 'Error updating File record' },
-            { status: 500 }
-          );
+          console.error('Error updating File record:', updateFileError);
+          throw updateFileError;
         }
 
         console.log(
@@ -261,7 +247,7 @@ export async function POST(request: NextRequest) {
         );
         controller.close();
       } catch (error) {
-        console.log('Unexpected error:', error);
+        console.error('[Upload] Unexpected error:', error);
         controller.enqueue(
           encoder.encode(
             'event: error\ndata: ' + JSON.stringify({ error }) + '\n\n'
