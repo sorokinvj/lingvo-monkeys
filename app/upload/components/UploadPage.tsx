@@ -110,9 +110,8 @@ const UploadPage: React.FC = () => {
         ) : (
           <p>Перетащите MP3 файл сюда или нажмите для выбора</p>
         )}
-        <p className="text-sm max-w-prose mx-auto text-gray-500 mt-4">
-          Жесткого ограничения на размер файла нет, однако загружать большие
-          файлы по 500 Мб и выше не рекомендуется.
+        <p className="text-sm text-gray-500 mt-4">
+          Максимальный размер файла: {MAX_FILE_SIZE_TEXT}
         </p>
         {progress > 0 && (
           <div className="mt-4">
