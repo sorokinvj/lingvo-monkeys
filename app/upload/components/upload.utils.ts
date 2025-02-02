@@ -83,24 +83,32 @@ export const processFile = async (
   },
   onProgress: (progress: number, message: string) => void
 ) => {
+  console.log('🚀 processFile: Started');
   return new Promise((resolve, reject) => {
     const eventSource = createSSEConnection('/api/upload', {
-      onProgress: (progress, message) => onProgress(progress, message),
+      onProgress: (progress, message) => {
+        console.log('📊 SSE Progress:', { progress, message });
+        onProgress(progress, message);
+      },
       onError: (error) => {
+        console.error('❌ SSE Error:', error);
         eventSource.close();
         reject(error);
       },
       onComplete: (data) => {
+        console.log('✅ SSE Complete:', data);
         eventSource.close();
         resolve(data);
       },
     });
 
+    console.log('📡 Starting POST request');
     fetch('/api/upload', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fileData),
     }).catch((error) => {
+      console.error('❌ POST Error:', error);
       eventSource.close();
       reject(error);
     });

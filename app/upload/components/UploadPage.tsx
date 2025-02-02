@@ -15,7 +15,7 @@ import {
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
-  const { progress, message, setMessage, updateProgress, reset } =
+  const { progress, message, setMessage, updateProgress, reset, complete } =
     useUploadProgress();
 
   const uploadMutation = useMutation({
@@ -37,6 +37,7 @@ const UploadPage: React.FC = () => {
         });
 
         // Этап 4: Обработка
+        console.log('🎯 Starting processFile');
         setMessage('Файл загружен, начинаем обработку...');
         await processFile(
           {
@@ -47,16 +48,23 @@ const UploadPage: React.FC = () => {
             publicUrl,
           },
           (processProgress, processMessage) => {
+            console.log('⏳ Process Progress:', {
+              processProgress,
+              processMessage,
+            });
             updateProgress('PROCESSING', processProgress);
             setMessage(processMessage);
           }
         );
 
         // Завершение
+        console.log('🏁 Upload completed, calling complete()');
         updateProgress('COMPLETED');
         setMessage('Загрузка завершена!');
+        complete();
+        console.log('✨ Complete called');
       } catch (error) {
-        console.error('Upload error:', error);
+        console.error('❌ Upload error:', error);
         reset();
         throw error;
       }
