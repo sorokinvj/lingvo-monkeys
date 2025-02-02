@@ -54,12 +54,15 @@ const UploadPage: React.FC = () => {
         await new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
 
+          // Таймаут 5 минут (presigned URL живет 10)
+          xhr.timeout = 300000;
+
           xhr.upload.onprogress = (event) => {
             if (event.lengthComputable) {
               const percentComplete = Math.round(
                 (event.loaded / event.total) * 40
-              ); // 40% для этапа загрузки
-              setProgress(20 + percentComplete); // 20% начальный прогресс + процент загрузки
+              );
+              setProgress(20 + percentComplete);
               setMessage(
                 `Загружено ${Math.round((event.loaded / event.total) * 100)}%`
               );
@@ -70,14 +73,35 @@ const UploadPage: React.FC = () => {
             if (xhr.status === 204) {
               resolve(null);
             } else {
-              reject(new Error('Failed to upload to S3'));
+              reject(new Error(`Upload failed with status: ${xhr.status}`));
             }
           };
 
-          xhr.onerror = () => reject(new Error('Failed to upload to S3'));
+          xhr.onerror = () => {
+            reject(new Error('Network error during upload'));
+          };
 
-          xhr.open('POST', url);
-          xhr.send(formData);
+          xhr.ontimeout = () => {
+            reject(new Error('Upload timed out'));
+          };
+
+          xhr.onabort = () => {
+            reject(new Error('Upload was aborted'));
+          };
+
+          try {
+            xhr.open('POST', url);
+            xhr.send(formData);
+          } catch (error) {
+            const errorMessage =
+              error instanceof Error ? error.message : 'Unknown error';
+            reject(new Error(`Failed to start upload: ${errorMessage}`));
+          }
+        }).catch((error) => {
+          console.error('Upload error:', error);
+          setProgress(0);
+          setMessage('');
+          throw new Error(`File upload failed: ${error.message}`);
         });
 
         setProgress(50);
