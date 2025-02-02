@@ -20,23 +20,35 @@ const UploadPage: React.FC = () => {
 
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
+      const timings = {
+        start: Date.now(),
+        presign: 0,
+        upload: 0,
+        processing: 0,
+        total: 0,
+      };
+
       try {
         // Этап 1: Получаем presigned URL
         setMessage('Подготовка к загрузке...');
         updateProgress('PRESIGN');
         const { url, fields, key, publicUrl } = await getPresignedUrl(file);
+        timings.presign = Date.now() - timings.start;
 
         // Этап 2: Подготовка
         setMessage('Начинаем загрузку...');
         updateProgress('PREPARING');
 
         // Этап 3: Загружаем в S3
+        const uploadStart = Date.now();
         setMessage('Загрузка файла...');
         await uploadToS3(url, fields, file, (uploadProgress) => {
           updateProgress('UPLOAD', uploadProgress);
         });
+        timings.upload = Date.now() - uploadStart;
 
         // Этап 4: Обработка
+        const processingStart = Date.now();
         await processFile(
           {
             name: file.name,
@@ -50,10 +62,24 @@ const UploadPage: React.FC = () => {
             setMessage(processMessage);
           }
         );
+        timings.processing = Date.now() - processingStart;
+        timings.total = Date.now() - timings.start;
+
+        // Логируем результаты
+        console.log('📊 Upload Timings:', {
+          fileName: file.name,
+          fileSize: `${(file.size / (1024 * 1024)).toFixed(2)}MB`,
+          presign: `${(timings.presign / 1000).toFixed(2)}s`,
+          upload: `${(timings.upload / 1000).toFixed(2)}s`,
+          processing: `${(timings.processing / 1000).toFixed(2)}s`,
+          total: `${(timings.total / 1000).toFixed(2)}s`,
+        });
 
         // Завершение
         updateProgress('COMPLETED');
-        setMessage('Загрузка завершена!');
+        setMessage(
+          `Загрузка завершена за ${(timings.total / 1000).toFixed(2)}s!`
+        );
         complete();
       } catch (error) {
         console.error('❌ Upload error:', error);

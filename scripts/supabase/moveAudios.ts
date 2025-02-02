@@ -67,6 +67,9 @@ const s3Client = new S3Client({
   },
 });
 
+// Добавим константу для бакета
+const SUPABASE_BUCKET = 'audio-files'; // Имя бакета из Supabase storage
+
 async function migrateFiles(isDryRun = true) {
   try {
     console.log(`Running in ${isDryRun ? 'DRY RUN' : 'PRODUCTION'} mode`);
@@ -178,7 +181,7 @@ async function migrateFiles(isDryRun = true) {
 
         // Проверяем существование файла в Supabase
         const { data: fileExists } = await supabase.storage
-          .from('your-bucket-name')
+          .from(SUPABASE_BUCKET)
           .download(file.path);
 
         if (!fileExists) {
@@ -212,11 +215,12 @@ async function migrateFiles(isDryRun = true) {
 
         // Загружаем файл в S3
         const { data: fileData, error: downloadError } = await supabase.storage
-          .from('your-bucket-name')
+          .from(SUPABASE_BUCKET)
           .download(file.path);
 
         if (downloadError || !fileData) {
-          throw new Error(`Failed to download: ${downloadError?.message}`);
+          log(`❌ Failed to download ${file.path}: ${downloadError?.message}`);
+          continue;
         }
 
         const upload = new Upload({
@@ -346,7 +350,7 @@ async function generateMigrationReport() {
 }
 
 // Запускаем в dry run режиме
-migrateFiles(true);
+migrateFiles(false);
 
 // Запускаем генерацию отчета
 generateMigrationReport();
