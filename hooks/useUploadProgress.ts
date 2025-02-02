@@ -10,19 +10,28 @@ export const useUploadProgress = ({
 }: UseUploadProgressProps = {}) => {
   const [progress, setProgress] = useState<number>(0);
   const [message, setMessage] = useState<string>('');
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const reset = useCallback(() => {
     setProgress(0);
     setMessage('');
+    setIsCompleted(false);
   }, []);
 
   const updateProgress = useCallback(
     (stage: UploadStage, current: number = 100) => {
+      // Если загрузка уже завершена, игнорируем обновления
+      if (isCompleted) return;
+
       const stages = Object.keys(UPLOAD_STAGES) as UploadStage[];
       const currentIndex = stages.indexOf(stage);
       const currentStageValue = UPLOAD_STAGES[stage];
       const prevStageValue =
         currentIndex > 0 ? UPLOAD_STAGES[stages[currentIndex - 1]] : 0;
+
+      if (stage === 'COMPLETED') {
+        setIsCompleted(true);
+      }
 
       // Для этапа UPLOAD используем прямой процент от XHR
       if (stage === 'UPLOAD') {
@@ -40,19 +49,19 @@ export const useUploadProgress = ({
       const calculatedProgress = prevStageValue + (range * current) / 100;
       setProgress(Math.round(calculatedProgress));
     },
-    []
+    [isCompleted]
   );
 
   useEffect(() => {
-    if (progress === UPLOAD_STAGES.COMPLETED) {
+    if (isCompleted) {
       const timer = setTimeout(() => {
         reset();
         onComplete?.();
-      }, 1500); // Увеличил время до сброса
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
-  }, [progress, onComplete, reset]);
+  }, [isCompleted, onComplete, reset]);
 
   return {
     progress,
