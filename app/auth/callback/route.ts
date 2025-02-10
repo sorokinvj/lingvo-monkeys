@@ -16,10 +16,17 @@ export async function GET(request: Request) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  if (redirectTo) {
-    return NextResponse.redirect(`${origin}${redirectTo}`);
-  }
+  // Создаем новые параметры, исключая code и redirect_to
+  const newSearchParams = new URLSearchParams();
+  requestUrl.searchParams.forEach((value, key) => {
+    if (key !== 'code' && key !== 'redirect_to') {
+      newSearchParams.append(key, value);
+    }
+  });
 
-  // URL to redirect to after sign up process completes
-  return NextResponse.redirect(`${origin}/upload`);
+  const queryString = newSearchParams.toString();
+  const redirectPath = redirectTo || '/upload';
+  const finalUrl = `${origin}${redirectPath}${queryString ? `?${queryString}` : ''}`;
+
+  return NextResponse.redirect(finalUrl);
 }

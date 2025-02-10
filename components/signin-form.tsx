@@ -23,7 +23,7 @@ export const SignInForm: FC<SignInFormProps> = ({ action }) => {
 
   return (
     <form
-      className="py-2 md:py-12 flex flex-col min-w-64 mx-auto relative"
+      className="py-2 md:py-12 flex flex-col min-w-64 mx-auto relative max-w-prose"
       action={clientAction}
     >
       <h2 className="text-2xl font-medium text-gray-700">Вход</h2>

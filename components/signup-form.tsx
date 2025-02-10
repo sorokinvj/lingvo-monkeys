@@ -23,7 +23,7 @@ export const SignUpForm = () => {
   return (
     <div className="w-full flex justify-center">
       <form
-        className="flex flex-col min-w-64 mx-auto relative py-2 md:py-12"
+        className="flex flex-col min-w-64 mx-auto relative py-2 md:py-12 max-w-prose"
         action={handleSubmit}
       >
         <h2 className="text-2xl font-medium text-gray-700">Регистрация</h2>

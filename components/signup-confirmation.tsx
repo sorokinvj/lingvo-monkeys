@@ -29,7 +29,7 @@ const SignUpConfirmation: React.FC = () => {
               className="w-6 h-6 text-black"
             />
           </div>
-          <h2 className="text-2xl font-bold mt-4">Классно, что ты с нами!</h2>
+          <h2 className="text-2xl font-bold mt-4">Скорее обезьянничать!</h2>
           <p className="text-gray-600 my-2">
             Аккаунт подтвержден, доступны все функции.
           </p>
