@@ -4,7 +4,8 @@ import { useCallback, useRef, useState } from 'react';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { signOutAction } from '@/app/actions';
-import { useOnClickOutside } from '@/hooks/use-click-outside';
+import { useOnClickOutside } from '@/hooks/useClickOutside';
+import { Shell } from 'lucide-react';
 
 interface AvatarMenuProps {
   user: User;
@@ -28,10 +29,10 @@ export function AvatarMenu({ user }: AvatarMenuProps) {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-medium"
+        className="h-8 w-8 rounded-full flex items-center justify-center text-sm font-medium"
         aria-label="User menu"
       >
-        {initials}
+        <Shell className="w-8 h-8" />
       </button>
 
       {isOpen && (

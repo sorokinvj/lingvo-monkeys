@@ -1,8 +1,9 @@
-import { roboto, oswald, didactGothic } from '@/lib/fonts';
+import { roboto, oswald } from '@/lib/fonts';
 import './globals.css';
 import Providers from './providers';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
+import SignUpConfirmation from '@/components/signup-confirmation';
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -48,6 +49,7 @@ export default function RootLayout({
             <div className="w-full flex-1">{children}</div>
             <Footer />
           </main>
+          <SignUpConfirmation />
         </Providers>
       </body>
     </html>

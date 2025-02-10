@@ -115,7 +115,10 @@ export const Drawer: React.FC<DrawerProps> = ({
                             onClick={onClose}
                           >
                             <span className="sr-only">Close panel</span>
-                            <XIcon className="h-6 w-6" aria-hidden="true" />
+                            <XIcon
+                              className="h-6 w-6 text-black"
+                              aria-hidden="true"
+                            />
                           </button>
                         </div>
                       </div>

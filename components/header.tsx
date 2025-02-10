@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { useUser } from '@/hooks/useUser';
 import { usePathname } from 'next/navigation';
 import { AvatarMenu } from './avatar-menu';
-import { useOnClickOutside } from '@/hooks/use-click-outside';
+import { useOnClickOutside } from '@/hooks/useClickOutside';
 import { signOutAction } from '@/app/actions';
 import { AlignRight } from 'lucide-react';
 import { Drawer } from './ui/drawer';
 import { Button } from './ui/button';
+
 export const Header: FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -53,7 +54,7 @@ export const Header: FC = () => {
     <header
       className={`
       bg-white z-20 shadow-header md:relative w-full md:max-w-6xl md:mx-auto md:translate-x-0 md:right-auto rounded-full mx-auto
-      transition-all duration-300 ease-in-out flex items-center justify-between px-4 py-4 md:py-8
+      transition-all duration-300 ease-in-out flex items-center justify-between px-4 py-4 pr-2 md:py-8 md:pr-0
       ${isCollapsed ? 'max-md:!w-14 max-md:!right-4 max-md:!left-auto max-md:!translate-x-0 max-md:!mx-0 max-md:!p-0' : ''}
     `}
     >
@@ -84,26 +85,24 @@ export const Header: FC = () => {
               </Link>
             )
         )}
-      </div>
-
-      {/* Desktop Auth */}
-      <div className="hidden md:flex items-center gap-4">
-        {user ? (
-          <AvatarMenu user={user} />
-        ) : (
-          <div className="flex items-center gap-4">
-            <Link href="/sign-in">
-              <div className="text-base hover:text-blue-600 hover:underline hover:underline-offset-4 hover:decoration-blue-600 hover:decoration-2">
-                Войти
-              </div>
-            </Link>
-            <Link href="/sign-up">
-              <div className="text-base bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
-                Регистрация
-              </div>
-            </Link>
-          </div>
-        )}
+        <div className="hidden md:flex items-center gap-4">
+          {user ? (
+            <AvatarMenu user={user} />
+          ) : (
+            <div className="flex items-center gap-4">
+              <Link href="/sign-in">
+                <div className="text-base hover:text-blue-600 hover:underline hover:underline-offset-4 hover:decoration-blue-600 hover:decoration-2">
+                  Войти
+                </div>
+              </Link>
+              <Link href="/sign-up">
+                <div className="text-base bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
+                  Регистрация
+                </div>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Mobile Menu Button */}
@@ -115,7 +114,7 @@ export const Header: FC = () => {
           }`}
           aria-label="Menu"
         >
-          <AlignRight className="w-6 h-6" />
+          <AlignRight className="w-8 h-8 font-bold" />
         </button>
 
         <Drawer
@@ -127,7 +126,7 @@ export const Header: FC = () => {
           hasNoBackgroundOverlay={false}
           className="md:hidden"
         >
-          <div className="flex flex-col gap-4 items-center">
+          <div className="flex flex-col gap-2 items-center">
             {Object.entries(navConfig).map(
               ([key, value]) =>
                 ('enabled' in value ? value.enabled : true) && (
@@ -154,8 +153,10 @@ export const Header: FC = () => {
             {user ? (
               <>
                 <div className="flex flex-col gap-4 items-center">
-                  <div className="text-sm text-gray-500 mb-2">{user.email}</div>
-                  <Button onClick={handleSignOut}>Выйти</Button>
+                  <div className="text-gray-700 mb-2">{user.email}</div>
+                  <Button onClick={handleSignOut} variant="outline">
+                    Выйти
+                  </Button>
                 </div>
               </>
             ) : (
