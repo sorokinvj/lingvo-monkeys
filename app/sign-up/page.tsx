@@ -1,9 +1,14 @@
 import { SignUpForm } from '@/components/signup-form';
+import { Suspense } from 'react';
 
 export const metadata = {
-  title: 'Регистрация | Lingvomonkeys',
+  title: 'Регистрация',
 };
 
 export default function Signup() {
-  return <SignUpForm />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignUpForm />
+    </Suspense>
+  );
 }
