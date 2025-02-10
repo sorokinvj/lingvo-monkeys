@@ -1,27 +1,36 @@
 'use client';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useUser } from '@/hooks/useUser';
 import { usePathname } from 'next/navigation';
 import { AvatarMenu } from './avatar-menu';
-import { User } from '@supabase/supabase-js';
-
+import { useOnClickOutside } from '@/hooks/use-click-outside';
+import { signOutAction } from '@/app/actions';
+import { AlignRight } from 'lucide-react';
+import { Drawer } from './ui/drawer';
+import { Button } from './ui/button';
 export const Header: FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { data: user } = useUser();
+  const pathname = usePathname();
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.innerWidth >= 768) return; // Only track scroll on mobile
+      if (window.innerWidth >= 768) return;
       const shouldCollapse = window.scrollY > window.innerHeight * 0.7;
       setIsCollapsed(shouldCollapse);
+      if (shouldCollapse) {
+        setIsMobileMenuOpen(false);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const { data: user } = useUser();
-  const pathname = usePathname();
+  useOnClickOutside(menuRef, () => setIsMobileMenuOpen(false));
 
   const navConfig = {
     files: {
@@ -33,6 +42,11 @@ export const Header: FC = () => {
       title: 'FAQ',
       href: '/faq',
     },
+  };
+
+  const handleSignOut = async () => {
+    await signOutAction();
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -52,6 +66,7 @@ export const Header: FC = () => {
         </h1>
       </Link>
 
+      {/* Desktop Navigation */}
       <div className="md:items-center md:gap-8 hidden md:flex">
         {Object.entries(navConfig).map(
           ([key, value]) =>
@@ -71,7 +86,8 @@ export const Header: FC = () => {
         )}
       </div>
 
-      <div className="flex items-center gap-4">
+      {/* Desktop Auth */}
+      <div className="hidden md:flex items-center gap-4">
         {user ? (
           <AvatarMenu user={user} />
         ) : (
@@ -88,6 +104,78 @@ export const Header: FC = () => {
             </Link>
           </div>
         )}
+      </div>
+
+      {/* Mobile Menu Button */}
+      <div className="md:hidden">
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className={`p-2 hover:bg-gray-100 rounded-full ${
+            isCollapsed ? 'max-md:mx-auto' : ''
+          }`}
+          aria-label="Menu"
+        >
+          <AlignRight className="w-6 h-6" />
+        </button>
+
+        <Drawer
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+          width="w-full"
+          minWidth="min-w-[320px]"
+          position="right"
+          hasNoBackgroundOverlay={false}
+          className="md:hidden"
+        >
+          <div className="flex flex-col gap-4 items-center">
+            {Object.entries(navConfig).map(
+              ([key, value]) =>
+                ('enabled' in value ? value.enabled : true) && (
+                  <Link
+                    href={value.href}
+                    key={key}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <div
+                      className={`text-lg py-2 ${
+                        pathname?.includes(value.href)
+                          ? 'text-blue-900 decoration-blue-900 decoration-2 underline underline-offset-8'
+                          : 'text-gray-900 hover:text-blue-600'
+                      }`}
+                    >
+                      {value.title}
+                    </div>
+                  </Link>
+                )
+            )}
+
+            <hr className="w-full my-6" />
+
+            {user ? (
+              <>
+                <div className="flex flex-col gap-4 items-center">
+                  <div className="text-sm text-gray-500 mb-2">{user.email}</div>
+                  <Button onClick={handleSignOut}>Выйти</Button>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col gap-4 items-center">
+                <Link
+                  href="/sign-in"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Button variant="outline">Войти</Button>
+                </Link>
+                <Link
+                  href="/sign-up"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Button variant="default">Регистрация</Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </Drawer>
       </div>
     </header>
   );
