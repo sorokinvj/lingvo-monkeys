@@ -24,7 +24,7 @@ export const Benefits: FC = () => {
       <h2 className="text-center text-3xl md:text-5xl uppercase font-heading flex items-center justify-center gap-2">
         <span>Загружай язык прямо в мозг</span>
       </h2>
-      <section className="flex flex-col gap-8 px-4 md:px-0">
+      <section className="flex flex-col gap-4 px-4 md:px-0">
         <div className="flex items-center gap-4">
           <Image
             src="/landing/Brain_icon.png"
@@ -51,30 +51,30 @@ export const Benefits: FC = () => {
             />
           </div>
         </div>
-        <div className="hidden md:flex relative">
-          <div className="relative left-48 flex -top-6">
+        <div className="hidden md:flex relative mt-4">
+          <div className="relative left-60 flex -top-6">
             <Image
               src="/landing/3_ Arrow_1.jpg"
-              width={418}
-              height={234}
+              width={118}
+              height={45}
               alt="Arrow"
-              className="w-48"
+              className="h-fit"
             />
-            <div className="relative left-12 flex">
+            <div className="relative left-24 flex">
               <Image
                 src="/landing/3_ Arrow_2.jpg"
-                width={201}
-                height={236}
+                width={56}
+                height={70}
                 alt="Arrow"
-                className="w-24"
+                className="h-fit"
               />
-              <div className="relative left-48">
+              <div className="relative left-60">
                 <Image
                   src="/landing/3_ Arrow_3.jpg"
-                  width={198}
-                  height={176}
+                  width={60}
+                  height={70}
                   alt="Arrow"
-                  className="w-28"
+                  className="h-fit"
                 />
               </div>
             </div>
