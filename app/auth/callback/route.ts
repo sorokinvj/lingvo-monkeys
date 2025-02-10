@@ -1,4 +1,3 @@
-// file: app/auth/callback/route.ts
 import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 
@@ -9,24 +8,14 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
   const origin = requestUrl.origin;
-  const redirectTo = requestUrl.searchParams.get('redirect_to')?.toString();
+  const firstSignIn = requestUrl.searchParams.get('firstSignIn');
 
   if (code) {
     const supabase = createClient();
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  // Создаем новые параметры, исключая code и redirect_to
-  const newSearchParams = new URLSearchParams();
-  requestUrl.searchParams.forEach((value, key) => {
-    if (key !== 'code' && key !== 'redirect_to') {
-      newSearchParams.append(key, value);
-    }
-  });
-
-  const queryString = newSearchParams.toString();
-  const redirectPath = redirectTo || '/upload';
-  const finalUrl = `${origin}${redirectPath}${queryString ? `?${queryString}` : ''}`;
-
-  return NextResponse.redirect(finalUrl);
+  return NextResponse.redirect(
+    `${origin}/upload${firstSignIn ? `?firstSignIn=${firstSignIn}` : ''}`
+  );
 }
