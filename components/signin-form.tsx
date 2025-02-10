@@ -66,10 +66,7 @@ export const SignInForm: FC<SignInFormProps> = ({ action }) => {
           Забыли пароль?
         </Link>
 
-        <SubmitButton
-          className="bg-gradient-to-r bg-blue-900 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors"
-          pendingText="🌈 "
-        >
+        <SubmitButton className="bg-gradient-to-r bg-blue-900 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors">
           Войти
         </SubmitButton>
         {message && <p className="text-red-500">{message}</p>}

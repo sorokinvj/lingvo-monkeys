@@ -60,10 +60,7 @@ export const SignUpForm = () => {
             className="border-gray-700 placeholder:text-gray-500 focus:ring-gray-600 hover:border-gray-600 transition-colors"
           />
 
-          <SubmitButton
-            className="bg-blue-900 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors"
-            pendingText="🌈 🌈 🌈 "
-          >
+          <SubmitButton className="bg-gradient-to-r bg-blue-900 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors">
             ✨ Создать аккаунт ✨
           </SubmitButton>
           {message}

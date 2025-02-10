@@ -3,6 +3,8 @@ import { FC, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useUser } from '@/hooks/useUser';
 import { usePathname } from 'next/navigation';
+import { AvatarMenu } from './avatar-menu';
+import { User } from '@supabase/supabase-js';
 
 export const Header: FC = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -22,11 +24,6 @@ export const Header: FC = () => {
   const pathname = usePathname();
 
   const navConfig = {
-    signIn: {
-      title: 'Войти',
-      href: '/sign-in',
-      enabled: !user,
-    },
     files: {
       title: 'Ваши файлы',
       href: '/upload',
@@ -71,6 +68,25 @@ export const Header: FC = () => {
                 </div>
               </Link>
             )
+        )}
+      </div>
+
+      <div className="flex items-center gap-4">
+        {user ? (
+          <AvatarMenu user={user} />
+        ) : (
+          <div className="flex items-center gap-4">
+            <Link href="/sign-in">
+              <div className="text-base hover:text-blue-600 hover:underline hover:underline-offset-4 hover:decoration-blue-600 hover:decoration-2">
+                Войти
+              </div>
+            </Link>
+            <Link href="/sign-up">
+              <div className="text-base bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors">
+                Регистрация
+              </div>
+            </Link>
+          </div>
         )}
       </div>
     </header>

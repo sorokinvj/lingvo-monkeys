@@ -7,7 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export const metadata = {
-  title: 'LM | Forgot Password',
+  title: 'Сбросить пароль',
 };
 
 export default function ForgotPassword({
@@ -18,14 +18,14 @@ export default function ForgotPassword({
   return (
     <div className="flex pt-48 md:pt-12">
       <form className="py-2 md:py-12 flex flex-col min-w-64 mx-auto relative">
-        <h2 className="text-2xl font-medium text-gray-700">Reset Password</h2>
+        <h2 className="text-2xl font-medium text-gray-700">Сбросить пароль</h2>
         <p className="text-sm text-gray-400">
-          Remember your password?{' '}
+          Помните свой пароль?{' '}
           <Link
             className="text-violet-500 font-medium underline hover:text-white transition-colors"
             href="/sign-in"
           >
-            Sign in
+            Войти
           </Link>
         </p>
 
@@ -43,7 +43,7 @@ export default function ForgotPassword({
             className="bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md transition-colors"
             formAction={forgotPasswordAction}
           >
-            Reset Password
+            Сбросить пароль
           </SubmitButton>
           <FormMessage message={searchParams} />
         </div>

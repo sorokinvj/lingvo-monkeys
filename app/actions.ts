@@ -15,13 +15,15 @@ export const signUpAction = async (formData: FormData) => {
     return { error: 'Email and password are required' };
   }
 
-  const { error } = await supabase.auth.signUp({
+  const { error, data } = await supabase.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo: `${origin}/auth/callback`,
     },
   });
+
+  console.log('signUp', data);
 
   if (error) {
     console.error(error.code + ' ' + error.message);
@@ -39,7 +41,7 @@ export const signInAction = async (formData: FormData) => {
   const password = formData.get('password') as string;
   const supabase = createClient();
 
-  const { error, data } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
