@@ -4,6 +4,7 @@ import Providers from './providers';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import SignUpConfirmation from '@/components/signup-confirmation';
+import { Suspense } from 'react';
 
 const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -49,7 +50,9 @@ export default function RootLayout({
             <div className="w-full flex-1">{children}</div>
             <Footer />
           </main>
-          <SignUpConfirmation />
+          <Suspense fallback={<div />}>
+            <SignUpConfirmation />
+          </Suspense>
         </Providers>
       </body>
     </html>
