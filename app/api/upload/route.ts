@@ -108,7 +108,8 @@ export async function POST(request: NextRequest) {
               punctuate: true,
               model: 'nova-3',
               language: 'en-US',
-              utterances: true,
+              paragraphs: true,
+              smart_format: true,
             }
           );
 
