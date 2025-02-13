@@ -106,9 +106,10 @@ export async function POST(request: NextRequest) {
             new CallbackUrl(callbackUrl),
             {
               punctuate: true,
-              model: 'nova-2',
+              model: 'nova-3',
               language: 'en-US',
-              utterances: true,
+              paragraphs: true,
+              smart_format: true,
             }
           );
 
