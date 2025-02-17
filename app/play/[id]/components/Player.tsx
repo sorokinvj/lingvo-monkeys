@@ -99,7 +99,7 @@ const Player: React.FC<PlayerProps> = ({
   }, []);
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col md:space-y-2">
       <div className="flex items-center justify-between">
         <button
           onClick={onPlayPause}
@@ -125,7 +125,7 @@ const Player: React.FC<PlayerProps> = ({
         </div>
         <p className="font-mono">{formatTime(currentTime)}</p>
       </div>
-      <div ref={containerRef} className="w-full" style={{ height: '60px' }} />
+      <div ref={containerRef} className="w-full h-[40px] md:h-[60px]" />
     </div>
   );
 };
