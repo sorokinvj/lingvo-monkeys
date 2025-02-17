@@ -67,7 +67,7 @@ const FileList: FC = () => {
       id: 'name',
       header: 'Название',
       accessorKey: 'name',
-      width: 200,
+      size: 400,
       cell: (info: CellContext<File, string>) => (
         <span key={info.row.original.id}>{info.getValue()}</span>
       ),
@@ -76,6 +76,7 @@ const FileList: FC = () => {
       id: 'status',
       header: 'Статус',
       accessorKey: 'status',
+      size: 120,
       cell: (info: CellContext<File, string>) => (
         <FileStatus
           key={info.row.original.id}
@@ -84,20 +85,17 @@ const FileList: FC = () => {
       ),
     },
     {
-      id: 'mimeType',
-      header: 'Тип',
-      accessorKey: 'mimeType',
-    },
-    {
       id: 'createdAt',
       header: 'Дата загрузки',
       accessorKey: 'createdAt',
+      size: 150,
       cell: (info: CellContext<File, string>) =>
         new Date(info.getValue()).toLocaleDateString(),
     },
     {
       id: 'actions',
-      header: 'Действия',
+      header: '',
+      size: 100,
       cell: (info: CellContext<File, string>) => (
         <FileActions
           fileId={info.row.original.id}

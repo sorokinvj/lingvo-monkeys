@@ -66,69 +66,77 @@ const GenericTable = <T extends { id: string | number }>({
   }
 
   return (
-    <div className="grid gap-4 overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="divide-y divide-gray-200">
-          <thead className="border-b border-gray-200">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  const width = header.column.getSize();
-                  const headerClassName = clsx(
-                    'p-4 whitespace-nowrap text-left'
-                  );
-                  return (
-                    <th
-                      key={header.id}
-                      className={headerClassName}
-                      style={{
-                        width: `${width}px`,
-                      }}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </th>
-                  );
-                })}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr className="border-b border-gray-200 cursor-pointer overflow-hidden transition-all duration-300 ease-out">
-                {row.getVisibleCells().map((cell) => {
-                  const width = cell.column.getSize();
-                  const cellClassName = clsx(`p-4 whitespace-nowrap text-left`);
-                  return (
-                    <td
-                      key={cell.id}
-                      className={cellClassName}
-                      style={{
-                        width: `${width}px`,
-                      }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="w-full h-full flex flex-col">
+      <div className="flex-1 min-h-0">
+        <div className="h-full overflow-auto">
+          <table className="w-full divide-y divide-gray-200">
+            <thead className="bg-white sticky top-0 border-b border-gray-200">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    const width = header.column.getSize();
+                    console.log('width for header', header.id, width);
+                    const headerClassName = clsx('p-4 text-left bg-white');
+                    return (
+                      <th
+                        key={header.id}
+                        className={headerClassName}
+                        style={{
+                          width: `${width}px`,
+                          minWidth: `${width}px`,
+                        }}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </th>
+                    );
+                  })}
+                </tr>
+              ))}
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="border-b border-gray-200 hover:bg-gray-50"
+                >
+                  {row.getVisibleCells().map((cell) => {
+                    const width = cell.column.getSize();
+                    const cellClassName = clsx('p-4 text-left');
+                    return (
+                      <td
+                        key={cell.id}
+                        className={cellClassName}
+                        style={{
+                          width: `${width}px`,
+                          minWidth: `${width}px`,
+                        }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       {data.length > pageSize && (
-        <TablePagination
-          currentPage={pagination.pageIndex + 1}
-          totalPages={table.getPageCount()}
-          onPageChange={(page) => table.setPageIndex(page - 1)}
-        />
+        <div className="mt-4">
+          <TablePagination
+            currentPage={pagination.pageIndex + 1}
+            totalPages={table.getPageCount()}
+            onPageChange={(page) => table.setPageIndex(page - 1)}
+          />
+        </div>
       )}
     </div>
   );
