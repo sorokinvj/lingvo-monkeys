@@ -11,6 +11,7 @@ import {
 } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { TablePagination } from './pagination';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 export type CustomColumnMeta = {
   isCustomerInfo?: boolean;
@@ -31,6 +32,7 @@ interface GenericTableProps<T> {
   EmptyComponent?: React.ComponentType;
   pageSize?: number;
   columnVisibility?: VisibilityState;
+  MobileComponent?: React.ComponentType<{ item: T }>;
 }
 
 const GenericTable = <T extends { id: string | number }>({
@@ -40,6 +42,7 @@ const GenericTable = <T extends { id: string | number }>({
   EmptyComponent,
   pageSize = 10,
   columnVisibility,
+  MobileComponent,
 }: GenericTableProps<T>) => {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -61,6 +64,8 @@ const GenericTable = <T extends { id: string | number }>({
     getRowId: (row) => row.id.toString(),
   });
 
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
   if (data.length === 0 && EmptyComponent) {
     return <EmptyComponent />;
   }
@@ -69,64 +74,100 @@ const GenericTable = <T extends { id: string | number }>({
     <div className="w-full h-full flex flex-col">
       <div className="flex-1 min-h-0">
         <div className="h-full overflow-auto">
-          <table className="w-full divide-y divide-gray-200">
-            <thead className="bg-white sticky top-0 border-b border-gray-200">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    const width = header.column.getSize();
-                    console.log('width for header', header.id, width);
-                    const headerClassName = clsx('p-4 text-left bg-white');
-                    return (
-                      <th
-                        key={header.id}
-                        className={headerClassName}
-                        style={{
-                          width: `${width}px`,
-                          minWidth: `${width}px`,
-                        }}
-                      >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </th>
-                    );
-                  })}
-                </tr>
-              ))}
-            </thead>
-            <tbody className="divide-y divide-gray-200">
+          {!isMobile ? (
+            // Desktop view - Table
+            <table className="w-full divide-y divide-gray-200">
+              <thead className="bg-white sticky top-0 border-b border-gray-200">
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      const width = header.column.getSize();
+                      console.log('width for header', header.id, width);
+                      const headerClassName = clsx('p-4 text-left bg-white');
+                      return (
+                        <th
+                          key={header.id}
+                          className={headerClassName}
+                          style={{
+                            width: `${width}px`,
+                            minWidth: `${width}px`,
+                          }}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </th>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {table.getRowModel().rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="border-b border-gray-200 hover:bg-gray-50"
+                  >
+                    {row.getVisibleCells().map((cell) => {
+                      const width = cell.column.getSize();
+                      const cellClassName = clsx('p-4 text-left');
+                      return (
+                        <td
+                          key={cell.id}
+                          className={cellClassName}
+                          style={{
+                            width: `${width}px`,
+                            minWidth: `${width}px`,
+                          }}
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : MobileComponent ? (
+            // Mobile view with custom component
+            <div className="space-y-4">
               {table.getRowModel().rows.map((row) => (
-                <tr
+                <MobileComponent key={row.id} item={row.original} />
+              ))}
+            </div>
+          ) : (
+            // Default mobile view if no custom component provided
+            <div className="space-y-4 px-4">
+              {table.getRowModel().rows.map((row) => (
+                <div
                   key={row.id}
-                  className="border-b border-gray-200 hover:bg-gray-50"
+                  className="bg-white p-4 rounded-lg shadow border border-gray-200"
                 >
-                  {row.getVisibleCells().map((cell) => {
-                    const width = cell.column.getSize();
-                    const cellClassName = clsx('p-4 text-left');
-                    return (
-                      <td
-                        key={cell.id}
-                        className={cellClassName}
-                        style={{
-                          width: `${width}px`,
-                          minWidth: `${width}px`,
-                        }}
-                      >
+                  {row.getVisibleCells().map((cell) => (
+                    <div key={cell.id} className="py-2">
+                      <div className="text-sm text-gray-500">
+                        {typeof cell.column.columnDef.header === 'string'
+                          ? cell.column.columnDef.header
+                          : cell.column.id}
+                      </div>
+                      <div className="mt-1">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
                         )}
-                      </td>
-                    );
-                  })}
-                </tr>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          )}
         </div>
       </div>
       {data.length > pageSize && (

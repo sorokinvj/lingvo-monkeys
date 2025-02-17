@@ -13,6 +13,7 @@ import FileStatus from './FileStatus';
 import { Status } from '@/schema/models';
 import { Spinner } from '@/components/ui/spinner';
 import FileActions from './FileActions';
+import { FileCard } from './FileCard';
 
 const FileList: FC = () => {
   const queryClient = useQueryClient();
@@ -113,6 +114,7 @@ const FileList: FC = () => {
         data={files}
         columns={columns}
         defaultSort={[{ id: 'createdAt', desc: true }]}
+        MobileComponent={FileCard}
       />
     );
 

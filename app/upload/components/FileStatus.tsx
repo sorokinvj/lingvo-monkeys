@@ -20,7 +20,7 @@ const FileStatus: React.FC<FileStatusProps> = ({ status }) => {
     const statusText =
       status === 'transcribed'
         ? 'Ready'
-        : status.charAt(0).toUpperCase() + status.slice(1);
+        : status?.charAt(0).toUpperCase() + status?.slice(1);
 
     return (
       <span className={`${baseClasses} ${statusStyles}`}>{statusText}</span>

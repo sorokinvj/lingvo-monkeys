@@ -119,7 +119,7 @@ const UploadPage: React.FC = () => {
   });
 
   return (
-    <div className="p-4 w-full h-full mt-12">
+    <div className="p-4 w-full h-full md:mt-12">
       <div
         {...getRootProps()}
         className={`border-2 border-dashed p-8 text-center cursor-pointer ${
@@ -141,12 +141,12 @@ const UploadPage: React.FC = () => {
           Максимальный размер файла: {MAX_FILE_SIZE_TEXT}
         </p>
         <p className="text-sm text-gray-500 mt-2">
-          Поддерживаемые языки: Английский\u00A0(en), Голландский\u00A0(nl),
-          Испанский\u00A0(es), Индонезийский\u00A0(id), Итальянский\u00A0(it),
-          Китайский\u00A0(zh), Корейский\u00A0(ko), Немецкий\u00A0(de),
-          Португальский\u00A0(pt), Русский\u00A0(ru), Турецкий\u00A0(tr),
-          Украинский\u00A0(uk), Французский\u00A0(fr), Хинди\u00A0(hi),
-          Шведский\u00A0(sv), Японский\u00A0(ja)
+          Поддерживаемые языки: Английский&nbsp;(en), Голландский&nbsp;(nl),
+          Испанский&nbsp;(es), Индонезийский&nbsp;(id), Итальянский&nbsp;(it),
+          Китайский&nbsp;(zh), Корейский&nbsp;(ko), Немецкий&nbsp;(de),
+          Португальский&nbsp;(pt), Русский&nbsp;(ru), Турецкий&nbsp;(tr),
+          Украинский&nbsp;(uk), Французский&nbsp;(fr), Хинди&nbsp;(hi),
+          Шведский&nbsp;(sv), Японский&nbsp;(ja)
         </p>
         {progress > 0 && (
           <div className="mt-4">
