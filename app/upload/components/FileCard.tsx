@@ -21,7 +21,7 @@ export const FileCard = ({ item }: FileCardProps) => {
         <FileActions
           fileId={item?.id}
           status={item?.status}
-          className="w-full py-2 px-4 text-red-600 border border-red-600 rounded-md hover:bg-red-50 transition-colors"
+          className="w-full transition-colors"
         />
       </div>
     </div>

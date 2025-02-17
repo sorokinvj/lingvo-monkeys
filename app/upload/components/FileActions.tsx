@@ -48,7 +48,7 @@ const FileActions = ({ fileId, status, className }: FileActionsProps) => {
         <Button
           variant="default"
           onClick={handleDelete}
-          className={`w-1/2 md:w-fit bg-red-300 hover:bg-red-500 ${className || ''}`}
+          className={`w-1/2 md:w-fit bg-red-300 hover:bg-red-500 flex items-center gap-2 ${className || ''}`}
           loading={deleteFileMutation.isPending}
         >
           <TrashIcon className="w-4 h-4" />
