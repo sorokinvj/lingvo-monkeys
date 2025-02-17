@@ -48,7 +48,7 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
 
   return (
     <div className="mt-8 mx-auto bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md relative flex flex-col h-[calc(100vh-6rem)] pb-32">
-      <div className="absolute z-40 -translate-x-1/2 top-6">
+      <div className="absolute z-40 -top-7 left-1/2 -translate-x-1/2 md:top-6">
         <button
           onClick={() => setIsSidebarOpen(true)}
           className="p-4 bg-white dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 transition-colors border border-gray-400 dark:border-gray-600 rounded-full"
@@ -67,14 +67,14 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
           <Settings />
         </Drawer>
       </div>
-      <div className="flex-grow overflow-y-auto p-6">
+      <div className="flex-grow overflow-y-auto md:p-6">
         <Transcript
           transcript={transcript?.fullTranscription}
           currentTimeMS={currentTimeMS}
           onWordClick={handleWordClick}
         />
       </div>
-      <div className="fixed bottom-6 left-8 right-8 mx-auto w-11/12 max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 z-50">
+      <div className="fixed w-full left-0 bottom-0 right-0 md:bottom-6 md:left-8 md:right-8 mx-auto md:w-11/12 max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 z-50">
         <Player
           publicUrl={publicUrl}
           jumpToPositionMS={jumpToPositionMS}
