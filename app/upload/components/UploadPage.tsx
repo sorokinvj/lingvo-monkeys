@@ -120,7 +120,7 @@ const UploadPage: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col p-4 w-full h-full md:mt-12">
+    <div className="flex flex-col p-4 w-full h-full">
       <div
         {...getRootProps()}
         className={`order-2 mt-4 md:order-1 border-2 border-dashed p-8 text-center cursor-pointer ${
