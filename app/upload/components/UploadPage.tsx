@@ -122,7 +122,7 @@ const UploadPage: React.FC = () => {
     <div className="p-4 w-full h-full md:mt-12">
       <div
         {...getRootProps()}
-        className={`border-2 border-dashed p-8 text-center cursor-pointer ${
+        className={`hidden md:block border-2 border-dashed p-8 text-center cursor-pointer ${
           isDragActive
             ? 'border-blue-500 bg-blue-50'
             : 'border-blue-300 rounded-lg'
@@ -165,7 +165,8 @@ const UploadPage: React.FC = () => {
           </p>
         )}
       </div>
-      <div className="mt-4">
+      <div className="mt-4 md:mt-8">
+        <h1 className="text-3xl font-sans mb-4 text-gray-700">Ваши файлы</h1>
         <FileList />
       </div>
     </div>
