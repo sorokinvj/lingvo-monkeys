@@ -140,6 +140,13 @@ const UploadPage: React.FC = () => {
         <p className="text-sm text-gray-500 mt-4">
           Максимальный размер файла: {MAX_FILE_SIZE_TEXT}
         </p>
+        <p className="text-sm text-gray-500 mt-2">
+          Поддерживаемые языки: Английский (en), Испанский (es), Хинди (hi),
+          Японский (ja), Русский (ru), Украинский (uk), Шведский (sv), Китайский
+          (zh), Португальский (pt), Нидерландский (nl), Турецкий (tr),
+          Французский (fr), Немецкий (de), Индонезийский (id), Корейский (ko),
+          Итальянский (it)
+        </p>
         {progress > 0 && (
           <div className="mt-4">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
