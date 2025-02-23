@@ -27,9 +27,9 @@ const Player: React.FC<PlayerProps> = ({
       console.log('Initializing WaveSurfer');
       wavesurferRef.current = WaveSurfer.create({
         container: containerRef.current,
-        waveColor: '#4F4A85',
-        progressColor: '#FF69B4',
-        cursorColor: '#383351',
+        waveColor: '#0349A4',
+        progressColor: '#90AFE2',
+        cursorColor: '#90AFE2',
         barWidth: 2,
         barRadius: 3,
         height: 60,
@@ -125,7 +125,7 @@ const Player: React.FC<PlayerProps> = ({
         </div>
         <p className="font-mono">{formatTime(currentTime)}</p>
       </div>
-      <div ref={containerRef} className="w-full h-[40px] md:h-[60px]" />
+      <div ref={containerRef} className="w-full h-[30px] md:h-[60px]" />
     </div>
   );
 };
