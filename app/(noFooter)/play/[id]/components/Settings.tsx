@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { FC } from 'react';
 import { RotateCcw, Sun, Type } from 'lucide-react';
 import { HighlightMode, TextAlignment, useSettings } from '@/hooks/useSettings';
 import { ColorPickerPopover } from './ColorPickerPopover';
@@ -9,7 +9,7 @@ import { FontOption } from '@/config/fonts';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import Toggle from '@/components/ui/toggle';
 
-const Settings: React.FC = () => {
+const Settings: FC = () => {
   const { settings, updateSetting, resetSettings } = useSettings();
 
   const handleColorChange = (
@@ -27,7 +27,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div className="space-y-16 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+    <div className="flex flex-col gap-12 p-4">
       <div className="space-y-4">
         <div className="space-y-4">
           <h3 className="text-xl font-medium flex items-center gap-2">
@@ -302,13 +302,31 @@ const Settings: React.FC = () => {
           </div>
         </div>
       </div>
-      <button
-        onClick={resetSettings}
-        className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
-      >
-        <RotateCcw className="h-4 w-4" />
-        Сбросить настройки
-      </button>
+      <div className="mt-auto pt-4 border-t">
+        <button
+          onClick={resetSettings}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="rotate-90"
+          >
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+            <path d="M16 21h5v-5" />
+          </svg>
+          Сбросить настройки
+        </button>
+      </div>
     </div>
   );
 };
