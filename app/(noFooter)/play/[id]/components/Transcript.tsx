@@ -131,9 +131,11 @@ const Transcription: FC<Props> = ({
               >
                 {word.punctuated_word}
               </span>
-              {timeGap > 1 && (
+              {timeGap > settings.pauseThreshold && (
                 <>
-                  <br />
+                  {[...Array(settings.pauseLines)].map((_, i) => (
+                    <br key={i} />
+                  ))}
                 </>
               )}
             </Fragment>

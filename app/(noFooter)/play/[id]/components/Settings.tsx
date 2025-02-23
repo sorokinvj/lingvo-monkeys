@@ -213,6 +213,62 @@ const Settings: React.FC = () => {
           </div>
         </div>
       </div>
+      <div className="space-y-4">
+        <div className="space-y-4">
+          <h3 className="text-xl font-medium flex items-center gap-2">
+            <Type className="h-6 w-6" />
+            Воздух в тексте
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Когда диктор делает паузу, мы можем добавить «воздуха» между
+            предложениями — как в книгах часто делают отступы между абзацами.
+            Это помогает лучше чувствовать ритм речи.
+          </p>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600 dark:text-gray-400">
+              Когда добавлять воздух (если диктор молчит дольше X секунд)
+            </label>
+            <input
+              type="range"
+              min="0.5"
+              max="5"
+              step="0.5"
+              value={settings.pauseThreshold}
+              onChange={(e) =>
+                updateSetting('pauseThreshold', parseFloat(e.target.value))
+              }
+              className="w-full"
+            />
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {settings.pauseThreshold.toFixed(1)}s
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm text-gray-600 dark:text-gray-400">
+              Сколько воздуха добавлять (количество пустых строк)
+            </label>
+            <input
+              type="range"
+              min="1"
+              max="3"
+              step="1"
+              value={settings.pauseLines}
+              onChange={(e) =>
+                updateSetting('pauseLines', parseInt(e.target.value))
+              }
+              className="w-full"
+            />
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {settings.pauseLines}{' '}
+              {settings.pauseLines === 1
+                ? 'строка'
+                : settings.pauseLines < 5
+                  ? 'строки'
+                  : 'строк'}
+            </div>
+          </div>
+        </div>
+      </div>
       <button
         onClick={resetSettings}
         className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"

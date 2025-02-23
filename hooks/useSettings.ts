@@ -14,6 +14,8 @@ export interface UserSettings {
   fontFamily: FontOption;
   theme: 'light' | 'dark' | 'system';
   highlightDelay: number;
+  pauseThreshold: number;
+  pauseLines: number;
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -28,6 +30,8 @@ const DEFAULT_SETTINGS: UserSettings = {
   fontFamily: 'System Native',
   theme: 'system',
   highlightDelay: 0,
+  pauseThreshold: 2,
+  pauseLines: 1,
 };
 
 const STORAGE_KEY = 'user_transcript_settings';
