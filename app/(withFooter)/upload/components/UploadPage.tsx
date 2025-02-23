@@ -12,6 +12,7 @@ import {
   MAX_FILE_SIZE_TEXT,
   ALLOWED_AUDIO_TYPES,
 } from '@/config/constants';
+import { Button } from '@/components/ui/button';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -119,26 +120,39 @@ const UploadPage: React.FC = () => {
   });
 
   return (
-    <div className="p-4 w-full h-full mt-12">
+    <div className="flex flex-col p-4 w-full h-full">
       <div
         {...getRootProps()}
-        className={`border-2 border-dashed p-8 text-center cursor-pointer ${
+        className={`order-2 mt-4 md:order-1 border-2 border-dashed p-8 text-center cursor-pointer ${
           isDragActive
             ? 'border-blue-500 bg-blue-50'
             : 'border-blue-300 rounded-lg'
         }`}
       >
-        <h1 className="text-xl font-bold mb-4 text-blue-900">
+        <h1 className="hidden md:block text-xl font-bold mb-4 text-blue-900">
           Загрузить MP3 Файл
         </h1>
+        <Button variant="default" className="block w-full md:hidden">
+          Загрузить MP3
+        </Button>
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p>Отпустите MP3 файл здесь...</p>
+          <p className="hidden md:block">Отпустите MP3 файл здесь...</p>
         ) : (
-          <p>Перетащите MP3 файл сюда или нажмите для выбора</p>
+          <p className="hidden md:block text-blue-900">
+            Перетащите MP3 файл сюда или нажмите для выбора
+          </p>
         )}
         <p className="text-sm text-gray-500 mt-4">
           Максимальный размер файла: {MAX_FILE_SIZE_TEXT}
+        </p>
+        <p className="text-sm text-gray-500 mt-2">
+          Поддерживаемые языки: Английский&nbsp;(en), Голландский&nbsp;(nl),
+          Испанский&nbsp;(es), Индонезийский&nbsp;(id), Итальянский&nbsp;(it),
+          Китайский&nbsp;(zh), Корейский&nbsp;(ko), Немецкий&nbsp;(de),
+          Португальский&nbsp;(pt), Русский&nbsp;(ru), Турецкий&nbsp;(tr),
+          Украинский&nbsp;(uk), Французский&nbsp;(fr), Хинди&nbsp;(hi),
+          Шведский&nbsp;(sv), Японский&nbsp;(ja)
         </p>
         {progress > 0 && (
           <div className="mt-4">
@@ -157,7 +171,8 @@ const UploadPage: React.FC = () => {
           </p>
         )}
       </div>
-      <div className="mt-4">
+      <div className="mt-4 md:mt-8 order-1 md:order-2">
+        <h1 className="text-3xl font-sans mb-4 text-gray-700">Ваши файлы</h1>
         <FileList />
       </div>
     </div>
