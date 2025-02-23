@@ -119,89 +119,6 @@ const Transcription: FC<Props> = ({
     }
   }, [currentTimeMS, transcript]);
 
-  const renderWords = useCallback(
-    (words: any[]) => {
-      let currentSentence: any[] = [];
-      const sentences: any[][] = [];
-
-      words.forEach((word, index) => {
-        currentSentence.push(word);
-
-        const isPeriod = word.punctuated_word.match(/[.!?]$/);
-        const nextWord = words[index + 1];
-
-        // Считаем значимую паузу только если она больше минимального порога
-        const timeGap = nextWord ? nextWord.start - word.end : 0;
-        const MINIMUM_SIGNIFICANT_GAP = 0.5; // полсекунды минимальная значимая пауза
-        const isSignificantGap =
-          timeGap > MINIMUM_SIGNIFICANT_GAP &&
-          timeGap > settings.pauseThreshold;
-
-        if (isPeriod || isSignificantGap) {
-          sentences.push([...currentSentence]);
-          currentSentence = [];
-        }
-      });
-
-      if (currentSentence.length > 0) {
-        sentences.push(currentSentence);
-      }
-
-      // Сохраняем информацию о паузах между предложениями
-      const sentenceBreaks: boolean[] = sentences.map((_, index) => {
-        if (index === sentences.length - 1) return false;
-
-        const lastWordInSentence =
-          sentences[index][sentences[index].length - 1];
-        const firstWordInNextSentence = sentences[index + 1][0];
-
-        const timeGap = firstWordInNextSentence.start - lastWordInSentence.end;
-        return timeGap > settings.pauseThreshold;
-      });
-
-      return sentences.map((sentence, sentenceIndex) => (
-        <Fragment key={`sentence-${sentenceIndex}`}>
-          <span
-            className="inline-block"
-            style={{
-              hyphens: 'auto',
-              WebkitHyphens: 'auto',
-              msHyphens: 'auto',
-            }}
-          >
-            {sentence.map((word: any, index: number) => (
-              <Fragment key={`${word.start}-${word.end}`}>
-                <span
-                  data-start={word.start}
-                  data-end={word.end}
-                  data-word-index={words.indexOf(word)}
-                  ref={(el) => applyWordStyles(el, words.indexOf(word))}
-                  className="inline cursor-pointer px-0.5 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
-                  onClick={(e) => handleWordClick(e, word.start)}
-                  onMouseDown={(e) => e.preventDefault()}
-                  suppressHydrationWarning={true}
-                >
-                  {word.punctuated_word}
-                </span>
-                {index < sentence.length - 1 && ' '}
-              </Fragment>
-            ))}
-          </span>
-          {settings.enableTextBreathing &&
-            sentenceIndex < sentences.length - 1 &&
-            sentenceBreaks[sentenceIndex] && (
-              <>
-                {[...Array(settings.pauseLines)].map((_, i) => (
-                  <br key={i} />
-                ))}
-              </>
-            )}
-        </Fragment>
-      ));
-    },
-    [settings, applyWordStyles, handleWordClick]
-  );
-
   if (!transcript) return null;
 
   const words = transcript.results.channels[0].alternatives[0].words;
@@ -209,14 +126,29 @@ const Transcription: FC<Props> = ({
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 overflow-hidden">
       <div
-        className="font-serif text-lg leading-relaxed break-words dark:text-gray-200 subpixel-antialiased"
-        style={{
-          textAlign: settings.textAlignment,
-          wordBreak: 'break-word',
-          overflowWrap: 'break-word',
-        }}
+        className="font-serif text-lg dark:text-gray-200 subpixel-antialiased"
+        style={{ textAlign: settings.textAlignment }}
       >
-        {renderWords(words)}
+        {words.map((word: any, index: number) => (
+          <Fragment key={`${word.start}-${word.end}`}>
+            <span
+              data-start={word.start}
+              data-end={word.end}
+              data-word-index={index}
+              ref={(el) => applyWordStyles(el, index)}
+              className="inline cursor-pointer px-0.5 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
+              onClick={(e) => handleWordClick(e, word.start)}
+              onMouseDown={(e) => e.preventDefault()}
+              suppressHydrationWarning={true}
+            >
+              {word.punctuated_word}
+            </span>{' '}
+            {settings.enableTextBreathing &&
+              index < words.length - 1 &&
+              words[index + 1].start - word.end > settings.pauseThreshold &&
+              [...Array(settings.pauseLines)].map((_, i) => <br key={i} />)}
+          </Fragment>
+        ))}
       </div>
     </div>
   );
