@@ -13,6 +13,7 @@ import {
   ALLOWED_AUDIO_TYPES,
 } from '@/config/constants';
 import { Button } from '@/components/ui/button';
+import AudiobookSources from './AudiobookSources';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -175,6 +176,7 @@ const UploadPage: React.FC = () => {
         <h1 className="text-3xl font-sans mb-4 text-gray-700">Ваши файлы</h1>
         <FileList />
       </div>
+      <AudiobookSources />
     </div>
   );
 };
