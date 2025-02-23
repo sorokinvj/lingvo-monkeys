@@ -16,6 +16,7 @@ const Transcription: FC<Props> = ({
 }) => {
   const { settings } = useSettings();
   const [activeWordIndex, setActiveWordIndex] = useState(-1);
+  const [clickCount, setClickCount] = useState(0);
 
   const findActiveWordIndex = useCallback(
     (words: any[], timeMS: number) => {
@@ -92,11 +93,20 @@ const Transcription: FC<Props> = ({
         MozOsxFontSmoothing: 'grayscale',
         fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1, "dlig" 1',
         textRendering: 'optimizeLegibility',
-        transition: 'color 0.3s, background-color 0.3s',
         letterSpacing: '-0.01em',
       });
     },
     [settings, shouldHighlight]
+  );
+
+  const handleWordClick = useCallback(
+    (event: React.MouseEvent, time: number) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setClickCount((prev) => prev + 1);
+      onWordClick(time + clickCount * 0.0001);
+    },
+    [onWordClick, clickCount]
   );
 
   useEffect(() => {
@@ -114,31 +124,31 @@ const Transcription: FC<Props> = ({
   const words = transcript.results.channels[0].alternatives[0].words;
 
   return (
-    <div className="max-w-4xl h-full md:h-auto overflow-scroll mx-auto p-4 md:p-6 bg-gray-50 dark:bg-gray-900 md:overflow-hidden">
-      <div className="font-serif text-lg leading-relaxed break-words dark:text-gray-200 subpixel-antialiased">
-        {words.map((word, index) => {
-          const nextWord = words[index + 1];
-          const timeGap = nextWord ? nextWord.start - word.end : 0;
-          return (
-            <Fragment key={`${word.start}-${word.end}`}>
-              <span
-                data-start={word.start}
-                data-end={word.end}
-                data-word-index={index}
-                ref={(el) => applyWordStyles(el, index)}
-                className="inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
-                onClick={() => onWordClick(word.start)}
-              >
-                {word.punctuated_word}
-              </span>
-              {timeGap > 1 && (
-                <>
-                  <br />
-                </>
-              )}
-            </Fragment>
-          );
-        })}
+    <div className="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      <div
+        className="font-serif text-lg dark:text-gray-200 subpixel-antialiased"
+        style={{ textAlign: settings.textAlignment }}
+      >
+        {words.map((word: any, index: number) => (
+          <Fragment key={`${word.start}-${word.end}`}>
+            <span
+              data-start={word.start}
+              data-end={word.end}
+              data-word-index={index}
+              ref={(el) => applyWordStyles(el, index)}
+              className="inline cursor-pointer px-0.5 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
+              onClick={(e) => handleWordClick(e, word.start)}
+              onMouseDown={(e) => e.preventDefault()}
+              suppressHydrationWarning={true}
+            >
+              {word.punctuated_word}
+            </span>{' '}
+            {settings.enableTextBreathing &&
+              index < words.length - 1 &&
+              words[index + 1].start - word.end > settings.pauseThreshold &&
+              [...Array(settings.pauseLines)].map((_, i) => <br key={i} />)}
+          </Fragment>
+        ))}
       </div>
     </div>
   );

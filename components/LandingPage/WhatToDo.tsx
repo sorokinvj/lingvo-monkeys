@@ -44,7 +44,7 @@ export const WhatToDo = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col gap-6 md:pt-36 px-4 md:px-0 md:pr-4">
+        <div className="flex flex-col gap-6 px-4 md:px-0 md:pr-4">
           <div className="flex flex-col">
             <div className="flex flex-row gap-4 items-end">
               <h3 className="font-bold">ПОДОБРАТЬ АУДИО-КНИГУ</h3>

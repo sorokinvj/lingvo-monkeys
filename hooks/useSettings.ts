@@ -2,6 +2,8 @@ import { FontOption } from '@/config/fonts';
 import { create } from 'zustand';
 
 export type HighlightMode = 'current' | 'all past' | 'past row';
+export type TextAlignment = 'left' | 'center' | 'justify' | 'right';
+
 export interface UserSettings {
   pastWordsColor: string;
   pastWordsHighlightColor: string;
@@ -14,6 +16,10 @@ export interface UserSettings {
   fontFamily: FontOption;
   theme: 'light' | 'dark' | 'system';
   highlightDelay: number;
+  pauseThreshold: number;
+  pauseLines: number;
+  textAlignment: TextAlignment;
+  enableTextBreathing: boolean;
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -28,6 +34,10 @@ const DEFAULT_SETTINGS: UserSettings = {
   fontFamily: 'System Native',
   theme: 'system',
   highlightDelay: 0,
+  pauseThreshold: 1,
+  pauseLines: 2,
+  textAlignment: 'left',
+  enableTextBreathing: true,
 };
 
 const STORAGE_KEY = 'user_transcript_settings';
