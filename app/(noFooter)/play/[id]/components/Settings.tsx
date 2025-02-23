@@ -193,7 +193,6 @@ const Settings: React.FC = () => {
           >
             <option value="left">По левому краю</option>
             <option value="center">По центру</option>
-            <option value="justify">По ширине</option>
             <option value="right">По правому краю</option>
           </select>
         </div>
