@@ -16,6 +16,7 @@ const Transcription: FC<Props> = ({
 }) => {
   const { settings } = useSettings();
   const [activeWordIndex, setActiveWordIndex] = useState(-1);
+  const [clickCount, setClickCount] = useState(0);
 
   const findActiveWordIndex = useCallback(
     (words: any[], timeMS: number) => {
@@ -92,11 +93,20 @@ const Transcription: FC<Props> = ({
         MozOsxFontSmoothing: 'grayscale',
         fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1, "dlig" 1',
         textRendering: 'optimizeLegibility',
-        transition: 'color 0.3s, background-color 0.3s',
         letterSpacing: '-0.01em',
       });
     },
     [settings, shouldHighlight]
+  );
+
+  const handleWordClick = useCallback(
+    (event: React.MouseEvent, time: number) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setClickCount((prev) => prev + 1);
+      onWordClick(time + clickCount * 0.0001);
+    },
+    [onWordClick, clickCount]
   );
 
   useEffect(() => {
@@ -150,7 +160,9 @@ const Transcription: FC<Props> = ({
                   data-word-index={words.indexOf(word)}
                   ref={(el) => applyWordStyles(el, words.indexOf(word))}
                   className="inline cursor-pointer px-0.5 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
-                  onClick={() => onWordClick(word.start)}
+                  onClick={(e) => handleWordClick(e, word.start)}
+                  onMouseDown={(e) => e.preventDefault()}
+                  suppressHydrationWarning={true}
                 >
                   {word.punctuated_word}
                 </span>
@@ -169,7 +181,7 @@ const Transcription: FC<Props> = ({
         </Fragment>
       ));
     },
-    [settings, applyWordStyles, onWordClick]
+    [settings, applyWordStyles, handleWordClick]
   );
 
   if (!transcript) return null;
