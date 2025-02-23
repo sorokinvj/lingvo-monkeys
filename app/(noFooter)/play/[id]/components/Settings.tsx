@@ -7,6 +7,7 @@ import { ColorPickerPopover } from './ColorPickerPopover';
 import { FontSelector } from './FontSelector';
 import { FontOption } from '@/config/fonts';
 import { ThemeSwitcher } from '@/components/theme-switcher';
+import Toggle from '@/components/ui/toggle';
 
 const Settings: React.FC = () => {
   const { settings, updateSetting, resetSettings } = useSettings();
@@ -26,7 +27,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div className="space-y-16 p-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+    <div className="space-y-16 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
       <div className="space-y-4">
         <div className="space-y-4">
           <h3 className="text-xl font-medium flex items-center gap-2">
@@ -231,56 +232,72 @@ const Settings: React.FC = () => {
       </div>
       <div className="space-y-4">
         <div className="space-y-4">
-          <h3 className="text-xl font-medium flex items-center gap-2">
-            <Type className="h-6 w-6" />
-            Воздух в тексте
+          <h3 className="text-xl font-medium flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Type className="h-6 w-6" />
+              Воздух в тексте
+            </div>
+            <Toggle
+              id="enableTextBreathing"
+              checked={settings.enableTextBreathing}
+              onChange={(checked) => {
+                updateSetting('enableTextBreathing', checked);
+              }}
+            />
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Когда диктор делает паузу, мы можем добавить «воздуха» между
             предложениями — как в книгах часто делают отступы между абзацами.
             Это помогает лучше чувствовать ритм речи.
           </p>
-          <div className="flex flex-col gap-2">
-            <label className="text-sm text-gray-600 dark:text-gray-400">
-              Когда добавлять воздух (если диктор молчит дольше X секунд)
-            </label>
-            <input
-              type="range"
-              min="0.5"
-              max="5"
-              step="0.5"
-              value={settings.pauseThreshold}
-              onChange={(e) =>
-                updateSetting('pauseThreshold', parseFloat(e.target.value))
-              }
-              className="w-full"
-            />
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              {settings.pauseThreshold.toFixed(1)}s
+          <div
+            className={`space-y-4 ${!settings.enableTextBreathing ? 'opacity-50 pointer-events-none' : ''}`}
+          >
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600 dark:text-gray-400">
+                Когда добавлять воздух (если диктор молчит дольше X секунд)
+              </label>
+              <input
+                type="range"
+                min="0.5"
+                max="5"
+                step="0.5"
+                value={settings.pauseThreshold}
+                onChange={(e) =>
+                  updateSetting('pauseThreshold', parseFloat(e.target.value))
+                }
+                disabled={!settings.enableTextBreathing}
+                className="w-full"
+              />
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {settings.pauseThreshold.toFixed(1)}s
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-sm text-gray-600 dark:text-gray-400">
-              Сколько воздуха добавлять (количество пустых строк)
-            </label>
-            <input
-              type="range"
-              min="1"
-              max="3"
-              step="1"
-              value={settings.pauseLines}
-              onChange={(e) =>
-                updateSetting('pauseLines', parseInt(e.target.value))
-              }
-              className="w-full"
-            />
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              {settings.pauseLines}{' '}
-              {settings.pauseLines === 1
-                ? 'строка'
-                : settings.pauseLines < 5
-                  ? 'строки'
-                  : 'строк'}
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-600 dark:text-gray-400">
+                Сколько воздуха добавлять (количество пустых строк)
+              </label>
+              <input
+                type="range"
+                min="1"
+                max="3"
+                step="1"
+                value={settings.pauseLines}
+                onChange={(e) =>
+                  updateSetting('pauseLines', parseInt(e.target.value))
+                }
+                disabled={!settings.enableTextBreathing}
+                className="w-full"
+              />
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                {settings.pauseLines}{' '}
+                {settings.pauseLines === 1
+                  ? 'строка'
+                  : settings.pauseLines < 5
+                    ? 'строки'
+                    : 'строк'}
+              </div>
             </div>
           </div>
         </div>

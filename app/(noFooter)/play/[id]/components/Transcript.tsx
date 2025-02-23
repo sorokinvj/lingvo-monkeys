@@ -131,23 +131,26 @@ const Transcription: FC<Props> = ({
                 ref={(el) => applyWordStyles(el, index)}
                 className="inline cursor-pointer px-1 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
                 style={{
-                  margin:
-                    settings.textAlignment === 'justify'
-                      ? '0 0.1em'
-                      : '0.125rem',
-                  display: 'inline',
+                  marginLeft:
+                    settings.enableTextBreathing &&
+                    index > 0 &&
+                    words[index - 1].end - words[index].start >
+                      settings.pauseThreshold
+                      ? '2rem'
+                      : '0.25rem',
                 }}
                 onClick={() => onWordClick(word.start)}
               >
                 {word.punctuated_word}
               </span>
-              {timeGap > settings.pauseThreshold && (
-                <>
-                  {[...Array(settings.pauseLines)].map((_, i) => (
-                    <br key={i} />
-                  ))}
-                </>
-              )}
+              {settings.enableTextBreathing &&
+                timeGap > settings.pauseThreshold && (
+                  <>
+                    {[...Array(settings.pauseLines)].map((_, i) => (
+                      <br key={i} />
+                    ))}
+                  </>
+                )}
             </Fragment>
           );
         })}

@@ -19,6 +19,7 @@ export interface UserSettings {
   pauseThreshold: number;
   pauseLines: number;
   textAlignment: TextAlignment;
+  enableTextBreathing: boolean;
 }
 
 const DEFAULT_SETTINGS: UserSettings = {
@@ -36,6 +37,7 @@ const DEFAULT_SETTINGS: UserSettings = {
   pauseThreshold: 2,
   pauseLines: 1,
   textAlignment: 'left',
+  enableTextBreathing: true,
 };
 
 const STORAGE_KEY = 'user_transcript_settings';
