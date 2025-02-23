@@ -109,6 +109,69 @@ const Transcription: FC<Props> = ({
     }
   }, [currentTimeMS, transcript]);
 
+  const renderWords = useCallback(
+    (words: any[]) => {
+      let currentSentence: any[] = [];
+      const sentences: any[][] = [];
+
+      words.forEach((word, index) => {
+        currentSentence.push(word);
+
+        // Определяем конец предложения по знакам пунктуации
+        const isPeriod = word.punctuated_word.match(/[.!?]$/);
+        const nextWord = words[index + 1];
+        const timeGap = nextWord ? nextWord.start - word.end : 0;
+
+        if (isPeriod || timeGap > settings.pauseThreshold) {
+          sentences.push([...currentSentence]);
+          currentSentence = [];
+        }
+      });
+
+      if (currentSentence.length > 0) {
+        sentences.push(currentSentence);
+      }
+
+      return sentences.map((sentence, sentenceIndex) => (
+        <Fragment key={`sentence-${sentenceIndex}`}>
+          <span
+            className="inline-block"
+            style={{
+              hyphens: 'auto',
+              WebkitHyphens: 'auto',
+              msHyphens: 'auto',
+            }}
+          >
+            {sentence.map((word: any, index: number) => (
+              <Fragment key={`${word.start}-${word.end}`}>
+                <span
+                  data-start={word.start}
+                  data-end={word.end}
+                  data-word-index={words.indexOf(word)}
+                  ref={(el) => applyWordStyles(el, words.indexOf(word))}
+                  className="inline cursor-pointer px-0.5 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
+                  onClick={() => onWordClick(word.start)}
+                >
+                  {word.punctuated_word}
+                </span>
+                {index < sentence.length - 1 && ' '}
+              </Fragment>
+            ))}
+          </span>
+          {settings.enableTextBreathing &&
+            sentenceIndex < sentences.length - 1 && (
+              <>
+                {[...Array(settings.pauseLines)].map((_, i) => (
+                  <br key={i} />
+                ))}
+              </>
+            )}
+        </Fragment>
+      ));
+    },
+    [settings, applyWordStyles, onWordClick]
+  );
+
   if (!transcript) return null;
 
   const words = transcript.results.channels[0].alternatives[0].words;
@@ -117,43 +180,13 @@ const Transcription: FC<Props> = ({
     <div className="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 overflow-hidden">
       <div
         className="font-serif text-lg leading-relaxed break-words dark:text-gray-200 subpixel-antialiased"
-        style={{ textAlign: settings.textAlignment }}
+        style={{
+          textAlign: settings.textAlignment,
+          wordBreak: 'break-word',
+          overflowWrap: 'break-word',
+        }}
       >
-        {words.map((word, index) => {
-          const nextWord = words[index + 1];
-          const timeGap = nextWord ? nextWord.start - word.end : 0;
-          return (
-            <Fragment key={`${word.start}-${word.end}`}>
-              <span
-                data-start={word.start}
-                data-end={word.end}
-                data-word-index={index}
-                ref={(el) => applyWordStyles(el, index)}
-                className="inline cursor-pointer px-1 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
-                style={{
-                  marginLeft:
-                    settings.enableTextBreathing &&
-                    index > 0 &&
-                    words[index - 1].end - words[index].start >
-                      settings.pauseThreshold
-                      ? '2rem'
-                      : '0.25rem',
-                }}
-                onClick={() => onWordClick(word.start)}
-              >
-                {word.punctuated_word}
-              </span>
-              {settings.enableTextBreathing &&
-                timeGap > settings.pauseThreshold && (
-                  <>
-                    {[...Array(settings.pauseLines)].map((_, i) => (
-                      <br key={i} />
-                    ))}
-                  </>
-                )}
-            </Fragment>
-          );
-        })}
+        {renderWords(words)}
       </div>
     </div>
   );

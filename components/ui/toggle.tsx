@@ -20,14 +20,12 @@ const Toggle: React.FC<ToggleProps> = ({
         className="sr-only"
         checked={checked}
         onChange={(e) => {
-          console.log('Checkbox changed:', e.target.checked);
           onChange(e.target.checked);
         }}
       />
       <div
         className={`block bg-gray-300 w-10 h-6 rounded-full ${checked ? 'bg-blue-500' : ''}`}
         onClick={() => {
-          console.log('Toggle clicked, current state:', checked);
           onChange(!checked);
         }}
       >

@@ -246,9 +246,9 @@ const Settings: React.FC = () => {
             />
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Когда диктор делает паузу, мы можем добавить «воздуха» между
-            предложениями — как в книгах часто делают отступы между абзацами.
-            Это помогает лучше чувствовать ритм речи.
+            Мы разбиваем текст на абзацы каждый раз, когда диктор делает паузу.
+            Так в тексте появляется воздух и читать становится удобней.
+            Воздушность текста можно настроить.
           </p>
           <div
             className={`space-y-4 ${!settings.enableTextBreathing ? 'opacity-50 pointer-events-none' : ''}`}
@@ -270,7 +270,7 @@ const Settings: React.FC = () => {
                 className="w-full"
               />
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                {settings.pauseThreshold.toFixed(1)}s
+                {settings.pauseThreshold.toFixed(1)} сек
               </div>
             </div>
 

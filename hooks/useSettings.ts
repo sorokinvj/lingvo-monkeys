@@ -34,8 +34,8 @@ const DEFAULT_SETTINGS: UserSettings = {
   fontFamily: 'System Native',
   theme: 'system',
   highlightDelay: 0,
-  pauseThreshold: 2,
-  pauseLines: 1,
+  pauseThreshold: 1,
+  pauseLines: 2,
   textAlignment: 'left',
   enableTextBreathing: true,
 };
