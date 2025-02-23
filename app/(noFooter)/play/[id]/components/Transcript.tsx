@@ -127,12 +127,17 @@ const Transcription: FC<Props> = ({
       words.forEach((word, index) => {
         currentSentence.push(word);
 
-        // Определяем конец предложения по знакам пунктуации
         const isPeriod = word.punctuated_word.match(/[.!?]$/);
         const nextWord = words[index + 1];
-        const timeGap = nextWord ? nextWord.start - word.end : 0;
 
-        if (isPeriod || timeGap > settings.pauseThreshold) {
+        // Считаем значимую паузу только если она больше минимального порога
+        const timeGap = nextWord ? nextWord.start - word.end : 0;
+        const MINIMUM_SIGNIFICANT_GAP = 0.5; // полсекунды минимальная значимая пауза
+        const isSignificantGap =
+          timeGap > MINIMUM_SIGNIFICANT_GAP &&
+          timeGap > settings.pauseThreshold;
+
+        if (isPeriod || isSignificantGap) {
           sentences.push([...currentSentence]);
           currentSentence = [];
         }
@@ -141,6 +146,18 @@ const Transcription: FC<Props> = ({
       if (currentSentence.length > 0) {
         sentences.push(currentSentence);
       }
+
+      // Сохраняем информацию о паузах между предложениями
+      const sentenceBreaks: boolean[] = sentences.map((_, index) => {
+        if (index === sentences.length - 1) return false;
+
+        const lastWordInSentence =
+          sentences[index][sentences[index].length - 1];
+        const firstWordInNextSentence = sentences[index + 1][0];
+
+        const timeGap = firstWordInNextSentence.start - lastWordInSentence.end;
+        return timeGap > settings.pauseThreshold;
+      });
 
       return sentences.map((sentence, sentenceIndex) => (
         <Fragment key={`sentence-${sentenceIndex}`}>
@@ -171,7 +188,8 @@ const Transcription: FC<Props> = ({
             ))}
           </span>
           {settings.enableTextBreathing &&
-            sentenceIndex < sentences.length - 1 && (
+            sentenceIndex < sentences.length - 1 &&
+            sentenceBreaks[sentenceIndex] && (
               <>
                 {[...Array(settings.pauseLines)].map((_, i) => (
                   <br key={i} />

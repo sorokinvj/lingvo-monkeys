@@ -38,7 +38,6 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       wavesurferRef.current.on('ready', () => {
-        console.log('WaveSurfer is ready');
         setIsReady(true);
       });
 
@@ -49,7 +48,6 @@ const Player: React.FC<PlayerProps> = ({
         onTimeUpdate?.(Math.floor(currentTime * 1000));
       });
       wavesurferRef.current.on('loading', (progress) => {
-        console.log(`Loading progress: ${progress}%`);
         setLoadingProgress(progress);
       });
 
@@ -57,8 +55,6 @@ const Player: React.FC<PlayerProps> = ({
       wavesurferRef.current.on('click', (relativePosition) => {
         const absoluteTime =
           relativePosition * wavesurferRef.current!.getDuration();
-        console.log(`Clicked at ${absoluteTime} seconds`);
-        // You can also trigger onTimeUpdate here if needed
         onTimeUpdate?.(Math.floor(absoluteTime * 1000));
       });
     }
@@ -69,7 +65,6 @@ const Player: React.FC<PlayerProps> = ({
 
     return () => {
       if (wavesurferRef.current) {
-        console.log('Destroying WaveSurfer instance');
         wavesurferRef.current.destroy();
         wavesurferRef.current = null;
       }

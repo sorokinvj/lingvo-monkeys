@@ -256,11 +256,14 @@ const Settings: FC = () => {
             <div className="flex flex-col gap-2">
               <label className="text-sm text-gray-600 dark:text-gray-400">
                 Когда добавлять воздух (если диктор молчит дольше X секунд)
+                <span className="block mt-1 text-xs text-gray-500">
+                  Рекомендуется: 2-4 секунды для обычной речи
+                </span>
               </label>
               <input
                 type="range"
                 min="0.5"
-                max="5"
+                max="10"
                 step="0.5"
                 value={settings.pauseThreshold}
                 onChange={(e) =>
