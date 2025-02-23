@@ -23,7 +23,7 @@ const AudiobookSources = () => {
   ];
 
   return (
-    <div className="bg-blue-50 rounded-lg p-6 mt-8">
+    <div className="bg-blue-50 rounded-lg p-6">
       <h2 className="text-xl font-semibold text-blue-900 mb-4">
         Где найти бесплатные аудиокниги?
       </h2>
