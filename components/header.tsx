@@ -41,7 +41,7 @@ export const Header: FC = () => {
     },
     faq: {
       title: 'FAQ',
-      href: '/faq',
+      href: '/f-a-q',
     },
   };
 

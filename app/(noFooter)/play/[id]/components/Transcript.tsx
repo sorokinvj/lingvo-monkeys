@@ -131,7 +131,11 @@ const Transcription: FC<Props> = ({
               >
                 {word.punctuated_word}
               </span>
-              {timeGap > 1 && <br />}
+              {timeGap > 1 && (
+                <>
+                  <br />
+                </>
+              )}
             </Fragment>
           );
         })}

@@ -5,5 +5,6 @@ export const metadata = {
 };
 
 export default async function FAQ() {
+  console.log('FAQ page');
   return <FAQPage />;
 }
