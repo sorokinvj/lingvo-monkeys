@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { SignInForm } from '../../components/signin-form';
+import { SignInForm } from '../../../components/signin-form';
 import { signInAction } from '@/app/actions';
 
 export const metadata = {

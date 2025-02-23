@@ -47,7 +47,7 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
   }, []);
 
   return (
-    <div className="md:mt-8 mx-auto bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md relative flex flex-col h-[calc(100vh-6rem)] pb-32">
+    <div className="mx-auto bg-gray-50 dark:bg-gray-900 rounded-lg shadow-md relative flex flex-col h-[calc(100vh-6rem)] pb-32">
       <div className="absolute z-40 top-2 right-2 md:top-6 md:right-6">
         <button
           onClick={() => setIsSidebarOpen(true)}
@@ -67,19 +67,19 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
           <Settings />
         </Drawer>
       </div>
-      <div className="flex-grow overflow-y-auto md:p-6">
+      <div className="flex-grow overflow-y-auto md:p-6 ">
         <Transcript
           transcript={transcript?.fullTranscription}
           currentTimeMS={currentTimeMS}
           onWordClick={handleWordClick}
         />
-      </div>
-      <div className="fixed w-full left-0 bottom-0 right-0 md:bottom-6 md:left-8 md:right-8 mx-auto md:w-11/12 max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 md:p-4 z-50">
-        <Player
-          publicUrl={publicUrl}
-          jumpToPositionMS={jumpToPositionMS}
-          onTimeUpdate={handleTimeUpdate}
-        />
+        <div className="fixed w-full left-0 bottom-0 right-0 md:bottom-6 md:left-8 md:right-8 mx-auto md:w-11/12 max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 md:p-4 z-50">
+          <Player
+            publicUrl={publicUrl}
+            jumpToPositionMS={jumpToPositionMS}
+            onTimeUpdate={handleTimeUpdate}
+          />
+        </div>
       </div>
     </div>
   );

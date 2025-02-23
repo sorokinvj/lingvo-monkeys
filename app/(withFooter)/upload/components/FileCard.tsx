@@ -1,6 +1,6 @@
 import { File, Status } from '@/schema/models';
-import FileStatus from '@/app/upload/components/FileStatus';
-import FileActions from '@/app/upload/components/FileActions';
+import FileStatus from '@/app/(withFooter)/upload/components/FileStatus';
+import FileActions from '@/app/(withFooter)/upload/components/FileActions';
 
 interface FileCardProps {
   item: File;

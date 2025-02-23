@@ -45,11 +45,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${roboto.variable} ${oswald.variable}`}>
         <Providers>
-          <main className="min-h-screen flex flex-col items-start w-full overflow-hidden md:overflow-visible md:max-w-6xl md:mx-auto">
-            <Header />
-            <div className="w-full flex-1">{children}</div>
-            <Footer />
-          </main>
+          {children}
           <Suspense fallback={<div />}>
             <SignUpConfirmation />
           </Suspense>

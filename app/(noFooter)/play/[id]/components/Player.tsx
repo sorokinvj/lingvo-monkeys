@@ -21,15 +21,15 @@ const Player: React.FC<PlayerProps> = ({
   const [currentTime, setCurrentTime] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   const initializeWaveSurfer = useCallback(() => {
     if (containerRef.current && !wavesurferRef.current) {
-      console.log('Initializing WaveSurfer');
       wavesurferRef.current = WaveSurfer.create({
         container: containerRef.current,
         waveColor: '#0349A4',
         progressColor: '#90AFE2',
-        cursorColor: '#90AFE2',
+        cursorColor: '#0349A4',
         barWidth: 2,
         barRadius: 3,
         height: 60,
@@ -50,6 +50,16 @@ const Player: React.FC<PlayerProps> = ({
       });
       wavesurferRef.current.on('loading', (progress) => {
         console.log(`Loading progress: ${progress}%`);
+        setLoadingProgress(progress);
+      });
+
+      // Add click handler
+      wavesurferRef.current.on('click', (relativePosition) => {
+        const absoluteTime =
+          relativePosition * wavesurferRef.current!.getDuration();
+        console.log(`Clicked at ${absoluteTime} seconds`);
+        // You can also trigger onTimeUpdate here if needed
+        onTimeUpdate?.(Math.floor(absoluteTime * 1000));
       });
     }
   }, [publicUrl, onTimeUpdate]);
@@ -125,7 +135,17 @@ const Player: React.FC<PlayerProps> = ({
         </div>
         <p className="font-mono">{formatTime(currentTime)}</p>
       </div>
-      <div ref={containerRef} className="w-full h-[30px] md:h-[60px]" />
+      <div className="relative w-full h-[30px] md:h-[60px]">
+        {loadingProgress < 100 && (
+          <div className="absolute inset-0 bg-gray-100 rounded">
+            <div
+              className="h-full bg-blue-200 rounded transition-all duration-300"
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
+        )}
+        <div ref={containerRef} className="w-full h-full" />
+      </div>
     </div>
   );
 };
