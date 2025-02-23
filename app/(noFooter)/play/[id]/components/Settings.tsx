@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { RotateCcw, Sun, Type } from 'lucide-react';
-import { HighlightMode, useSettings } from '@/hooks/useSettings';
+import { HighlightMode, TextAlignment, useSettings } from '@/hooks/useSettings';
 import { ColorPickerPopover } from './ColorPickerPopover';
 import { FontSelector } from './FontSelector';
 import { FontOption } from '@/config/fonts';
@@ -179,6 +179,23 @@ const Settings: React.FC = () => {
               />
             </div>
           </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="text-base font-medium text-gray-600 dark:text-gray-400">
+            Выравнивание текста
+          </label>
+          <select
+            className="w-full rounded-md border border-gray-200 dark:border-gray-600 p-2 bg-white dark:bg-gray-700 dark:text-gray-200"
+            value={settings.textAlignment}
+            onChange={(e) =>
+              updateSetting('textAlignment', e.target.value as TextAlignment)
+            }
+          >
+            <option value="left">По левому краю</option>
+            <option value="center">По центру</option>
+            <option value="justify">По ширине</option>
+            <option value="right">По правому краю</option>
+          </select>
         </div>
       </div>
       <div className="space-y-4">

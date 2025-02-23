@@ -114,8 +114,11 @@ const Transcription: FC<Props> = ({
   const words = transcript.results.channels[0].alternatives[0].words;
 
   return (
-    <div className="max-w-4xl h-full md:h-auto overflow-scroll mx-auto p-4 md:p-6 bg-gray-50 dark:bg-gray-900 md:overflow-hidden">
-      <div className="font-serif text-lg leading-relaxed break-words dark:text-gray-200 subpixel-antialiased">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      <div
+        className="font-serif text-lg leading-relaxed break-words dark:text-gray-200 subpixel-antialiased"
+        style={{ textAlign: settings.textAlignment }}
+      >
         {words.map((word, index) => {
           const nextWord = words[index + 1];
           const timeGap = nextWord ? nextWord.start - word.end : 0;
@@ -126,7 +129,14 @@ const Transcription: FC<Props> = ({
                 data-end={word.end}
                 data-word-index={index}
                 ref={(el) => applyWordStyles(el, index)}
-                className="inline-block cursor-pointer px-1 py-0.5 m-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
+                className="inline cursor-pointer px-1 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
+                style={{
+                  margin:
+                    settings.textAlignment === 'justify'
+                      ? '0 0.1em'
+                      : '0.125rem',
+                  display: 'inline',
+                }}
                 onClick={() => onWordClick(word.start)}
               >
                 {word.punctuated_word}
