@@ -41,7 +41,9 @@ const AudiobookSources = () => {
                   className="block p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="font-medium text-blue-700">{source.name}</span>
+                    <span className="font-medium text-blue-700">
+                      {source.name}
+                    </span>
                     <ExternalLink size={16} className="text-blue-500" />
                   </div>
                   <p className="text-sm text-gray-600">{source.description}</p>
@@ -68,7 +70,9 @@ const AudiobookSources = () => {
                 className="block p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
               >
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="font-medium text-blue-700">{source.name}</span>
+                  <span className="font-medium text-blue-700">
+                    {source.name}
+                  </span>
                   <ExternalLink size={16} className="text-blue-500" />
                 </div>
                 <p className="text-sm text-gray-600">{source.description}</p>
@@ -79,7 +83,6 @@ const AudiobookSources = () => {
       </div>
     </>
   );
-};
 };
 
 export default AudiobookSources;
