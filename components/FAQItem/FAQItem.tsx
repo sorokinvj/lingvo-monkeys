@@ -20,7 +20,7 @@ export const FAQItem: FC<FAQItemProps> = ({
       {({ open }) => (
         <div className="flex flex-col shadow-disclosure rounded-lg overflow-hidden">
           <DisclosureButton
-            className={`flex justify-between w-full px-4 md:px-7 py-3 md:py-7 text-base font-medium text-left text-gray-900 ${bgColor} focus:outline-none`}
+            className={`flex justify-between w-full px-4 md:p-7 py-3 text-base font-medium text-left text-gray-900 ${bgColor} focus:outline-none`}
           >
             <span className="font-semibold">{question}</span>
             {open ? (
@@ -35,7 +35,7 @@ export const FAQItem: FC<FAQItemProps> = ({
               open ? 'max-h-96' : 'max-h-0'
             } overflow-hidden`}
           >
-            <div className={`p-7 pt-0 text-base text-gray-500 ${bgColor}`}>
+            <div className={`p-4 pt-0 text-base text-gray-500 ${bgColor}`}>
               {answer}
             </div>
           </div>
