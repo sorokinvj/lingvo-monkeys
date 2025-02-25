@@ -37,6 +37,7 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
     undefined
   );
   const [currentTimeMS, setCurrentTimeMS] = useState(0);
+  const [shouldScrollToWord, setShouldScrollToWord] = useState(false);
 
   const handleWordClick = (time: number) => {
     setJumpToPositionMS(time * 1000);
@@ -44,6 +45,11 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
 
   const handleTimeUpdate = useCallback((timeMS: number) => {
     setCurrentTimeMS(timeMS);
+    setShouldScrollToWord(false);
+  }, []);
+
+  const handleWaveformSeek = useCallback((timeMS: number) => {
+    setShouldScrollToWord(true);
   }, []);
 
   return (
@@ -72,12 +78,14 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
           transcript={transcript?.fullTranscription}
           currentTimeMS={currentTimeMS}
           onWordClick={handleWordClick}
+          shouldScrollToWord={shouldScrollToWord}
         />
         <div className="fixed w-full left-0 bottom-0 right-0 md:bottom-6 md:left-8 md:right-8 mx-auto md:w-11/12 max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 md:p-4 z-50">
           <Player
             publicUrl={publicUrl}
             jumpToPositionMS={jumpToPositionMS}
             onTimeUpdate={handleTimeUpdate}
+            onWaveformSeek={handleWaveformSeek}
           />
         </div>
       </div>

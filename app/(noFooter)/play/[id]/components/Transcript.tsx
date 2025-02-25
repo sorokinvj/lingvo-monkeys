@@ -2,17 +2,20 @@ import { FC, useState, useEffect, useCallback, Fragment } from 'react';
 import { FullTranscription } from '@/schema/models';
 import { useSettings } from '@/hooks/useSettings';
 import { AVAILABLE_FONTS } from '@/config/fonts';
+import { setTimeout } from 'timers';
 
 type Props = {
   transcript?: FullTranscription | null;
   currentTimeMS: number;
   onWordClick: (time: number) => void;
+  shouldScrollToWord?: boolean;
 };
 
 const Transcription: FC<Props> = ({
   transcript,
   currentTimeMS,
   onWordClick,
+  shouldScrollToWord = false,
 }) => {
   const { settings } = useSettings();
   const [activeWordIndex, setActiveWordIndex] = useState(-1);
@@ -115,9 +118,50 @@ const Transcription: FC<Props> = ({
       const newActiveIndex = findActiveWordIndex(words, currentTimeMS);
       if (newActiveIndex !== -1) {
         setActiveWordIndex(newActiveIndex);
+
+        // Only scroll when explicitly requested (after waveform click)
+        if (shouldScrollToWord) {
+          setTimeout(() => {
+            const activeWordElement = document.querySelector(
+              `[data-word-index="${newActiveIndex}"]`
+            ) as HTMLElement;
+
+            if (activeWordElement) {
+              // Find the parent scrollable container
+              const scrollableParent =
+                activeWordElement.closest('.overflow-y-auto');
+
+              if (scrollableParent) {
+                // Get the parent's scroll position and dimensions
+                const parentRect = scrollableParent.getBoundingClientRect();
+                const elementRect = activeWordElement.getBoundingClientRect();
+
+                // Check if element is outside the visible area
+                const isVisible =
+                  elementRect.top >= parentRect.top &&
+                  elementRect.bottom <= parentRect.bottom;
+
+                if (!isVisible) {
+                  // Calculate the scroll position
+                  const scrollTop =
+                    scrollableParent.scrollTop +
+                    (elementRect.top - parentRect.top) -
+                    parentRect.height / 2 +
+                    elementRect.height / 2;
+
+                  // Smoothly scroll to the element
+                  scrollableParent.scrollTo({
+                    top: scrollTop,
+                    behavior: 'smooth',
+                  });
+                }
+              }
+            }
+          }, 0); // setTimeout to ensure DOM has updated
+        }
       }
     }
-  }, [currentTimeMS, transcript]);
+  }, [currentTimeMS, transcript, findActiveWordIndex, shouldScrollToWord]);
 
   if (!transcript) return null;
 

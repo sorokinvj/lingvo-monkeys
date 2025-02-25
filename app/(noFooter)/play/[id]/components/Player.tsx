@@ -8,12 +8,14 @@ interface PlayerProps {
   publicUrl: string;
   jumpToPositionMS?: number;
   onTimeUpdate?: (timeMS: number) => void;
+  onWaveformSeek?: (timeMS: number) => void;
 }
 
 const Player: React.FC<PlayerProps> = ({
   publicUrl,
   jumpToPositionMS,
   onTimeUpdate,
+  onWaveformSeek,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
@@ -55,10 +57,13 @@ const Player: React.FC<PlayerProps> = ({
       wavesurferRef.current.on('click', (relativePosition) => {
         const absoluteTime =
           relativePosition * wavesurferRef.current!.getDuration();
-        onTimeUpdate?.(Math.floor(absoluteTime * 1000));
+        const timeMS = Math.floor(absoluteTime * 1000);
+        onTimeUpdate?.(timeMS);
+        // Call separate callback for waveform seek
+        onWaveformSeek?.(timeMS);
       });
     }
-  }, [publicUrl, onTimeUpdate]);
+  }, [publicUrl, onTimeUpdate, onWaveformSeek]);
 
   useEffect(() => {
     initializeWaveSurfer();
