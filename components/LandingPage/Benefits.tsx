@@ -44,38 +44,35 @@ export const Benefits: FC = () => {
           <div className="relative">
             <Image
               src="/landing/Razvivaet.jpg"
-              alt="Brain icon"
+              alt="Razvivaet"
               width={592}
               height={157}
               className="w-80"
             />
-          </div>
-        </div>
-        <div className="hidden md:flex relative mt-4">
-          <div className="relative left-60 flex -top-6">
-            <Image
-              src="/landing/3_ Arrow_1.jpg"
-              width={118}
-              height={45}
-              alt="Arrow"
-              className="h-fit"
-            />
-            <div className="relative left-24 flex">
-              <Image
-                src="/landing/3_ Arrow_2.jpg"
-                width={56}
-                height={70}
-                alt="Arrow"
-                className="h-fit"
-              />
-              <div className="relative left-60">
+            <div className="hidden md:flex relative -left-36">
+              <div className="flex">
                 <Image
-                  src="/landing/3_ Arrow_3.jpg"
-                  width={60}
-                  height={70}
+                  src="/landing/3_ Arrow_1.jpg"
+                  width={59}
+                  height={22.5}
                   alt="Arrow"
-                  className="h-fit"
                 />
+                <div className="relative left-24 flex">
+                  <Image
+                    src="/landing/3_ Arrow_2.jpg"
+                    width={28}
+                    height={35}
+                    alt="Arrow"
+                  />
+                  <div className="relative left-60">
+                    <Image
+                      src="/landing/3_ Arrow_3.jpg"
+                      width={30}
+                      height={35}
+                      alt="Arrow"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
