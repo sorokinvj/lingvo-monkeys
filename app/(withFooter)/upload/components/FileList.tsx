@@ -150,7 +150,7 @@ const FileList: FC = () => {
             className="text-gray-600 hover:text-gray-900"
             onClick={() => setShowCollection(false)}
           >
-            {files && files.length > 0 ? 'Мои файлы' : 'Назад'}
+            {files && files.length > 0 ? 'Мои файлы' : 'Назад в мои файлы'}
           </Button>
         </div>
         <CollectionFiles />
