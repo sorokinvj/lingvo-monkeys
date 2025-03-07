@@ -42,8 +42,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${roboto.variable} ${oswald.variable}`}>
+    <html lang="en" suppressHydrationWarning className="light">
+      <body
+        className={`${roboto.variable} ${oswald.variable} bg-white text-black`}
+      >
         <Providers>
           {children}
           <Suspense fallback={<div />}>
