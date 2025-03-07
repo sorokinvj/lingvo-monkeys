@@ -2,7 +2,7 @@
 
 import { CellContext } from '@tanstack/react-table';
 import { File } from '@/schema/models';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import DataTable from '@/components/ui/table';
 import { createClient } from '@/utils/supabase/client';
 import { RealtimeChannel } from '@supabase/supabase-js';
@@ -14,10 +14,15 @@ import { Status } from '@/schema/models';
 import { Spinner } from '@/components/ui/spinner';
 import FileActions from './FileActions';
 import { FileCard } from './FileCard';
+import Link from 'next/link';
+import { FolderOpen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import CollectionFiles from './CollectionFiles';
 
 const FileList: FC = () => {
   const queryClient = useQueryClient();
   const supabase = createClient();
+  const [showCollection, setShowCollection] = useState(false);
 
   const { data: user } = useUser();
   const { data: files, isLoading, error } = useFiles(user?.id);
@@ -106,17 +111,75 @@ const FileList: FC = () => {
     },
   ];
 
+  // Показываем спиннер при загрузке
   if (isLoading) return <Spinner fullscreen size="lg" />;
+
+  // Показываем ошибку, если есть
   if (error) return <div>Error loading files: {error.message}</div>;
-  if (files)
+
+  // Если файлов нет и коллекция не отображается, показываем пустое состояние
+  if (files && files.length === 0 && !showCollection) {
     return (
-      <DataTable
-        data={files}
-        columns={columns}
-        defaultSort={[{ id: 'createdAt', desc: true }]}
-        MobileComponent={FileCard}
-      />
+      <div className="bg-white border-2 border-sky-100 rounded-lg p-6 text-center">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <div className="rounded-full">
+            <FolderOpen className="h-10 w-10 text-blue-600" />
+          </div>
+          <h3 className="text-lg font-medium text-gray-900">
+            У вас пока нет загруженных файлов
+          </h3>
+          <p className="text-gray-600 max-w-md">
+            Загрузите аудиофайл выше или посмотрите нашу коллекцию готовых
+            материалов
+          </p>
+          <Button onClick={() => setShowCollection(true)} variant="default">
+            Lingvo Monkeys Collection
+          </Button>
+        </div>
+      </div>
     );
+  }
+
+  // Если пользователь нажал на кнопку коллекции
+  if (showCollection) {
+    return (
+      <div>
+        <div className="mb-4 flex justify-between items-center">
+          <Button
+            variant="outline"
+            className="text-gray-600 hover:text-gray-900"
+            onClick={() => setShowCollection(false)}
+          >
+            {files && files.length > 0 ? 'Мои файлы' : 'Назад'}
+          </Button>
+        </div>
+        <CollectionFiles />
+      </div>
+    );
+  }
+
+  // Если у пользователя есть файлы, показываем их
+  if (files && files.length > 0) {
+    return (
+      <>
+        <div className="mb-4 flex justify-end">
+          <Button
+            variant="outline"
+            className="text-blue-600 hover:bg-blue-50 border-blue-200"
+            onClick={() => setShowCollection(true)}
+          >
+            Смотреть коллекцию
+          </Button>
+        </div>
+        <DataTable
+          data={files}
+          columns={columns}
+          defaultSort={[{ id: 'createdAt', desc: true }]}
+          MobileComponent={FileCard}
+        />
+      </>
+    );
+  }
 
   return null;
 };
