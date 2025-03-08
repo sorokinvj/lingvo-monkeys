@@ -12,18 +12,24 @@ interface StatsCardProps {
 export function StatsCard({ title, value, endpoint }: StatsCardProps) {
   const [data, setData] = useState<string>(value);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
+        setError(false);
+
         const response = await fetch(endpoint);
         if (!response.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error(`Server responded with ${response.status}`);
         }
+
         const result = await response.json();
         setData(result.value.toString());
       } catch (error) {
         console.error('Error fetching stats:', error);
+        setError(true);
         setData('Ошибка');
       } finally {
         setIsLoading(false);
@@ -42,6 +48,8 @@ export function StatsCard({ title, value, endpoint }: StatsCardProps) {
         <div className="text-2xl font-bold">
           {isLoading ? (
             <div className="h-6 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700"></div>
+          ) : error ? (
+            <div className="text-destructive">Ошибка</div>
           ) : (
             data
           )}

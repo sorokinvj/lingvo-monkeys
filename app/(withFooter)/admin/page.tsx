@@ -1,14 +1,11 @@
 import { redirect } from 'next/navigation';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server';
 import { StatsCard } from '@/components/stats-card';
 import { UserStatsTable } from '@/components/user-stats-table';
 import { UserActivityChart } from '@/components/user-activity-chart';
 
 export default async function AdminDashboard() {
-  const supabase = createServerComponentClient({ cookies });
-
-  // Check if user is authenticated and has admin role
+  const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -24,14 +21,8 @@ export default async function AdminDashboard() {
     .eq('id', user.id)
     .single();
 
-  // This assumes you have a way to identify admins
-  // You may need to add an "isAdmin" column to your User table
-  // For now, I'll use a hardcoded admin email check as an example
-  const isAdmin =
-    userData?.email &&
-    (userData.email === process.env.ADMIN_EMAIL ||
-      userData.email.endsWith('@lingvomonkeys.com'));
-
+  const isAdmin = userData?.email === 'sorokinvj@gmail.com';
+  console.log(userData);
   if (!isAdmin) {
     redirect('/');
   }

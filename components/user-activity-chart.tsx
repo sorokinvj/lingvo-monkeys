@@ -14,18 +14,24 @@ interface ChartProps {
 export function UserActivityChart({ endpoint }: ChartProps) {
   const [activityData, setActivityData] = useState<ActivityData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchActivityData = async () => {
       try {
+        setIsLoading(true);
+        setError(false);
+
         const response = await fetch(endpoint);
         if (!response.ok) {
-          throw new Error('Failed to fetch activity data');
+          throw new Error(`Server responded with ${response.status}`);
         }
+
         const data = await response.json();
-        setActivityData(data.activity);
+        setActivityData(data.activity || []);
       } catch (error) {
         console.error('Error fetching activity data:', error);
+        setError(true);
       } finally {
         setIsLoading(false);
       }
@@ -36,6 +42,14 @@ export function UserActivityChart({ endpoint }: ChartProps) {
 
   if (isLoading) {
     return <div className="p-8 text-center">Загрузка данных активности...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="p-8 text-center text-destructive">
+        Ошибка загрузки данных
+      </div>
+    );
   }
 
   if (activityData.length === 0) {

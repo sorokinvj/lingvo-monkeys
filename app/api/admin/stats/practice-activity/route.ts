@@ -1,28 +1,8 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { createClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 
-// Helper function to check if a user is an admin
-async function isAdmin(userId: string) {
-  const supabase = createRouteHandlerClient({ cookies });
-
-  // Get the user's email
-  const { data: userData } = await supabase
-    .from('User')
-    .select('email')
-    .eq('id', userId)
-    .single();
-
-  // Check if the user is an admin
-  return (
-    userData?.email &&
-    (userData.email === process.env.ADMIN_EMAIL ||
-      userData.email.endsWith('@lingvomonkeys.com'))
-  );
-}
-
 export async function GET() {
-  const supabase = createRouteHandlerClient({ cookies });
+  const supabase = createClient();
 
   // Check authentication
   const {
@@ -37,9 +17,16 @@ export async function GET() {
   }
 
   // Check if user is admin
-  const admin = await isAdmin(user.id);
+  const { data: userData } = await supabase
+    .from('User')
+    .select('email')
+    .eq('id', user.id)
+    .single();
 
-  if (!admin) {
+  // Используем тот же метод проверки что и на странице
+  const isAdmin = userData?.email === 'sorokinvj@gmail.com';
+
+  if (!isAdmin) {
     return NextResponse.json(
       { error: 'Admin access required' },
       { status: 403 }
