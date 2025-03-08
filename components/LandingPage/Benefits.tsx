@@ -49,27 +49,30 @@ export const Benefits: FC = () => {
               height={157}
               className="w-80"
             />
-            <div className="hidden md:flex relative -left-36">
+            <div className="hidden md:flex relative -left-40">
               <div className="flex">
                 <Image
                   src="/landing/3_ Arrow_1.jpg"
-                  width={59}
-                  height={22.5}
+                  width={93}
+                  height={52}
                   alt="Arrow"
+                  className="h-fit"
                 />
-                <div className="relative left-24 flex">
+                <div className="relative left-20 flex">
                   <Image
                     src="/landing/3_ Arrow_2.jpg"
-                    width={28}
-                    height={35}
+                    width={40}
+                    height={47}
                     alt="Arrow"
+                    className="h-fit"
                   />
                   <div className="relative left-60">
                     <Image
                       src="/landing/3_ Arrow_3.jpg"
-                      width={30}
-                      height={35}
+                      width={53}
+                      height={47}
                       alt="Arrow"
+                      className="h-fit"
                     />
                   </div>
                 </div>
@@ -140,7 +143,7 @@ export const Benefits: FC = () => {
               />
             </div>
             <div className="flex flex-col md:flex-row items-start gap-4 md:gap-12">
-              <div className="w-full md:w-3/5 mt-2 md:mt-8">
+              <div className="w-full md:w-1/2 mt-2 md:mt-8">
                 <div className="flex items-center gap-2 pl-4 md:pl-0">
                   <Image
                     src="/landing/BLOCK 2_Arrow_3-right-down.png"
@@ -149,7 +152,7 @@ export const Benefits: FC = () => {
                     alt="Arrow"
                     className="w-12 md:hidden"
                   />
-                  <h3 className="inline uppercase font-heading text-2xl md:text-4xl whitespace-nowrap">
+                  <h3 className="inline uppercase font-heading text-2xl md:text-4xl">
                     АРТИКУЛЯЦИОННУЮ БАЗУ
                   </h3>
                 </div>
@@ -161,7 +164,7 @@ export const Benefits: FC = () => {
                   по-новому.
                 </p>
               </div>
-              <div className="w-full md:w-2/5 md:mt-8">
+              <div className="w-full md:w-1/2 md:mt-8">
                 <div className="flex items-center gap-4 pl-4 md:pl-0">
                   <Image
                     src="/landing/BLOCK 2_Arrow_3-right-down-2.png"
