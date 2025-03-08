@@ -9,9 +9,10 @@ interface ActivityData {
 
 interface ChartProps {
   endpoint: string;
+  description?: string;
 }
 
-export function UserActivityChart({ endpoint }: ChartProps) {
+export function UserActivityChart({ endpoint, description }: ChartProps) {
   const [activityData, setActivityData] = useState<ActivityData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -61,10 +62,20 @@ export function UserActivityChart({ endpoint }: ChartProps) {
 
   return (
     <div className="w-full">
+      {description && (
+        <div className="mb-4 text-sm text-gray-500">
+          <p>
+            <strong>Формула расчета:</strong> {description}
+          </p>
+        </div>
+      )}
       <div className="flex h-[200px] items-end gap-2">
         {activityData.map((item, index) => {
           const heightPercentage =
             maxValue > 0 ? (item.count / maxValue) * 100 : 0;
+
+          const date = new Date(item.date);
+          const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}`;
 
           return (
             <div
@@ -76,10 +87,7 @@ export function UserActivityChart({ endpoint }: ChartProps) {
                 style={{ height: `${heightPercentage}%` }}
               ></div>
               <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-gray-500">
-                {new Date(item.date).toLocaleDateString('ru-RU', {
-                  month: 'short',
-                  day: 'numeric',
-                })}
+                {formattedDate}
               </span>
             </div>
           );

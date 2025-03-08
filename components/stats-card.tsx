@@ -7,9 +7,15 @@ interface StatsCardProps {
   title: string;
   value: string;
   endpoint: string;
+  description?: string;
 }
 
-export function StatsCard({ title, value, endpoint }: StatsCardProps) {
+export function StatsCard({
+  title,
+  value,
+  endpoint,
+  description,
+}: StatsCardProps) {
   const [data, setData] = useState<string>(value);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
@@ -54,6 +60,9 @@ export function StatsCard({ title, value, endpoint }: StatsCardProps) {
             data
           )}
         </div>
+        {description && (
+          <div className="mt-2 text-xs text-gray-500">{description}</div>
+        )}
       </CardContent>
     </Card>
   );
