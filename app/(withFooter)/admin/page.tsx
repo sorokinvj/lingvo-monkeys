@@ -21,7 +21,9 @@ export default async function AdminDashboard() {
     .eq('id', user.id)
     .single();
 
-  const isAdmin = userData?.email === 'sorokinvj@gmail.com';
+  const isAdmin =
+    userData?.email === 'sorokinvj@gmail.com' ||
+    userData?.email === 'bichiko@gmail.com';
   console.log(userData);
   if (!isAdmin) {
     redirect('/');
