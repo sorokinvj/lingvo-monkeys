@@ -56,7 +56,7 @@ const AudiobookSources = () => {
 
       {/* Десктопный вид - карточки */}
       <div className="hidden md:block">
-        <div className="bg-blue-50 rounded-lg p-6">
+        <div className="bg-sky-50 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-blue-900 mb-4">
             Где найти бесплатные аудиокниги?
           </h2>

@@ -6,6 +6,7 @@ import {
   QueryClient,
   dehydrate,
 } from '@tanstack/react-query';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'LM | Upload',
@@ -19,7 +20,7 @@ export default async function Upload() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return [];
+    redirect('/sign-in');
   }
 
   const queryClient = new QueryClient();
