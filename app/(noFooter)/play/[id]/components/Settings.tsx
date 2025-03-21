@@ -8,9 +8,13 @@ import { FontSelector } from './FontSelector';
 import { FontOption } from '@/config/fonts';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import Toggle from '@/components/ui/toggle';
+import { useSettingsTracking } from '@/hooks/useSettingsTracking';
 
 const Settings: FC = () => {
   const { settings, updateSetting, resetSettings } = useSettings();
+
+  // Добавляем отслеживание изменений настроек
+  useSettingsTracking();
 
   const handleColorChange = (
     key:
