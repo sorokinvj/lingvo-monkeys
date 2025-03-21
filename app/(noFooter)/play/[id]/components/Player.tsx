@@ -63,6 +63,9 @@ const Player: React.FC<PlayerProps> = ({
           fileId,
           actionType: 'play',
           position: wavesurferRef.current?.getCurrentTime() || 0,
+          metadata: {
+            fileName: fileName || null,
+          },
         });
       });
 
@@ -73,6 +76,9 @@ const Player: React.FC<PlayerProps> = ({
           fileId,
           actionType: 'pause',
           position: wavesurferRef.current?.getCurrentTime() || 0,
+          metadata: {
+            fileName: fileName || null,
+          },
         });
       });
 
@@ -93,6 +99,7 @@ const Player: React.FC<PlayerProps> = ({
           metadata: {
             method: 'automatic',
             totalDuration: wavesurferRef.current?.getDuration() || 0,
+            fileName: fileName || null,
           },
         });
       });
@@ -180,6 +187,7 @@ const Player: React.FC<PlayerProps> = ({
             metadata: {
               oldRate: prevRate,
               newRate: roundedRate,
+              fileName: fileName || null,
             },
           });
 
@@ -187,7 +195,7 @@ const Player: React.FC<PlayerProps> = ({
         });
       }
     },
-    [trackPlayerInteraction, fileId]
+    [trackPlayerInteraction, fileId, fileName]
   );
 
   return (
