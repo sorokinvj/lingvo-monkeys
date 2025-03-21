@@ -15,7 +15,7 @@ import { Spinner } from '@/components/ui/spinner';
 import FileActions from './FileActions';
 import { FileCard } from './FileCard';
 import Link from 'next/link';
-import { FolderOpen } from 'lucide-react';
+import { ArrowLeft, FolderOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CollectionFiles from './CollectionFiles';
 
@@ -146,11 +146,12 @@ const FileList: FC = () => {
       <div>
         <div className="mb-4 flex justify-between items-center">
           <Button
-            variant="outline"
-            className="text-gray-600 hover:text-gray-900"
+            variant="link"
+            className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
             onClick={() => setShowCollection(false)}
           >
-            {files && files.length > 0 ? 'Мои файлы' : 'Назад в мои файлы'}
+            <ArrowLeft className="w-6 h-6 text-blue-600" />
+            <span className="text-blue-600">Мои файлы</span>
           </Button>
         </div>
         <CollectionFiles />

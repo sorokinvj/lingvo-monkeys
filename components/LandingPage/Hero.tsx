@@ -15,7 +15,7 @@ export function Hero() {
             <Image
               src="/landing/Bez_Skukoti_MOBILE.jpg"
               alt="Без скукоты"
-              className="left-[180px] w-24 -mt-7 relative"
+              className="left-[200px] w-24 -mt-7 relative"
               width={469}
               height={305}
             />
@@ -25,14 +25,13 @@ export function Hero() {
             <br className="md:hidden" /> обезьянничать
           </button>
           <Image
-            src="/landing/Hand_down_mobile.png"
+            src="/landing/21Jan_Top Button MOBILE.png"
             alt="Hand"
             className="relative z-10 w-full mt-2"
             width={1408}
             height={1154}
             priority
             sizes="100vw"
-            style={{ transform: 'scaleX(-1)' }}
           />
         </div>
 
