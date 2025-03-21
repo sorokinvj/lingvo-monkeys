@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = createClient();
+    const adminClient = createClient({ useServiceRole: true });
 
     const body = await request.json();
     console.log('Received callback body:', body);
@@ -46,12 +47,14 @@ export async function POST(request: NextRequest) {
     const updatedTranscription = transcriptionData[0]; // It's an array, so we take the first item
 
     // Update the File record with the new transcriptionId and status
-    const { error: updateFileError } = await supabase
+    const { data: fileData, error: updateFileError } = await supabase
       .from('File')
       .update({
         status: 'transcribed',
       })
-      .eq('id', updatedTranscription.fileId);
+      .eq('id', updatedTranscription.fileId)
+      .select('id')
+      .single();
 
     if (updateFileError) {
       console.error('Error updating File record:', updateFileError);
@@ -59,6 +62,26 @@ export async function POST(request: NextRequest) {
         { error: 'Error updating File record' },
         { status: 500 }
       );
+    }
+
+    // Найдем последнее событие загрузки для этого файла
+    const { data: uploadEvent, error: findEventError } = await adminClient
+      .from('FileUploadEvent')
+      .select('id')
+      .eq('fileId', fileData.id)
+      .order('createdAt', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (!findEventError && uploadEvent) {
+      // Обновим статус события загрузки на "transcribed"
+      await adminClient
+        .from('FileUploadEvent')
+        .update({
+          status: 'transcribed',
+        })
+        .eq('id', uploadEvent.id)
+        .eq('fileId', fileData.id);
     }
 
     return NextResponse.json({ success: true });

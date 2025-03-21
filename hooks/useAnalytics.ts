@@ -28,6 +28,8 @@ export function useAnalytics() {
           const errorData = await response.json();
           console.error('Error tracking event:', errorData);
         }
+
+        return response.json();
       } catch (error) {
         console.error('Failed to track event:', error);
       }
@@ -39,9 +41,32 @@ export function useAnalytics() {
    * Трекинг загрузки файла
    */
   const trackFileUpload = useCallback(
-    (data: { fileId: string; fileName: string; fileSize: number }) => {
+    (data: {
+      fileId: string;
+      fileName: string;
+      fileSize: number;
+      status?: string;
+    }) => {
       return trackEvent({
         eventType: 'file_upload',
+        data,
+      });
+    },
+    [trackEvent]
+  );
+
+  /**
+   * Трекинг изменения статуса файла
+   */
+  const trackFileStatusChange = useCallback(
+    (data: {
+      fileId: string;
+      uploadEventId: string;
+      status: 'uploading' | 'processing' | 'transcribed' | 'error';
+      error?: string;
+    }) => {
+      return trackEvent({
+        eventType: 'file_status_change',
         data,
       });
     },
@@ -133,6 +158,7 @@ export function useAnalytics() {
   return {
     trackEvent,
     trackFileUpload,
+    trackFileStatusChange,
     trackFileListeningStart,
     trackFileListeningEnd,
     trackPlayerInteraction,
