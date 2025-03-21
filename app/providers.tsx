@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import { PropsWithChildren } from 'react';
+import { usePageTracking } from '@/hooks/usePageTracking';
 
 function makeQueryClient() {
   return new QueryClient({
@@ -52,7 +53,17 @@ export default function Providers({ children }: PropsWithChildren) {
       disableTransitionOnChange
       forcedTheme="light"
     >
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <AnalyticsWrapper>{children}</AnalyticsWrapper>
+      </QueryClientProvider>
     </ThemeProvider>
   );
+}
+
+// Отдельный компонент для инициализации аналитики
+function AnalyticsWrapper({ children }: PropsWithChildren) {
+  // Теперь безопасно используем хук внутри QueryClientProvider
+  usePageTracking();
+
+  return <>{children}</>;
 }

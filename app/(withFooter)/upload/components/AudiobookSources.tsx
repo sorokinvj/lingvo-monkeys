@@ -1,6 +1,7 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { FAQItem } from '@/components/FAQItem/FAQItem';
+import { LingvoMonkeysCollectionCard } from './LingvoMonkeysCollectionCard';
 
 const AudiobookSources = () => {
   const sources = [
@@ -32,6 +33,7 @@ const AudiobookSources = () => {
           bgColor="bg-blue-50"
           answer={
             <div className="grid gap-3">
+              <LingvoMonkeysCollectionCard />
               {sources.map((source) => (
                 <a
                   key={source.name}
@@ -60,7 +62,8 @@ const AudiobookSources = () => {
           <h2 className="text-xl font-semibold text-blue-900 mb-4">
             Где найти бесплатные аудиокниги?
           </h2>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-4 gap-4">
+            <LingvoMonkeysCollectionCard />
             {sources.map((source) => (
               <a
                 key={source.name}

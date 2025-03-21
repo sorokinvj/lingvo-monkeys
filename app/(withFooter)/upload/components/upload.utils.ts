@@ -81,7 +81,7 @@ export const processFile = async (
     publicUrl: string;
   },
   onProgress: (progress: number, message: string) => void
-) => {
+): Promise<{ fileId?: string; analyticsEventId?: string }> => {
   const response = await fetch('/api/upload', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -95,6 +95,9 @@ export const processFile = async (
   const reader = response.body?.getReader();
   if (!reader) throw new Error('Unable to read response');
 
+  let fileId: string | undefined;
+  let analyticsEventId: string | undefined;
+
   try {
     while (true) {
       const { done, value } = await reader.read();
@@ -106,15 +109,33 @@ export const processFile = async (
       for (const event of events) {
         const [eventType, data] = event.split('\n');
         if (eventType === 'event: progress') {
-          const { progress, message } = JSON.parse(data.replace('data: ', ''));
+          const progressData = JSON.parse(data.replace('data: ', ''));
+          const { progress, message } = progressData;
+
+          // Извлекаем структурированные данные
+          if (progressData.fileId && !fileId) {
+            fileId = progressData.fileId;
+          }
+
+          if (progressData.analyticsEventId && !analyticsEventId) {
+            analyticsEventId = progressData.analyticsEventId;
+          }
+
           onProgress(progress, message);
         } else if (eventType === 'event: error') {
           const { error } = JSON.parse(data.replace('data: ', ''));
           throw new Error(error);
+        } else if (eventType === 'event: complete') {
+          const completeData = JSON.parse(data.replace('data: ', ''));
+          if (completeData.fileId && !fileId) {
+            fileId = completeData.fileId;
+          }
         }
       }
     }
   } finally {
     reader.releaseLock();
   }
+
+  return { fileId, analyticsEventId };
 };

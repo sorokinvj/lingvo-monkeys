@@ -1,6 +1,6 @@
 // file: app/upload/components/UploadPage.tsx
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import FileList from './FileList';
 import { parseErrorMessage } from '@/lib/utils';
@@ -14,9 +14,17 @@ import {
 } from '@/config/constants';
 import { Button } from '@/components/ui/button';
 import AudiobookSources from './AudiobookSources';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 const UploadPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
+  const { trackFileStatusChange } = useAnalytics();
+
+  // Для хранения идентификаторов
+  const [fileData, setFileData] = useState<{
+    fileId?: string;
+    analyticsEventId?: string;
+  }>({});
 
   const { progress, message, setMessage, updateProgress, reset, complete } =
     useUploadProgress();
@@ -48,11 +56,14 @@ const UploadPage: React.FC = () => {
         await uploadToS3(url, fields, file, (uploadProgress) => {
           updateProgress('UPLOAD', uploadProgress);
         });
+
+        // После успешной загрузки в S3
         timings.upload = Date.now() - uploadStart;
 
-        // Этап 4: Обработка
+        // Этап 4: Обработка и транскрибирование
         const processingStart = Date.now();
-        await processFile(
+
+        const result = await processFile(
           {
             name: file.name,
             path: key,
@@ -65,6 +76,10 @@ const UploadPage: React.FC = () => {
             setMessage(processMessage);
           }
         );
+
+        // Сохраняем идентификаторы
+        setFileData(result);
+
         timings.processing = Date.now() - processingStart;
         timings.total = Date.now() - timings.start;
 
@@ -86,6 +101,17 @@ const UploadPage: React.FC = () => {
         complete();
       } catch (error) {
         console.error('❌ Upload error:', error);
+
+        // Если у нас есть идентификаторы и произошла ошибка, обновляем статус в аналитике
+        if (fileData.fileId && fileData.analyticsEventId) {
+          await trackFileStatusChange({
+            fileId: fileData.fileId,
+            uploadEventId: fileData.analyticsEventId,
+            status: 'error',
+            error: parseErrorMessage(error),
+          });
+        }
+
         reset();
         throw error;
       }

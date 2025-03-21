@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
   }
 
   const supabase = createClient();
+  const adminClient = createClient({ useServiceRole: true });
   const deepgram = createDeepgramClient(process.env.DEEPGRAM_API_KEY);
 
   const {
@@ -72,12 +73,28 @@ export async function POST(request: NextRequest) {
           );
         }
 
+        // Создаем событие аналитики для загруженного файла
+        // Это говорит о том, что файл физически загружен в S3
+        const { data: analyticsEvent } = await adminClient
+          .from('FileUploadEvent')
+          .insert({
+            fileId: newFile.id,
+            fileName: name,
+            fileSize: size,
+            status: 'uploaded',
+            userId: user.id,
+          })
+          .select('id')
+          .single();
+
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
               JSON.stringify({
                 progress: UPLOAD_STAGES.PRESIGN,
-                message: 'File record created',
+                message: `File record created (fileId: ${newFile.id}, analyticsEventId: ${analyticsEvent?.id})`,
+                fileId: newFile.id,
+                analyticsEventId: analyticsEvent?.id,
               }) +
               '\n\n'
           )
@@ -93,6 +110,7 @@ export async function POST(request: NextRequest) {
               JSON.stringify({
                 progress: UPLOAD_STAGES.PREPARING,
                 message: 'Preparing transcription',
+                fileId: newFile.id,
               }) +
               '\n\n'
           )
@@ -125,6 +143,7 @@ export async function POST(request: NextRequest) {
               JSON.stringify({
                 progress: UPLOAD_STAGES.PROCESSING,
                 message: 'Transcription process started',
+                fileId: newFile.id,
               }) +
               '\n\n'
           )
@@ -169,6 +188,7 @@ export async function POST(request: NextRequest) {
               JSON.stringify({
                 progress: UPLOAD_STAGES.COMPLETED,
                 message: 'Process completed',
+                fileId: newFile.id,
               }) +
               '\n\n'
           )
@@ -178,7 +198,10 @@ export async function POST(request: NextRequest) {
         controller.enqueue(
           encoder.encode(
             'event: complete\ndata: ' +
-              JSON.stringify({ success: true }) +
+              JSON.stringify({
+                success: true,
+                fileId: newFile.id,
+              }) +
               '\n\n'
           )
         );
