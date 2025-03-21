@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react';
 import { CellContext } from '@tanstack/react-table';
 import { Spinner } from '@/components/ui/spinner';
 import { File, Status } from '@/schema/models';
-import DataTable from '@/components/ui/table';
+import DataTable, { CustomColumnDef } from '@/components/ui/table';
 import { FileCard } from './FileCard';
 import FileStatus from './FileStatus';
 import CollectionFileActions from './CollectionFileActions';
@@ -42,41 +42,56 @@ const CollectionFiles: FC = () => {
     loadFiles();
   }, []);
 
-  // Определяем колонки, как в FileList
-  const columns = [
+  // Определяем колонки
+  const columns: CustomColumnDef<File>[] = [
     {
       id: 'name',
       header: 'Название',
       accessorKey: 'name',
       size: 400,
+      enableSorting: true,
       cell: (info: CellContext<File, string>) => (
         <span key={info.row.original.id}>{info.getValue()}</span>
       ),
     },
     {
-      id: 'status',
-      header: 'Статус',
-      accessorKey: 'status',
-      size: 120,
+      id: 'language',
+      header: 'Язык',
+      accessorKey: 'language',
+      size: 100,
+      enableSorting: true,
+      sortUndefined: 'last',
       cell: (info: CellContext<File, string>) => (
-        <FileStatus
-          key={info.row.original.id}
-          status={info.getValue() as Status}
-        />
+        <span key={info.row.original.id}>{info.getValue() || '-'}</span>
       ),
     },
     {
-      id: 'createdAt',
-      header: 'Дата загрузки',
-      accessorKey: 'createdAt',
-      size: 150,
-      cell: (info: CellContext<File, string>) =>
-        new Date(info.getValue()).toLocaleDateString(),
+      id: 'languageLevel',
+      header: 'Уровень',
+      accessorKey: 'languageLevel',
+      size: 100,
+      enableSorting: true,
+      sortUndefined: 'last',
+      cell: (info: CellContext<File, string>) => (
+        <span key={info.row.original.id}>{info.getValue() || '-'}</span>
+      ),
+    },
+    {
+      id: 'contentType',
+      header: 'Тип контента',
+      accessorKey: 'contentType',
+      size: 120,
+      enableSorting: true,
+      sortUndefined: 'last',
+      cell: (info: CellContext<File, string>) => (
+        <span key={info.row.original.id}>{info.getValue() || '-'}</span>
+      ),
     },
     {
       id: 'actions',
       header: '',
       size: 100,
+      enableSorting: false,
       cell: (info: CellContext<File, string>) => (
         <CollectionFileActions
           fileId={info.row.original.id}

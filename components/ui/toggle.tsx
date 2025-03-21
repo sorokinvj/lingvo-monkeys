@@ -24,7 +24,7 @@ const Toggle: React.FC<ToggleProps> = ({
         }}
       />
       <div
-        className={`block bg-gray-300 w-10 h-6 rounded-full ${checked ? 'bg-blue-500' : ''}`}
+        className={`block w-10 h-6 rounded-full ${checked ? 'bg-blue-500' : 'bg-gray-300'}`}
         onClick={() => {
           onChange(!checked);
         }}

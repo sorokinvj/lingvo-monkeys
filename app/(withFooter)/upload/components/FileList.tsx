@@ -163,6 +163,7 @@ const FileList: FC = () => {
   if (files && files.length > 0) {
     return (
       <>
+        <h1 className="text-3xl font-sans mb-4 text-gray-700">Ваши файлы</h1>
         <div className="mb-4 flex justify-end">
           <Button
             variant="outline"

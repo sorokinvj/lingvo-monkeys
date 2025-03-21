@@ -173,7 +173,6 @@ const UploadPage: React.FC = () => {
         )}
       </div>
       <div className="mt-4 md:mt-8 order-1 md:order-2">
-        <h1 className="text-3xl font-sans mb-4 text-gray-700">Ваши файлы</h1>
         <FileList />
       </div>
       <AudiobookSources />

@@ -8,11 +8,14 @@ import {
   ColumnDef,
   VisibilityState,
   PaginationState,
+  SortDirection,
+  SortingState,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { TablePagination } from './pagination';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { cn } from '@/lib/utils';
+import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
 
 export type CustomColumnMeta = {
   isCustomerInfo?: boolean;
@@ -50,6 +53,9 @@ const GenericTable = <T extends { id: string | number }>({
     pageSize,
   });
 
+  // Добавляем состояние сортировки
+  const [sorting, setSorting] = useState<SortingState>(defaultSort);
+
   const table = useReactTable({
     data,
     columns,
@@ -57,10 +63,11 @@ const GenericTable = <T extends { id: string | number }>({
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     state: {
-      sorting: defaultSort,
+      sorting,
       pagination,
       columnVisibility,
     },
+    onSortingChange: setSorting,
     onPaginationChange: setPagination,
     getRowId: (row) => row.id.toString(),
   });
@@ -70,6 +77,18 @@ const GenericTable = <T extends { id: string | number }>({
   if (data.length === 0 && EmptyComponent) {
     return <EmptyComponent />;
   }
+
+  // Функция отображения иконки сортировки
+  const renderSortIcon = (isSorted: false | SortDirection) => {
+    if (!isSorted) {
+      return <ArrowUpDown size={16} className="ml-2 text-gray-400" />;
+    }
+    return isSorted === 'asc' ? (
+      <ArrowUp size={16} className="ml-2 text-gray-700" />
+    ) : (
+      <ArrowDown size={16} className="ml-2 text-gray-700" />
+    );
+  };
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -83,8 +102,11 @@ const GenericTable = <T extends { id: string | number }>({
                   <tr key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       const width = header.column.getSize();
-                      console.log('width for header', header.id, width);
-                      const headerClassName = clsx('p-4 text-left bg-white');
+                      const canSort = header.column.getCanSort();
+                      const headerClassName = clsx('p-4 text-left bg-white', {
+                        'cursor-pointer select-none': canSort,
+                      });
+
                       return (
                         <th
                           key={header.id}
@@ -93,13 +115,22 @@ const GenericTable = <T extends { id: string | number }>({
                             width: `${width}px`,
                             minWidth: `${width}px`,
                           }}
+                          onClick={
+                            canSort
+                              ? header.column.getToggleSortingHandler()
+                              : undefined
+                          }
                         >
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                          <div className="flex items-center">
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                            {canSort &&
+                              renderSortIcon(header.column.getIsSorted())}
+                          </div>
                         </th>
                       );
                     })}
