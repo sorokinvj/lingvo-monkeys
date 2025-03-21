@@ -8,7 +8,8 @@ export type AnalyticsEvent = {
     | 'player_interaction'
     | 'transcript_interaction'
     | 'settings_change'
-    | 'page_view';
+    | 'page_view'
+    | 'file_status_change';
   data: Record<string, any>;
 };
 
@@ -43,11 +44,43 @@ export async function POST(req: NextRequest) {
     try {
       const supabaseAdmin = createClient({ useServiceRole: true });
       let table = '';
+      let response;
+
+      // Специальная обработка для обновления статуса файла
+      if (
+        event.eventType === 'file_status_change' &&
+        event.data.fileId &&
+        event.data.uploadEventId
+      ) {
+        const { data, error } = await supabaseAdmin
+          .from('FileUploadEvent')
+          .update({
+            status: event.data.status,
+            ...(event.data.error ? { errorMessage: event.data.error } : {}),
+          })
+          .eq('id', event.data.uploadEventId)
+          .eq('fileId', event.data.fileId)
+          .eq('userId', user.id)
+          .select('id')
+          .single();
+
+        if (error) {
+          console.error('Error updating file status:', error);
+          return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({
+          success: true,
+          id: data?.id,
+        });
+      }
 
       // Определяем таблицу на основе типа события
       switch (event.eventType) {
         case 'file_upload':
           table = 'FileUploadEvent';
+          // Добавляем статус при создании записи о загрузке
+          dataWithUser.status = dataWithUser.status || 'uploading';
           break;
         case 'file_listening':
           table = 'FileListeningEvent';
@@ -55,8 +88,11 @@ export async function POST(req: NextRequest) {
         case 'player_interaction':
           table = 'PlayerInteractionEvent';
           break;
-        case 'transcript_interaction':
-          table = 'TranscriptInteractionEvent';
+        case 'transcript_interaction': // Перенаправляем в PlayerInteractionEvent
+          table = 'PlayerInteractionEvent';
+          // Добавляем source для отличия от обычных взаимодействий с плеером
+          dataWithUser.source = 'transcript';
+          dataWithUser.actionType = 'transcript_seek';
           break;
         case 'settings_change':
           table = 'SettingsChangeEvent';
@@ -94,9 +130,40 @@ export async function POST(req: NextRequest) {
       // Если не удалось использовать сервисную роль, пробуем обычного клиента
       let error;
 
+      // Специальная обработка для обновления статуса файла через обычный клиент
+      if (
+        event.eventType === 'file_status_change' &&
+        event.data.fileId &&
+        event.data.uploadEventId
+      ) {
+        const { data, error } = await supabase
+          .from('FileUploadEvent')
+          .update({
+            status: event.data.status,
+            ...(event.data.error ? { errorMessage: event.data.error } : {}),
+          })
+          .eq('id', event.data.uploadEventId)
+          .eq('fileId', event.data.fileId)
+          .eq('userId', user.id)
+          .select('id')
+          .single();
+
+        if (error) {
+          console.error('Error updating file status:', error);
+          return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({
+          success: true,
+          id: data?.id,
+        });
+      }
+
       // Сохраняем событие в соответствующую таблицу
       switch (event.eventType) {
         case 'file_upload':
+          // Добавляем статус при создании записи о загрузке
+          dataWithUser.status = dataWithUser.status || 'uploading';
           const { error: uploadError } = await supabase
             .from('FileUploadEvent')
             .insert(dataWithUser);
@@ -117,9 +184,11 @@ export async function POST(req: NextRequest) {
           error = playerError;
           break;
 
-        case 'transcript_interaction':
+        case 'transcript_interaction': // Перенаправляем в PlayerInteractionEvent
+          dataWithUser.source = 'transcript';
+          dataWithUser.actionType = 'transcript_seek';
           const { error: transcriptError } = await supabase
-            .from('TranscriptInteractionEvent')
+            .from('PlayerInteractionEvent')
             .insert(dataWithUser);
           error = transcriptError;
           break;
