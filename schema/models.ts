@@ -20,6 +20,9 @@ export interface File {
   userId: string;
   status: Status;
   transcriptionId: string | null;
+  language?: string | null;
+  languageLevel?: string | null;
+  contentType?: string | null;
 }
 
 export interface Transcription {
