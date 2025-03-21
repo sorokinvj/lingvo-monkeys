@@ -180,7 +180,7 @@ export function Hero() {
         <img
           src="/landing/2_Arrow_1.jpg"
           alt="Arrow"
-          className="h-12 md:h-24"
+          className="w-[32px] h-[79px]"
         />
         <img
           src="/landing/2_Arrow_3.jpg"
@@ -190,7 +190,7 @@ export function Hero() {
         <img
           src="/landing/2_Arrow_2.jpg"
           alt="Arrow"
-          className="h-12 md:h-24"
+          className="w-[44px] h-[79px]"
         />
       </div>
     </section>
