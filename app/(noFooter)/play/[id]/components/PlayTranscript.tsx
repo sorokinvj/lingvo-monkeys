@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Settings2 } from 'lucide-react';
 import Transcript from './Transcript';
@@ -8,6 +8,8 @@ import Player from './Player';
 import { createClient } from '@/utils/supabase/client';
 import { Drawer } from '@/components/ui/drawer';
 import Settings from './Settings';
+import { useParams } from 'next/navigation';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 const fetchTranscription = async (transcriptionId: string) => {
   const supabase = createClient();
@@ -42,6 +44,10 @@ type Props = {
 
 const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const params = useParams();
+  const fileId = typeof params.id === 'string' ? params.id : '';
+  const { trackPlayerInteraction } = useAnalytics();
+
   const { data: transcript } = useQuery({
     queryKey: ['transcription', transcriptionId],
     queryFn: () => fetchTranscription(transcriptionId),
@@ -57,9 +63,35 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
   );
   const [currentTimeMS, setCurrentTimeMS] = useState(0);
   const [shouldScrollToWord, setShouldScrollToWord] = useState(false);
+  const [totalDuration, setTotalDuration] = useState<number | null>(null);
 
-  const handleWordClick = (time: number) => {
-    setJumpToPositionMS(time * 1000);
+  const handleDurationReady = useCallback((duration: number) => {
+    setTotalDuration(duration);
+  }, []);
+
+  const handleWordClick = (time: number, wordIndex?: number) => {
+    const timeInSeconds = time;
+    const timeInMs = time * 1000;
+
+    // Отправляем событие аналитики
+    trackPlayerInteraction({
+      fileId,
+      actionType: 'seek',
+      position: timeInSeconds,
+      metadata: {
+        source: 'transcript',
+        wordIndex: wordIndex,
+        method: 'word_click',
+        positionPercent: totalDuration
+          ? Math.round((timeInSeconds / totalDuration) * 100)
+          : null,
+        totalDuration: totalDuration || null,
+        fileName: fileInfo?.name || null,
+      },
+    });
+
+    // Устанавливаем позицию для перехода
+    setJumpToPositionMS(timeInMs);
   };
 
   const handleTimeUpdate = useCallback((timeMS: number) => {
@@ -110,9 +142,11 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
         <div className="fixed w-full left-0 bottom-0 right-0 md:bottom-6 md:left-8 md:right-8 mx-auto md:w-11/12 max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 md:p-4 z-50">
           <Player
             publicUrl={publicUrl}
+            fileId={fileId}
             jumpToPositionMS={jumpToPositionMS}
             onTimeUpdate={handleTimeUpdate}
             onWaveformSeek={handleWaveformSeek}
+            onDurationReady={handleDurationReady}
           />
         </div>
       </div>

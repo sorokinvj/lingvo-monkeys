@@ -11,6 +11,8 @@ interface PlayerProps {
   jumpToPositionMS?: number;
   onTimeUpdate?: (timeMS: number) => void;
   onWaveformSeek?: (timeMS: number) => void;
+  onDurationReady?: (duration: number) => void;
+  fileName?: string;
 }
 
 const Player: React.FC<PlayerProps> = ({
@@ -19,6 +21,8 @@ const Player: React.FC<PlayerProps> = ({
   jumpToPositionMS,
   onTimeUpdate,
   onWaveformSeek,
+  onDurationReady,
+  fileName,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
@@ -46,6 +50,10 @@ const Player: React.FC<PlayerProps> = ({
 
       wavesurferRef.current.on('ready', () => {
         setIsReady(true);
+
+        if (wavesurferRef.current && onDurationReady) {
+          onDurationReady(wavesurferRef.current.getDuration());
+        }
       });
 
       wavesurferRef.current.on('play', () => {
@@ -94,11 +102,20 @@ const Player: React.FC<PlayerProps> = ({
           const absoluteTime =
             relativePosition * wavesurferRef.current.getDuration();
           const timeMS = Math.floor(absoluteTime * 1000);
+          const totalDuration = wavesurferRef.current.getDuration();
+          const positionPercent = Math.round(relativePosition * 100);
 
           trackPlayerInteraction({
             fileId,
             actionType: 'seek',
             position: absoluteTime,
+            metadata: {
+              source: 'player',
+              method: 'waveform_click',
+              positionPercent,
+              totalDuration,
+              fileName: fileName || null,
+            },
           });
 
           onTimeUpdate?.(timeMS);
@@ -106,7 +123,15 @@ const Player: React.FC<PlayerProps> = ({
         }
       });
     }
-  }, [publicUrl, onTimeUpdate, onWaveformSeek, trackPlayerInteraction, fileId]);
+  }, [
+    publicUrl,
+    onTimeUpdate,
+    onWaveformSeek,
+    trackPlayerInteraction,
+    fileId,
+    onDurationReady,
+    fileName,
+  ]);
 
   useEffect(() => {
     initializeWaveSurfer();

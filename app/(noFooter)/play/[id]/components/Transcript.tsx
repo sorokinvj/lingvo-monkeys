@@ -7,7 +7,7 @@ import { setTimeout } from 'timers';
 type Props = {
   transcript?: FullTranscription | null;
   currentTimeMS: number;
-  onWordClick: (time: number) => void;
+  onWordClick: (time: number, wordIndex?: number) => void;
   shouldScrollToWord?: boolean;
 };
 
@@ -103,11 +103,11 @@ const Transcription: FC<Props> = ({
   );
 
   const handleWordClick = useCallback(
-    (event: React.MouseEvent, time: number) => {
+    (event: React.MouseEvent, time: number, wordIndex: number) => {
       event.preventDefault();
       event.stopPropagation();
       setClickCount((prev) => prev + 1);
-      onWordClick(time + clickCount * 0.0001);
+      onWordClick(time + clickCount * 0.0001, wordIndex);
     },
     [onWordClick, clickCount]
   );
@@ -181,7 +181,7 @@ const Transcription: FC<Props> = ({
               data-word-index={index}
               ref={(el) => applyWordStyles(el, index)}
               className="inline cursor-pointer px-0.5 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
-              onClick={(e) => handleWordClick(e, word.start)}
+              onClick={(e) => handleWordClick(e, word.start, index)}
               onMouseDown={(e) => e.preventDefault()}
               suppressHydrationWarning={true}
             >
