@@ -1,285 +1,273 @@
+import React from 'react';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
+
+// Интерфейсы для типизации данных
+interface UserFile {
+  id: string;
+  name: string;
+}
+
+interface Event {
+  id: string;
+  userId: string;
+  eventType: string;
+  createdAt: string;
+  [key: string]: any;
+}
+
+interface EventsResult {
+  uploadEvents: Event[];
+  listeningEvents: Event[];
+  playerEvents: Event[];
+  settingsEvents: Event[];
+  pageViewEvents: Event[];
+}
+
+interface UserAuditData {
+  user: { email: string; id: string };
+  files: UserFile[];
+  fileNames: Record<string, string>;
+  events: EventsResult;
+}
+
+// Функция для получения данных аудита пользователя через API
+async function getUserAuditData(email: string): Promise<UserAuditData> {
+  try {
+    // Запрос к API используя относительный путь
+    const response = await fetch(
+      `/api/admin/user-audit?email=${encodeURIComponent(email)}`,
+      { cache: 'no-store' }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error fetching user audit data:', errorData);
+      throw new Error(
+        `Failed to fetch user audit data: ${errorData.error || response.statusText}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error in getUserAuditData:', error);
+    throw error;
+  }
+}
+
+// Функция для получения описания события
+function getEventDescription(
+  event: Event,
+  fileNames: Record<string, string>
+): string {
+  const fileName =
+    event.fileName || fileNames[event.fileId] || 'Неизвестный файл';
+
+  switch (event.eventType) {
+    case 'file_upload':
+      return `Загрузил файл "${fileName}" - ${event.status}${event.error ? ` - Ошибка: ${event.error}` : ''}`;
+    case 'file_listening':
+      return `Прослушал "${fileName}" с ${event.startTime} по ${event.endTime}`;
+    case 'player_interaction':
+      return `Взаимодействие с плеером для файла "${fileName}" - ${event.action}`;
+    case 'settings_change':
+      return `Изменил настройки: ${event.setting} = ${event.value}`;
+    case 'page_view':
+      const duration = event.exitedAt
+        ? new Date(event.exitedAt).getTime() -
+          new Date(event.enteredAt).getTime()
+        : 'в процессе';
+      const formattedDuration =
+        typeof duration === 'number'
+          ? `${Math.floor(duration / 1000)} сек`
+          : duration;
+      return `Посетил страницу ${event.path} (${formattedDuration})`;
+    default:
+      return `Неизвестное событие: ${event.eventType}`;
+  }
+}
 
 export default async function UserAuditPage({
   params,
 }: {
   params: { email: string };
 }) {
-  const supabase = createClient();
-  const adminClient = createClient({ useServiceRole: true });
+  const email = decodeURIComponent(params.email);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  try {
+    // Проверяем права администратора
+    const supabase = createClient();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect('/sign-in');
-  }
+    if (userError || !user) {
+      console.error('Error authenticating user:', userError);
+      return (
+        <div className="p-4">
+          <h1 className="text-2xl font-bold mb-4">Ошибка авторизации</h1>
+          <p>Пожалуйста, войдите в систему.</p>
+        </div>
+      );
+    }
 
-  // Проверка на админа
-  const { data: userData } = await supabase
-    .from('User')
-    .select('email, id')
-    .eq('id', user.id)
-    .single();
+    const { data: userData } = await supabase
+      .from('User')
+      .select('email')
+      .eq('id', user.id)
+      .single();
 
-  const isAdmin =
-    userData?.email === 'sorokinvj@gmail.com' ||
-    userData?.email === 'bichiko@gmail.com';
+    const isAdmin =
+      userData?.email === 'sorokinvj@gmail.com' ||
+      userData?.email === 'bichiko@gmail.com';
 
-  if (!isAdmin) {
-    redirect('/');
-  }
+    if (!isAdmin) {
+      redirect('/');
+    }
 
-  // Получаем userId по email
-  const decodedEmail = decodeURIComponent(params.email);
+    // Получаем данные аудита пользователя через API
+    const auditData = await getUserAuditData(email);
 
-  const { data: targetUser } = await adminClient
-    .from('User')
-    .select('id, email')
-    .eq('email', decodedEmail)
-    .single();
-
-  if (!targetUser) {
-    return (
-      <div className="container py-10">
-        <h1 className="text-3xl font-bold mb-6">Пользователь не найден</h1>
-        <p>Пользователь с email {decodedEmail} не найден в системе</p>
-      </div>
-    );
-  }
-
-  // Получаем все события загрузки файлов пользователя
-  const { data: uploadEvents } = await adminClient
-    .from('FileUploadEvent')
-    .select('*')
-    .eq('userId', targetUser.id)
-    .order('createdAt', { ascending: false });
-
-  // Получаем все события прослушивания файлов
-  const { data: listeningEvents } = await adminClient
-    .from('FileListeningEvent')
-    .select('*')
-    .eq('userId', targetUser.id)
-    .order('createdAt', { ascending: false });
-
-  // Получаем все события взаимодействия с плеером
-  const { data: playerEvents } = await adminClient
-    .from('PlayerInteractionEvent')
-    .select('*')
-    .eq('userId', targetUser.id)
-    .order('createdAt', { ascending: false });
-
-  // Получаем все события изменения настроек
-  const { data: settingsEvents } = await adminClient
-    .from('SettingsChangeEvent')
-    .select('*')
-    .eq('userId', targetUser.id)
-    .order('createdAt', { ascending: false });
-
-  // Получаем все визиты страниц
-  const { data: pageViewEvents } = await adminClient
-    .from('PageViewEvent')
-    .select('*')
-    .eq('userId', targetUser.id)
-    .order('enteredAt', { ascending: false });
-
-  // Получаем все файлы пользователя для связывания с событиями
-  const { data: userFiles } = await adminClient
-    .from('File')
-    .select('id, name')
-    .eq('userId', targetUser.id);
-
-  // Создаем словарь для быстрого доступа к названиям файлов
-  const fileNames: Record<string, string> = {};
-  if (userFiles) {
-    userFiles.forEach((file) => {
-      fileNames[file.id] = file.name;
+    // Объединяем все события в один массив и сортируем по времени
+    const allEvents = [
+      ...auditData.events.uploadEvents,
+      ...auditData.events.listeningEvents,
+      ...auditData.events.playerEvents,
+      ...auditData.events.settingsEvents,
+      ...auditData.events.pageViewEvents,
+    ].sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
-  }
 
-  // Объединяем все события в один массив
-  const allEvents = [
-    ...(uploadEvents || []).map((event) => ({
-      ...event,
-      eventType: 'file_upload',
-      fileName: fileNames[event.fileId] || event.fileName || 'Неизвестный файл',
-    })),
-    ...(listeningEvents || []).map((event) => ({
-      ...event,
-      eventType: 'file_listening',
-      fileName: fileNames[event.fileId] || 'Неизвестный файл',
-    })),
-    ...(playerEvents || []).map((event) => ({
-      ...event,
-      eventType: 'player_interaction',
-      fileName: fileNames[event.fileId] || 'Неизвестный файл',
-    })),
-    ...(settingsEvents || []).map((event) => ({
-      ...event,
-      eventType: 'settings_change',
-    })),
-    ...(pageViewEvents || []).map((event) => ({
-      ...event,
-      eventType: 'page_view',
-      createdAt: event.enteredAt, // Для унификации сортировки
-    })),
-  ];
-
-  // Сортируем все события по времени (от новых к старым)
-  allEvents.sort((a, b) => {
-    const dateA = new Date(a.createdAt || a.startTime || a.enteredAt);
-    const dateB = new Date(b.createdAt || b.startTime || b.enteredAt);
-    return dateB.getTime() - dateA.getTime();
-  });
-
-  // Форматирование времени для отображения
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-  };
-
-  // Получение человекочитаемого описания события
-  const getEventDescription = (event: any) => {
-    switch (event.eventType) {
-      case 'file_upload':
-        return `Загрузка файла "${event.fileName}" (${Math.round(
-          event.fileSize / 1024 / 1024
-        )} МБ) - статус: ${event.status || 'неизвестен'}${
-          event.errorMessage ? ` - ошибка: ${event.errorMessage}` : ''
-        }`;
-      case 'file_listening':
-        return `Прослушивание файла "${event.fileName}"${
-          event.durationSeconds
-            ? ` (длительность: ${Math.floor(event.durationSeconds / 60)}:${(
-                event.durationSeconds % 60
-              )
-                .toString()
-                .padStart(2, '0')})`
-            : ''
-        }`;
-      case 'player_interaction':
-        return `${getActionTypeDescription(event.actionType)} "${
-          event.fileName
-        }"${
-          event.position !== undefined
-            ? ` (позиция: ${Math.floor(event.position)}с)`
-            : ''
-        }${event.value !== undefined ? ` (значение: ${event.value})` : ''}${
-          event.metadata && Object.keys(event.metadata).length > 0
-            ? ` - ${JSON.stringify(event.metadata)}`
-            : ''
-        }`;
-      case 'settings_change':
-        return `Изменение настройки "${event.settingKey}" с ${JSON.stringify(
-          event.oldValue
-        )} на ${JSON.stringify(event.newValue)}`;
-      case 'page_view':
-        const duration = event.duration
-          ? ` (время на странице: ${Math.floor(event.duration / 60)}:${(event.duration % 60).toString().padStart(2, '0')})`
-          : event.exitedAt
-            ? ` (время на странице: ${Math.floor((new Date(event.exitedAt).getTime() - new Date(event.enteredAt).getTime()) / 1000 / 60)}:${(Math.floor((new Date(event.exitedAt).getTime() - new Date(event.enteredAt).getTime()) / 1000) % 60).toString().padStart(2, '0')})`
-            : '';
-        return `Посещение страницы ${event.path}${duration}`;
-      default:
-        return `Неизвестное событие: ${event.eventType}`;
-    }
-  };
-
-  // Человекочитаемое описание типа действия с плеером
-  const getActionTypeDescription = (actionType: string) => {
-    switch (actionType) {
-      case 'play':
-        return 'Воспроизведение';
-      case 'pause':
-        return 'Пауза';
-      case 'seek':
-        return 'Перемотка';
-      case 'speed_change':
-        return 'Изменение скорости';
-      case 'playback_complete':
-        return 'Завершение прослушивания';
-      case 'transcript_seek':
-        return 'Клик по слову в транскрипции';
-      default:
-        return actionType;
-    }
-  };
-
-  return (
-    <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-6">
-        Аудит действий пользователя: {decodedEmail}
-      </h1>
-
-      <div className="mb-4">
-        <a
-          href="/admin"
-          className="text-blue-600 hover:underline flex items-center gap-1"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+    return (
+      <div className="p-4">
+        <div className="flex items-center mb-6">
+          <Link
+            href="/admin"
+            className="flex items-center text-blue-600 hover:text-blue-800 mr-4"
           >
-            <path d="M10 12L6 8L10 4" />
-          </svg>
-          Вернуться в админскую панель
-        </a>
-      </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Назад к админке
+          </Link>
+          <h1 className="text-2xl font-bold">Аудит пользователя: {email}</h1>
+        </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b dark:border-gray-700">
-                <th className="px-4 py-2 text-left">Время</th>
-                <th className="px-4 py-2 text-left">Тип события</th>
-                <th className="px-4 py-2 text-left">Описание</th>
+        <p className="mb-4">ID пользователя: {auditData.user.id}</p>
+
+        <h2 className="text-xl font-semibold mb-2">Файлы пользователя:</h2>
+        <div className="bg-white rounded-lg shadow p-4 mb-6">
+          {auditData.files.length > 0 ? (
+            <ul className="list-disc pl-5">
+              {auditData.files.map((file) => (
+                <li key={file.id}>
+                  {file.name} (ID: {file.id})
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>У пользователя нет файлов</p>
+          )}
+        </div>
+
+        <h2 className="text-xl font-semibold mb-2">Действия пользователя:</h2>
+        <div className="bg-white rounded-lg shadow overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Дата
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Действие
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Детали
+                </th>
               </tr>
             </thead>
-            <tbody>
-              {allEvents.length > 0 ? (
-                allEvents.map((event, index) => (
-                  <tr
-                    key={`${event.id}-${index}`}
-                    className={`border-b dark:border-gray-700 ${
-                      event.status === 'error' || event.errorMessage
-                        ? 'bg-red-50 dark:bg-red-900/20'
-                        : 'hover:bg-gray-50 dark:hover:bg-gray-700/20'
-                    }`}
-                  >
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      {formatDate(
-                        event.createdAt || event.startTime || event.enteredAt
+            <tbody className="bg-white divide-y divide-gray-200">
+              {allEvents.map((event) => {
+                const hasError = event.error || event.status === 'error';
+                return (
+                  <tr key={event.id} className={hasError ? 'bg-red-50' : ''}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(event.createdAt).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {getEventDescription(event, auditData.fileNames)}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      {JSON.stringify(
+                        Object.fromEntries(
+                          Object.entries(event).filter(
+                            ([key]) =>
+                              ![
+                                'id',
+                                'userId',
+                                'eventType',
+                                'createdAt',
+                                'fileName',
+                              ].includes(key)
+                          )
+                        ),
+                        null,
+                        2
                       )}
                     </td>
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      {event.eventType}
-                    </td>
-                    <td className="px-4 py-2 break-words">
-                      {getEventDescription(event)}
-                    </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={3} className="px-4 py-2 text-center">
-                    Действия пользователя не найдены
-                  </td>
-                </tr>
-              )}
+                );
+              })}
             </tbody>
           </table>
         </div>
       </div>
-    </div>
-  );
+    );
+  } catch (error) {
+    console.error('Error in UserAuditPage:', error);
+    return (
+      <div className="p-4">
+        <Link
+          href="/admin"
+          className="flex items-center text-blue-600 hover:text-blue-800 mb-6"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          Назад к админке
+        </Link>
+        <h1 className="text-2xl font-bold mb-4">
+          Ошибка при загрузке данных аудита
+        </h1>
+        <p className="text-red-500">
+          {error instanceof Error ? error.message : 'Неизвестная ошибка'}
+        </p>
+      </div>
+    );
+  }
 }

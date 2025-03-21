@@ -1,6 +1,37 @@
 import { useRef, useCallback } from 'react';
 import { useAnalytics } from './useAnalytics';
-import debounce from 'lodash/debounce';
+
+// Custom debounce implementation
+interface DebouncedFunction<F extends (...args: any[]) => any> {
+  (...args: Parameters<F>): void;
+  cancel: () => void;
+}
+
+function debounce<F extends (...args: any[]) => any>(
+  func: F,
+  wait: number
+): DebouncedFunction<F> {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  const debounced = (...args: Parameters<F>) => {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      func(...args);
+      timeoutId = null;
+    }, wait);
+  };
+
+  debounced.cancel = () => {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+  };
+
+  return debounced as DebouncedFunction<F>;
+}
 
 interface SettingsChangeOptions {
   debounceMs?: number;
