@@ -3,19 +3,26 @@ import React, { useRef, useEffect, useState, useCallback } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import { Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import dayjs from 'dayjs';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 interface PlayerProps {
   publicUrl: string;
+  fileId: string;
   jumpToPositionMS?: number;
   onTimeUpdate?: (timeMS: number) => void;
   onWaveformSeek?: (timeMS: number) => void;
+  onDurationReady?: (duration: number) => void;
+  fileName?: string;
 }
 
 const Player: React.FC<PlayerProps> = ({
   publicUrl,
+  fileId,
   jumpToPositionMS,
   onTimeUpdate,
   onWaveformSeek,
+  onDurationReady,
+  fileName,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
@@ -24,6 +31,8 @@ const Player: React.FC<PlayerProps> = ({
   const [isReady, setIsReady] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [loadingProgress, setLoadingProgress] = useState(0);
+
+  const { trackPlayerInteraction } = useAnalytics();
 
   const initializeWaveSurfer = useCallback(() => {
     if (containerRef.current && !wavesurferRef.current) {
@@ -41,29 +50,98 @@ const Player: React.FC<PlayerProps> = ({
 
       wavesurferRef.current.on('ready', () => {
         setIsReady(true);
+
+        if (wavesurferRef.current && onDurationReady) {
+          onDurationReady(wavesurferRef.current.getDuration());
+        }
       });
 
-      wavesurferRef.current.on('play', () => setIsPlaying(true));
-      wavesurferRef.current.on('pause', () => setIsPlaying(false));
+      wavesurferRef.current.on('play', () => {
+        setIsPlaying(true);
+        trackPlayerInteraction({
+          fileId,
+          fileName: fileName || 'Unknown File',
+          actionType: 'play',
+          position: wavesurferRef.current?.getCurrentTime() || 0,
+        });
+      });
+
+      wavesurferRef.current.on('pause', () => {
+        setIsPlaying(false);
+        trackPlayerInteraction({
+          fileId,
+          fileName: fileName || 'Unknown File',
+          actionType: 'pause',
+          position: wavesurferRef.current?.getCurrentTime() || 0,
+        });
+      });
+
       wavesurferRef.current.on('timeupdate', (currentTime) => {
         setCurrentTime(currentTime);
         onTimeUpdate?.(Math.floor(currentTime * 1000));
       });
+
       wavesurferRef.current.on('loading', (progress) => {
         setLoadingProgress(progress);
       });
 
-      // Add click handler
+      wavesurferRef.current.on('finish', () => {
+        trackPlayerInteraction({
+          fileId,
+          fileName: fileName || 'Unknown File',
+          actionType: 'playback_complete',
+          position: currentTime,
+          metadata: {
+            method: 'auto',
+            totalDuration: wavesurferRef.current?.getDuration() || 0,
+          },
+        });
+      });
+
       wavesurferRef.current.on('click', (relativePosition) => {
-        const absoluteTime =
-          relativePosition * wavesurferRef.current!.getDuration();
-        const timeMS = Math.floor(absoluteTime * 1000);
-        onTimeUpdate?.(timeMS);
-        // Call separate callback for waveform seek
-        onWaveformSeek?.(timeMS);
+        if (typeof relativePosition === 'number' && wavesurferRef.current) {
+          const absoluteTime =
+            relativePosition * wavesurferRef.current.getDuration();
+          const timeMS = Math.floor(absoluteTime * 1000);
+          const totalDuration = wavesurferRef.current.getDuration();
+          const positionPercent = Math.round(relativePosition * 100);
+
+          trackPlayerInteraction({
+            fileId,
+            fileName: fileName || 'Unknown File',
+            actionType: 'seek',
+            position: absoluteTime,
+            metadata: {
+              source: 'transcript',
+              method: 'click',
+              positionPercent,
+              totalDuration,
+            },
+          });
+
+          onTimeUpdate?.(timeMS);
+          onWaveformSeek?.(timeMS);
+        }
+      });
+
+      wavesurferRef.current.on('seeking', () => {
+        trackPlayerInteraction({
+          fileId,
+          fileName: fileName || 'Unknown File',
+          actionType: 'seek',
+          position: wavesurferRef.current?.getCurrentTime() || 0,
+        });
       });
     }
-  }, [publicUrl, onTimeUpdate, onWaveformSeek]);
+  }, [
+    publicUrl,
+    onTimeUpdate,
+    onWaveformSeek,
+    trackPlayerInteraction,
+    fileId,
+    onDurationReady,
+    fileName,
+  ]);
 
   useEffect(() => {
     initializeWaveSurfer();
@@ -97,16 +175,31 @@ const Player: React.FC<PlayerProps> = ({
     return dayjs().startOf('day').millisecond(timeInMs).format('HH:mm:ss.SSS');
   };
 
-  const changePlaybackRate = useCallback((increment: boolean) => {
-    if (wavesurferRef.current) {
-      setPlaybackRate((prevRate) => {
-        const newRate = increment ? prevRate + 0.1 : prevRate - 0.1;
-        const roundedRate = Number(newRate.toFixed(1));
-        wavesurferRef.current?.setPlaybackRate(roundedRate);
-        return roundedRate;
-      });
-    }
-  }, []);
+  const changePlaybackRate = useCallback(
+    (increment: boolean) => {
+      if (wavesurferRef.current) {
+        setPlaybackRate((prevRate) => {
+          const newRate = increment ? prevRate + 0.1 : prevRate - 0.1;
+          const roundedRate = Number(newRate.toFixed(1));
+          wavesurferRef.current?.setPlaybackRate(roundedRate);
+
+          trackPlayerInteraction({
+            fileId,
+            fileName: fileName || 'Unknown File',
+            actionType: 'speed_change',
+            position: wavesurferRef.current?.getCurrentTime() || 0,
+            metadata: {
+              oldRate: prevRate,
+              newRate: roundedRate,
+            },
+          });
+
+          return roundedRate;
+        });
+      }
+    },
+    [trackPlayerInteraction, fileId, fileName]
+  );
 
   return (
     <div className="flex flex-col md:space-y-2">

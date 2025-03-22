@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Tables, Columns } from '@/schema/schema';
 import { createClient } from '@/utils/supabase/server';
 
 export async function POST(request: NextRequest) {
@@ -14,6 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = createClient();
+    const adminClient = createClient({ useServiceRole: true });
 
     const body = await request.json();
     console.log('Received callback body:', body);
@@ -25,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     // Update the Transcription record with the results
     const { data: transcriptionData, error } = await supabase
-      .from('Transcription')
+      .from(Tables.TRANSCRIPTION)
       .update({
         content: transcript,
         isTranscribing: false,
@@ -46,12 +48,14 @@ export async function POST(request: NextRequest) {
     const updatedTranscription = transcriptionData[0]; // It's an array, so we take the first item
 
     // Update the File record with the new transcriptionId and status
-    const { error: updateFileError } = await supabase
-      .from('File')
+    const { data: fileData, error: updateFileError } = await supabase
+      .from(Tables.FILE)
       .update({
         status: 'transcribed',
       })
-      .eq('id', updatedTranscription.fileId);
+      .eq('id', updatedTranscription.fileId)
+      .select('id')
+      .single();
 
     if (updateFileError) {
       console.error('Error updating File record:', updateFileError);
@@ -59,6 +63,26 @@ export async function POST(request: NextRequest) {
         { error: 'Error updating File record' },
         { status: 500 }
       );
+    }
+
+    // Найдем последнее событие загрузки для этого файла
+    const { data: uploadEvent, error: findEventError } = await adminClient
+      .from(Tables.FILE_UPLOAD_EVENT)
+      .select('id')
+      .eq(Columns.UPLOAD_EVENT.FILE_ID, fileData.id)
+      .order('createdAt', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (!findEventError && uploadEvent) {
+      // Обновим статус события загрузки на "transcribed"
+      await adminClient
+        .from(Tables.FILE_UPLOAD_EVENT)
+        .update({
+          status: 'transcribed',
+        })
+        .eq('id', uploadEvent.id)
+        .eq(Columns.UPLOAD_EVENT.FILE_ID, fileData.id);
     }
 
     return NextResponse.json({ success: true });

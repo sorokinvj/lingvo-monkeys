@@ -9,6 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/ui-table';
+import Link from 'next/link';
+import { InfoIcon } from 'lucide-react';
 
 interface UserStat {
   id: string;
@@ -88,8 +90,9 @@ export function UserStatsTable() {
     description: string;
   }) => (
     <div className="group relative">
-      <div>
-        {title} <span className="cursor-help text-gray-400">ℹ️</span>
+      <div className="flex items-center gap-2 justify-end">
+        {title}
+        <InfoIcon className="w-4 h-4" />
       </div>
       <div className="absolute left-0 top-full z-10 mt-1 hidden w-64 rounded-md bg-black p-2 text-xs text-white shadow-lg group-hover:block">
         {description}
@@ -99,22 +102,9 @@ export function UserStatsTable() {
 
   return (
     <div className="overflow-x-auto">
-      <div className="p-4 mb-4 text-sm text-gray-500 border-b">
-        <p className="mb-2">
-          <strong>Описание метрик:</strong>
-        </p>
-        <ul className="list-disc pl-5 space-y-1">
-          {Object.entries(METRIC_DESCRIPTIONS).map(([key, desc]) => (
-            <li key={key}>
-              <strong>{key}:</strong> {desc}
-            </li>
-          ))}
-        </ul>
-      </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Имя</TableHead>
             <TableHead>Email</TableHead>
             <TableHead className="text-right">
               <HeaderWithTooltip
@@ -145,8 +135,9 @@ export function UserStatsTable() {
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id}>
-              <TableCell className="font-medium">{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
+              <TableCell>
+                <Link href={`/admin/${user.email}`}>{user.email}</Link>
+              </TableCell>
               <TableCell className="text-right">{user.minutesPerDay}</TableCell>
               <TableCell className="text-right">{user.totalFiles}</TableCell>
               <TableCell className="text-right">

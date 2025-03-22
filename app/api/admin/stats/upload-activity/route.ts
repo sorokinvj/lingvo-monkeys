@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { Tables } from '@/schema/schema';
 import { NextResponse } from 'next/server';
 
 /**
@@ -33,7 +34,7 @@ export async function GET() {
 
   // Check if user is admin
   const { data: userData } = await supabase
-    .from('User')
+    .from(Tables.USER)
     .select('email')
     .eq('id', user.id)
     .single();
@@ -56,7 +57,7 @@ export async function GET() {
 
     // Get uploaded files grouped by day
     const { data } = await supabase
-      .from('File')
+      .from(Tables.FILE)
       .select('createdAt')
       .gte('createdAt', thirtyDaysAgo.toISOString())
       .order('createdAt', { ascending: true });

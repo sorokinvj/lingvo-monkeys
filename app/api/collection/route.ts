@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { Tables, Columns } from '@/schema/schema';
 import { NextResponse } from 'next/server';
 
 // Email пользователя, владеющего коллекцией
@@ -10,7 +11,7 @@ export async function GET() {
   try {
     // Находим пользователя в таблице User по email
     const { data: userData, error: userError } = await supabase
-      .from('User')
+      .from(Tables.USER)
       .select('id')
       .eq('email', COLLECTION_OWNER_EMAIL)
       .single();
@@ -27,9 +28,9 @@ export async function GET() {
 
     // Загружаем все файлы пользователя
     const { data: files, error: filesError } = await supabase
-      .from('File')
+      .from(Tables.FILE)
       .select('*')
-      .eq('userId', userData.id)
+      .eq(Columns.COMMON.USER_ID, userData.id)
       .order('createdAt', { ascending: false });
 
     if (filesError) {

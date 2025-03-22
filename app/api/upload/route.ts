@@ -1,5 +1,6 @@
 // file: app/api/upload/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { Tables, Columns } from '@/schema/schema';
 import { createClient } from '@/utils/supabase/server';
 import {
   createClient as createDeepgramClient,
@@ -20,6 +21,7 @@ export async function POST(request: NextRequest) {
   }
 
   const supabase = createClient();
+  const adminClient = createClient({ useServiceRole: true });
   const deepgram = createDeepgramClient(process.env.DEEPGRAM_API_KEY);
 
   const {
@@ -53,7 +55,7 @@ export async function POST(request: NextRequest) {
 
         // Create File record in database
         const { data: newFile, error: insertError } = await supabase
-          .from('File')
+          .from(Tables.FILE)
           .insert({
             name,
             path,
@@ -72,12 +74,28 @@ export async function POST(request: NextRequest) {
           );
         }
 
+        // Создаем событие аналитики для загруженного файла
+        // Это говорит о том, что файл физически загружен в S3
+        const { data: analyticsEvent } = await adminClient
+          .from(Tables.FILE_UPLOAD_EVENT)
+          .insert({
+            fileId: newFile.id,
+            fileName: name,
+            fileSize: size,
+            status: 'uploaded',
+            userId: user.id,
+          })
+          .select('id')
+          .single();
+
         controller.enqueue(
           encoder.encode(
             'event: progress\ndata: ' +
               JSON.stringify({
                 progress: UPLOAD_STAGES.PRESIGN,
-                message: 'File record created',
+                message: `File record created (fileId: ${newFile.id}, analyticsEventId: ${analyticsEvent?.id})`,
+                fileId: newFile.id,
+                analyticsEventId: analyticsEvent?.id,
               }) +
               '\n\n'
           )
@@ -93,6 +111,7 @@ export async function POST(request: NextRequest) {
               JSON.stringify({
                 progress: UPLOAD_STAGES.PREPARING,
                 message: 'Preparing transcription',
+                fileId: newFile.id,
               }) +
               '\n\n'
           )
@@ -125,6 +144,7 @@ export async function POST(request: NextRequest) {
               JSON.stringify({
                 progress: UPLOAD_STAGES.PROCESSING,
                 message: 'Transcription process started',
+                fileId: newFile.id,
               }) +
               '\n\n'
           )
@@ -133,7 +153,7 @@ export async function POST(request: NextRequest) {
         // Create Transcription record after receiving request_id
         const { data: transcriptionData, error: transcriptionError } =
           await supabase
-            .from('Transcription')
+            .from(Tables.TRANSCRIPTION)
             .insert({
               id: result.request_id,
               isTranscribing: true,
@@ -152,7 +172,7 @@ export async function POST(request: NextRequest) {
 
         // Update the File record with the new transcriptionId
         const { error: updateFileError } = await supabase
-          .from('File')
+          .from(Tables.FILE)
           .update({ transcriptionId: transcriptionData.id })
           .eq('id', newFile.id);
 
@@ -169,6 +189,7 @@ export async function POST(request: NextRequest) {
               JSON.stringify({
                 progress: UPLOAD_STAGES.COMPLETED,
                 message: 'Process completed',
+                fileId: newFile.id,
               }) +
               '\n\n'
           )
@@ -178,7 +199,10 @@ export async function POST(request: NextRequest) {
         controller.enqueue(
           encoder.encode(
             'event: complete\ndata: ' +
-              JSON.stringify({ success: true }) +
+              JSON.stringify({
+                success: true,
+                fileId: newFile.id,
+              }) +
               '\n\n'
           )
         );
