@@ -6,7 +6,7 @@ import {
   dehydrate,
 } from '@tanstack/react-query';
 import UserAuditPage from './components/UserAuditPage';
-import { fetchUserAuditData, fetchUserAuditDataServer } from './helpers';
+import { fetchUserAuditData } from './components/helpers';
 import { isAdminEmail } from '../helpers';
 
 export default async function UserAudit({
@@ -37,7 +37,7 @@ export default async function UserAudit({
   try {
     await queryClient.prefetchQuery({
       queryKey: ['userAudit', email],
-      queryFn: () => fetchUserAuditDataServer(email, user?.email),
+      queryFn: () => fetchUserAuditData(email, user?.email),
     });
   } catch (error) {
     console.error('Failed to prefetch user audit data:', error);

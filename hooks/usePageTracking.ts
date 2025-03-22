@@ -27,7 +27,6 @@ export function usePageTracking() {
   // Функция для обновления времени выхода со страницы (синхронная версия)
   const updatePageExit = useCallback(async (viewId: string) => {
     try {
-      console.log('Sending page exit for ID:', viewId);
       // Используем navigator.sendBeacon для гарантированной отправки перед выгрузкой страницы
       if (navigator.sendBeacon) {
         const blob = new Blob([JSON.stringify({ pageViewId: viewId })], {
@@ -56,7 +55,6 @@ export function usePageTracking() {
   // Функция для создания записи о просмотре страницы
   const createPageView = useCallback(async (path: string) => {
     try {
-      console.log('Creating page view for path:', path);
       const response = await fetch('/api/analytics/track', {
         method: 'POST',
         headers: {
@@ -80,7 +78,6 @@ export function usePageTracking() {
 
       // Получаем ID созданной записи
       const data = await response.json();
-      console.log('Page view created:', data);
 
       if (data.success && data.id) {
         setPageViewId(data.id);
@@ -108,10 +105,6 @@ export function usePageTracking() {
       previousPathname.current !== pathname &&
       previousPageViewRef.current
     ) {
-      console.log(
-        'Path changed, updating exit for previous path',
-        previousPathname.current
-      );
       updatePageExit(previousPageViewRef.current);
 
       // Сбрасываем предыдущий ID после отправки
@@ -163,11 +156,7 @@ export function usePageTracking() {
           },
           body: JSON.stringify({ pageViewId }),
         });
-        // Сокращаем частоту логирования
-        // console.log('Heartbeat sent for ID:', pageViewId);
-      } catch (error) {
-        console.error('Failed to send heartbeat:', error);
-      }
+      } catch (error) {}
     };
 
     // Отправляем сигнал каждые 10 секунд
