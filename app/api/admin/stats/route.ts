@@ -1,4 +1,5 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { Tables, Columns } from '@/schema/schema';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
@@ -8,7 +9,7 @@ async function isAdmin(userId: string) {
 
   // Get the user's email
   const { data: userData } = await supabase
-    .from('User')
+    .from(Tables.USER)
     .select('email')
     .eq('id', userId)
     .single();
@@ -51,12 +52,12 @@ export async function GET() {
   try {
     // Count total users
     const { count: userCount } = await supabase
-      .from('User')
+      .from(Tables.USER)
       .select('*', { count: 'exact', head: true });
 
     // Count total files
     const { count: fileCount } = await supabase
-      .from('File')
+      .from(Tables.FILE)
       .select('*', { count: 'exact', head: true });
 
     // Get today's date at midnight
@@ -65,7 +66,7 @@ export async function GET() {
 
     // Count files uploaded today
     const { count: filesToday } = await supabase
-      .from('File')
+      .from(Tables.FILE)
       .select('*', { count: 'exact', head: true })
       .gte('createdAt', today.toISOString());
 
@@ -76,7 +77,7 @@ export async function GET() {
 
     // Count files uploaded in the last 7 days
     const { count: filesWeek } = await supabase
-      .from('File')
+      .from(Tables.FILE)
       .select('*', { count: 'exact', head: true })
       .gte('createdAt', weekAgo.toISOString());
 

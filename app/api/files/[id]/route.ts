@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Tables, Columns } from '@/schema/schema';
 import { createClient } from '@/utils/supabase/server';
 import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
@@ -35,7 +36,7 @@ export async function DELETE(
 
   // Fetch the file details
   const { data: file, error: fetchError } = await supabase
-    .from('File')
+    .from(Tables.FILE)
     .select('path, transcriptionId')
     .eq('id', fileId)
     .single();
@@ -65,7 +66,7 @@ export async function DELETE(
 
   // Delete the file record
   const { error: fileError } = await supabase
-    .from('File')
+    .from(Tables.FILE)
     .delete()
     .eq('id', fileId);
 
@@ -79,7 +80,7 @@ export async function DELETE(
   // Delete the transcription record
   if (file.transcriptionId) {
     const { error: transcriptionError } = await supabase
-      .from('Transcription')
+      .from(Tables.TRANSCRIPTION)
       .delete()
       .eq('id', file.transcriptionId);
 

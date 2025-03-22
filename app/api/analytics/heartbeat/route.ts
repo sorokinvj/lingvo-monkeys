@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { Tables, Columns } from '@/schema/schema';
 import { NextRequest, NextResponse } from 'next/server';
 
 type HeartbeatPayload = {
@@ -31,13 +32,13 @@ export async function POST(req: NextRequest) {
       const supabaseAdmin = createClient({ useServiceRole: true });
 
       const { error } = await supabaseAdmin
-        .from('PageViewEvent')
+        .from(Tables.PAGE_VIEW_EVENT)
         .update({
           lastActivityAt: new Date().toISOString(),
           isActive: true,
         })
         .eq('id', pageViewId)
-        .eq('userId', user.id); // Всё равно проверяем принадлежность записи пользователю
+        .eq(Columns.COMMON.USER_ID, user.id); // Всё равно проверяем принадлежность записи пользователю
 
       if (error) {
         console.error('Error updating heartbeat (admin):', error);
@@ -51,13 +52,13 @@ export async function POST(req: NextRequest) {
 
       // Обновляем lastActivityAt и устанавливаем isActive в true
       const { error } = await supabase
-        .from('PageViewEvent')
+        .from(Tables.PAGE_VIEW_EVENT)
         .update({
           lastActivityAt: new Date().toISOString(),
           isActive: true,
         })
         .eq('id', pageViewId)
-        .eq('userId', user.id); // Убеждаемся, что запись принадлежит текущему пользователю
+        .eq(Columns.COMMON.USER_ID, user.id); // Убеждаемся, что запись принадлежит текущему пользователю
 
       if (error) {
         console.error('Error updating heartbeat:', error);

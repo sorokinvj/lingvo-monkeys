@@ -1,5 +1,6 @@
 // file: app/api/upload/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { Tables, Columns } from '@/schema/schema';
 import { createClient } from '@/utils/supabase/server';
 import {
   createClient as createDeepgramClient,
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
 
         // Create File record in database
         const { data: newFile, error: insertError } = await supabase
-          .from('File')
+          .from(Tables.FILE)
           .insert({
             name,
             path,
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
         // Создаем событие аналитики для загруженного файла
         // Это говорит о том, что файл физически загружен в S3
         const { data: analyticsEvent } = await adminClient
-          .from('FileUploadEvent')
+          .from(Tables.FILE_UPLOAD_EVENT)
           .insert({
             fileId: newFile.id,
             fileName: name,
@@ -152,7 +153,7 @@ export async function POST(request: NextRequest) {
         // Create Transcription record after receiving request_id
         const { data: transcriptionData, error: transcriptionError } =
           await supabase
-            .from('Transcription')
+            .from(Tables.TRANSCRIPTION)
             .insert({
               id: result.request_id,
               isTranscribing: true,
@@ -171,7 +172,7 @@ export async function POST(request: NextRequest) {
 
         // Update the File record with the new transcriptionId
         const { error: updateFileError } = await supabase
-          .from('File')
+          .from(Tables.FILE)
           .update({ transcriptionId: transcriptionData.id })
           .eq('id', newFile.id);
 

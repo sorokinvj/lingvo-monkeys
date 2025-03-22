@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { Tables, Columns } from '@/schema/schema';
 import { NextRequest, NextResponse } from 'next/server';
 
 export type AnalyticsEvent = {
@@ -49,14 +50,14 @@ export async function POST(req: NextRequest) {
       event.data.uploadEventId
     ) {
       const { data, error } = await supabaseAdmin
-        .from('FileUploadEvent')
+        .from(Tables.FILE_UPLOAD_EVENT)
         .update({
           status: event.data.status,
           ...(event.data.error ? { errorMessage: event.data.error } : {}),
         })
         .eq('id', event.data.uploadEventId)
-        .eq('fileId', event.data.fileId)
-        .eq('userId', user.id)
+        .eq(Columns.COMMON.FILE_ID, event.data.fileId)
+        .eq(Columns.COMMON.USER_ID, user.id)
         .select('id')
         .single();
 

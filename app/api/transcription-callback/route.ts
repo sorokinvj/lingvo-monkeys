@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Tables, Columns } from '@/schema/schema';
 import { createClient } from '@/utils/supabase/server';
 
 export async function POST(request: NextRequest) {
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     // Update the Transcription record with the results
     const { data: transcriptionData, error } = await supabase
-      .from('Transcription')
+      .from(Tables.TRANSCRIPTION)
       .update({
         content: transcript,
         isTranscribing: false,
@@ -48,7 +49,7 @@ export async function POST(request: NextRequest) {
 
     // Update the File record with the new transcriptionId and status
     const { data: fileData, error: updateFileError } = await supabase
-      .from('File')
+      .from(Tables.FILE)
       .update({
         status: 'transcribed',
       })
@@ -66,9 +67,9 @@ export async function POST(request: NextRequest) {
 
     // Найдем последнее событие загрузки для этого файла
     const { data: uploadEvent, error: findEventError } = await adminClient
-      .from('FileUploadEvent')
+      .from(Tables.FILE_UPLOAD_EVENT)
       .select('id')
-      .eq('fileId', fileData.id)
+      .eq(Columns.COMMON.FILE_ID, fileData.id)
       .order('createdAt', { ascending: false })
       .limit(1)
       .single();
@@ -76,12 +77,12 @@ export async function POST(request: NextRequest) {
     if (!findEventError && uploadEvent) {
       // Обновим статус события загрузки на "transcribed"
       await adminClient
-        .from('FileUploadEvent')
+        .from(Tables.FILE_UPLOAD_EVENT)
         .update({
           status: 'transcribed',
         })
         .eq('id', uploadEvent.id)
-        .eq('fileId', fileData.id);
+        .eq(Columns.COMMON.FILE_ID, fileData.id);
     }
 
     return NextResponse.json({ success: true });

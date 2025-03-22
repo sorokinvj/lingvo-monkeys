@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { Tables, Columns } from '@/schema/schema';
 import { NextRequest, NextResponse } from 'next/server';
 
 type PageExitPayload = {
@@ -32,10 +33,10 @@ export async function POST(req: NextRequest) {
 
       // Получаем текущую запись
       const { data: pageView, error: fetchError } = await supabaseAdmin
-        .from('PageViewEvent')
+        .from(Tables.PAGE_VIEW_EVENT)
         .select('enteredAt')
         .eq('id', pageViewId)
-        .eq('userId', user.id)
+        .eq(Columns.COMMON.USER_ID, user.id)
         .single();
 
       if (fetchError) {
@@ -51,14 +52,14 @@ export async function POST(req: NextRequest) {
 
       // Обновляем запись с данными о выходе
       const { error } = await supabaseAdmin
-        .from('PageViewEvent')
+        .from(Tables.PAGE_VIEW_EVENT)
         .update({
           isActive: false,
           exitedAt: exitedAt.toISOString(),
           duration: durationSeconds,
         })
         .eq('id', pageViewId)
-        .eq('userId', user.id);
+        .eq(Columns.COMMON.USER_ID, user.id);
 
       if (error) {
         console.error('Error updating page exit (admin):', error);
@@ -72,10 +73,10 @@ export async function POST(req: NextRequest) {
 
       // Получаем текущую запись
       const { data: pageView, error: fetchError } = await supabase
-        .from('PageViewEvent')
+        .from(Tables.PAGE_VIEW_EVENT)
         .select('enteredAt')
         .eq('id', pageViewId)
-        .eq('userId', user.id)
+        .eq(Columns.COMMON.USER_ID, user.id)
         .single();
 
       if (fetchError) {
@@ -94,14 +95,14 @@ export async function POST(req: NextRequest) {
 
       // Обновляем запись с данными о выходе
       const { error } = await supabase
-        .from('PageViewEvent')
+        .from(Tables.PAGE_VIEW_EVENT)
         .update({
           isActive: false,
           exitedAt: exitedAt.toISOString(),
           duration: durationSeconds,
         })
         .eq('id', pageViewId)
-        .eq('userId', user.id);
+        .eq(Columns.COMMON.USER_ID, user.id);
 
       if (error) {
         console.error('Error updating page exit:', error);

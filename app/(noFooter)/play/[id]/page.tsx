@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { Tables, Columns } from '@/schema/schema';
 import {
   dehydrate,
   HydrationBoundary,
@@ -11,7 +12,7 @@ export default async function PlayPage({ params }: { params: { id: string } }) {
 
   // Fetch the file record
   const { data: file, error: fileError } = await supabase
-    .from('File')
+    .from(Tables.FILE)
     .select('*')
     .eq('id', params.id)
     .single();

@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/client';
+import { Tables, Columns } from '@/schema/schema';
 import { useQueryClient, useQuery } from '@tanstack/react-query';
 import { File } from '@/schema/models';
 
@@ -9,9 +10,9 @@ export const useFiles = (userId: string | undefined) => {
     queryFn: async () => {
       if (!userId) throw new Error('User ID is required');
       const { data, error } = await supabase
-        .from('File')
+        .from(Tables.FILE)
         .select('*')
-        .eq('userId', userId)
+        .eq(Columns.COMMON.USER_ID, userId)
         .order('createdAt', { ascending: false });
 
       if (error) throw error;

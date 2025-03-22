@@ -1,4 +1,5 @@
 import UploadPage from './components/UploadPage';
+import { Tables, Columns } from '@/schema/schema';
 import { createClient } from '@/utils/supabase/server';
 
 import {
@@ -29,9 +30,9 @@ export default async function Upload() {
     queryKey: ['files', user.id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('File')
+        .from(Tables.FILE)
         .select('*')
-        .eq('userId', user.id)
+        .eq(Columns.COMMON.USER_ID, user.id)
         .order('createdAt', { ascending: false });
 
       if (error) throw error;

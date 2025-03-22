@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
+import { Tables, Columns } from '@/schema/schema';
 import { useQuery } from '@tanstack/react-query';
 import { Settings2 } from 'lucide-react';
 import Transcript from './Transcript';
@@ -14,7 +15,7 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 const fetchTranscription = async (transcriptionId: string) => {
   const supabase = createClient();
   const { data: transcript, error } = await supabase
-    .from('Transcription')
+    .from(Tables.TRANSCRIPTION)
     .select('*')
     .eq('id', transcriptionId)
     .single();
@@ -27,7 +28,7 @@ const fetchTranscription = async (transcriptionId: string) => {
 const fetchFileInfo = async (transcriptionId: string) => {
   const supabase = createClient();
   const { data: file, error } = await supabase
-    .from('File')
+    .from(Tables.FILE)
     .select('name')
     .eq('transcriptionId', transcriptionId)
     .single();

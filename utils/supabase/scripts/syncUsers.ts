@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { Tables, Columns } from '@/schema/schema';
 const parsed = dotenv.config({ path: '.env.local' });
 
 import { createClient } from '@supabase/supabase-js';
@@ -42,7 +43,7 @@ async function syncUsers() {
 
   for (const authUser of authUsers.users) {
     const { data: existingUser, error: checkError } = await supabase
-      .from('User')
+      .from(Tables.USER)
       .select('id')
       .eq('id', authUser.id)
       .single();
@@ -53,7 +54,7 @@ async function syncUsers() {
     }
 
     if (!existingUser) {
-      const { error: insertError } = await supabase.from('User').insert({
+      const { error: insertError } = await supabase.from(Tables.USER).insert({
         id: authUser.id,
         name: authUser.user_metadata.full_name || 'Anonymous',
         email: authUser.email,

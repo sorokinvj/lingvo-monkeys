@@ -1,5 +1,6 @@
 // migrations/storage-migration.ts
 import dotenv from 'dotenv';
+import { Tables, Columns } from '@/schema/schema';
 const parsed = dotenv.config({ path: '.env.local' });
 
 import { createClient } from '@supabase/supabase-js';
@@ -76,7 +77,7 @@ async function migrateFiles(isDryRun = true) {
 
     // Проверяем подключение к Supabase
     const { data: testConnection, error: connectionError } = await supabase
-      .from('File')
+      .from(Tables.FILE)
       .select('*', { count: 'exact', head: true });
     if (connectionError)
       throw new Error(`Cannot connect to Supabase: ${connectionError.message}`);
@@ -90,7 +91,7 @@ async function migrateFiles(isDryRun = true) {
 
     // Получаем все файлы и делаем предварительный анализ
     const { data: files, error } = await supabase
-      .from('File')
+      .from(Tables.FILE)
       .select('*')
       .returns<File[]>();
 
@@ -249,7 +250,7 @@ async function migrateFiles(isDryRun = true) {
 
         // Обновляем запись в базе
         const { error: updateError } = await supabase
-          .from('File')
+          .from(Tables.FILE)
           .update({
             publicUrl: newUrl,
             path: key,
@@ -288,7 +289,7 @@ async function migrateFiles(isDryRun = true) {
 
 async function generateMigrationReport() {
   const { data: files, error } = await supabase
-    .from('File')
+    .from(Tables.FILE)
     .select('*')
     .returns<File[]>();
 
