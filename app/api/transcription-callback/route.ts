@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     const { data: uploadEvent, error: findEventError } = await adminClient
       .from(Tables.FILE_UPLOAD_EVENT)
       .select('id')
-      .eq(Columns.COMMON.FILE_ID, fileData.id)
+      .eq(Columns.UPLOAD_EVENT.FILE_ID, fileData.id)
       .order('createdAt', { ascending: false })
       .limit(1)
       .single();
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
           status: 'transcribed',
         })
         .eq('id', uploadEvent.id)
-        .eq(Columns.COMMON.FILE_ID, fileData.id);
+        .eq(Columns.UPLOAD_EVENT.FILE_ID, fileData.id);
     }
 
     return NextResponse.json({ success: true });
