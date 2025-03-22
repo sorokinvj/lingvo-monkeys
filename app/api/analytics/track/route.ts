@@ -30,6 +30,11 @@ export async function POST(req: NextRequest) {
 
     const event: AnalyticsEvent = await req.json();
 
+    console.log('Received analytics event:', {
+      type: event.eventType,
+      data: JSON.stringify(event.data).substring(0, 200), // Логируем только начало данных
+    });
+
     if (!event.eventType || !event.data) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -56,7 +61,7 @@ export async function POST(req: NextRequest) {
           ...(event.data.error ? { errorMessage: event.data.error } : {}),
         })
         .eq('id', event.data.uploadEventId)
-        .eq(Columns.COMMON.FILE_ID, event.data.fileId)
+        .eq(Columns.UPLOAD_EVENT.FILE_ID, event.data.fileId)
         .eq(Columns.COMMON.USER_ID, user.id)
         .select('id')
         .single();

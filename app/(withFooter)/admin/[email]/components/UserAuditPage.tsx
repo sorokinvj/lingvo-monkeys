@@ -85,7 +85,7 @@ export default function UserAuditPage({ email }: { email: string }) {
         </svg>
         Назад к админке
       </Link>
-      <h1 className="text-2xl font-bold">Действия пользователя: {email}</h1>
+      <h1 className="text-2xl font-bold">{email}</h1>
 
       {/* Статистика */}
       <StatisticsSection auditData={auditData} />

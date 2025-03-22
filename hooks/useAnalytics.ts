@@ -109,8 +109,9 @@ export function useAnalytics() {
    * Трекинг взаимодействия с плеером
    */
   const trackPlayerInteraction = useCallback(
-    (data: {
+    async (data: {
       fileId: string;
+      fileName: string;
       actionType:
         | 'play'
         | 'pause'
@@ -118,15 +119,42 @@ export function useAnalytics() {
         | 'speed_change'
         | 'playback_complete';
       position?: number;
-      value?: number;
       metadata?: Record<string, any>;
     }) => {
-      return trackEvent({
-        eventType: 'player_interaction',
-        data,
-      });
+      try {
+        console.log(
+          `Tracking player interaction: ${data.actionType} at position ${data.position}`
+        );
+
+        const response = await fetch('/api/analytics/track', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            eventType: 'player_interaction',
+            data,
+          }),
+        });
+
+        // Клонируем response для двойного чтения
+        const clonedResponse = response.clone();
+
+        if (!response.ok) {
+          const errorText = await clonedResponse.text();
+          console.error('Error tracking event:', errorText);
+          return { error: errorText };
+        }
+
+        const result = await response.json();
+        console.log('Tracking result:', result);
+        return result;
+      } catch (error) {
+        console.error('Failed to track player interaction:', error);
+        return { error };
+      }
     },
-    [trackEvent]
+    []
   );
 
   /**

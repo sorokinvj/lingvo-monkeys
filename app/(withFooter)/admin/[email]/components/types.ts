@@ -15,18 +15,11 @@ export interface UploadEvent extends BaseEvent {
   fileType?: string;
 }
 
-export interface ListeningEvent extends BaseEvent {
-  eventType: 'file_listening';
-  fileId: string;
-  fileName?: string;
-  duration?: number;
-  position?: number;
-}
-
 export interface PlayerEvent extends BaseEvent {
   eventType: 'player_interaction';
   actionType: 'play' | 'pause' | 'seek' | 'speed' | string;
   fileId?: string;
+  fileName?: string;
   position?: number;
   speed?: number;
 }
@@ -45,10 +38,26 @@ export interface PageViewEvent extends BaseEvent {
   duration?: number;
 }
 
+// Интерфейс для агрегированной статистики
+export interface UserDailyStats {
+  totalSeconds: number;
+  totalFilesListened: number;
+  streak: number;
+  dailyStats?: Array<{
+    date: string;
+    totalListeningSeconds: number;
+    totalFilesUploaded: number;
+    filesListened: Array<{
+      fileId: string;
+      fileName: string;
+      seconds: number;
+    }>;
+  }>;
+}
+
 // Объединенный тип для всех событий
 export type AnalyticsEvent =
   | UploadEvent
-  | ListeningEvent
   | PlayerEvent
   | SettingsEvent
   | PageViewEvent;
@@ -56,8 +65,8 @@ export type AnalyticsEvent =
 // Структура ответа API
 export interface UserAuditData {
   upload_events: UploadEvent[];
-  listening_events: ListeningEvent[];
   player_events: PlayerEvent[];
   settings_events: SettingsEvent[];
   page_view_events: PageViewEvent[];
+  daily_stats?: UserDailyStats;
 }

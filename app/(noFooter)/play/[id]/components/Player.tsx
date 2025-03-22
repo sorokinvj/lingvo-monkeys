@@ -58,27 +58,21 @@ const Player: React.FC<PlayerProps> = ({
 
       wavesurferRef.current.on('play', () => {
         setIsPlaying(true);
-
         trackPlayerInteraction({
           fileId,
+          fileName: fileName || 'Unknown File',
           actionType: 'play',
           position: wavesurferRef.current?.getCurrentTime() || 0,
-          metadata: {
-            fileName: fileName || null,
-          },
         });
       });
 
       wavesurferRef.current.on('pause', () => {
         setIsPlaying(false);
-
         trackPlayerInteraction({
           fileId,
+          fileName: fileName || 'Unknown File',
           actionType: 'pause',
           position: wavesurferRef.current?.getCurrentTime() || 0,
-          metadata: {
-            fileName: fileName || null,
-          },
         });
       });
 
@@ -94,12 +88,12 @@ const Player: React.FC<PlayerProps> = ({
       wavesurferRef.current.on('finish', () => {
         trackPlayerInteraction({
           fileId,
+          fileName: fileName || 'Unknown File',
           actionType: 'playback_complete',
-          position: wavesurferRef.current?.getDuration() || 0,
+          position: currentTime,
           metadata: {
-            method: 'automatic',
+            method: 'auto',
             totalDuration: wavesurferRef.current?.getDuration() || 0,
-            fileName: fileName || null,
           },
         });
       });
@@ -114,20 +108,29 @@ const Player: React.FC<PlayerProps> = ({
 
           trackPlayerInteraction({
             fileId,
+            fileName: fileName || 'Unknown File',
             actionType: 'seek',
             position: absoluteTime,
             metadata: {
-              source: 'player',
-              method: 'waveform_click',
+              source: 'transcript',
+              method: 'click',
               positionPercent,
               totalDuration,
-              fileName: fileName || null,
             },
           });
 
           onTimeUpdate?.(timeMS);
           onWaveformSeek?.(timeMS);
         }
+      });
+
+      wavesurferRef.current.on('seeking', () => {
+        trackPlayerInteraction({
+          fileId,
+          fileName: fileName || 'Unknown File',
+          actionType: 'seek',
+          position: wavesurferRef.current?.getCurrentTime() || 0,
+        });
       });
     }
   }, [
@@ -182,12 +185,12 @@ const Player: React.FC<PlayerProps> = ({
 
           trackPlayerInteraction({
             fileId,
+            fileName: fileName || 'Unknown File',
             actionType: 'speed_change',
-            value: roundedRate,
+            position: wavesurferRef.current?.getCurrentTime() || 0,
             metadata: {
               oldRate: prevRate,
               newRate: roundedRate,
-              fileName: fileName || null,
             },
           });
 

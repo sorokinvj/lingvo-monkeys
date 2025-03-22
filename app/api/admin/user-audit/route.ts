@@ -49,6 +49,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     );
 
     if (eventsError) {
+      console.error('RPC ERROR', eventsError);
       return NextResponse.json(
         {
           data: null,
@@ -61,6 +62,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // Возвращаем типизированный ответ
     return NextResponse.json(events as UserAuditData);
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       {
         data: null,

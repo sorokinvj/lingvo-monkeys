@@ -48,11 +48,6 @@ export const processUserAuditData = (
     eventType: 'file_upload' as const,
   }));
 
-  const listeningEvents = auditData.listening_events.map((event) => ({
-    ...event,
-    eventType: 'file_listening' as const,
-  }));
-
   const playerEvents = auditData.player_events.map((event) => ({
     ...event,
     eventType: 'player_interaction' as const,
@@ -71,7 +66,6 @@ export const processUserAuditData = (
   // Объединяем все события в один массив и сортируем по времени
   const events = [
     ...uploadEvents,
-    ...listeningEvents,
     ...playerEvents,
     ...settingsEvents,
     ...pageViewEvents,
@@ -103,9 +97,6 @@ export const getEventDescription = (
   switch (event.eventType) {
     case 'file_upload':
       return `Загружен файл: ${fileName}`;
-
-    case 'file_listening':
-      return `Прослушивание файла: ${fileName}`;
 
     case 'player_interaction':
       const actionMap: Record<string, string> = {
@@ -144,7 +135,12 @@ export const fetchUserAuditData = async (
       throw new Error('You must be logged in as admin to view audit data');
     }
 
-    const response = await fetch(`/api/admin/user-audit?email=${email}`);
+    // Используем абсолютный URL с origin
+    const apiUrl = new URL(
+      `/api/admin/user-audit?email=${email}`,
+      window.location.origin
+    ).toString();
+    const response = await fetch(apiUrl);
 
     if (!response.ok) {
       const errorData = await response.json();

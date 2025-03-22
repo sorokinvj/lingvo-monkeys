@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/ui-table';
+import Link from 'next/link';
 
 interface UserStat {
   id: string;
@@ -145,7 +146,9 @@ export function UserStatsTable() {
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id}>
-              <TableCell className="font-medium">{user.name}</TableCell>
+              <TableCell className="font-medium">
+                <Link href={`/admin/${user.email}`}>{user.name}</Link>
+              </TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell className="text-right">{user.minutesPerDay}</TableCell>
               <TableCell className="text-right">{user.totalFiles}</TableCell>
