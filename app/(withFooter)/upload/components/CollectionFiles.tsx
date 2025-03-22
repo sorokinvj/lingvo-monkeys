@@ -78,7 +78,7 @@ const CollectionFiles: FC = () => {
     },
     {
       id: 'contentType',
-      header: 'Тип контента',
+      header: 'Жанр',
       accessorKey: 'contentType',
       size: 120,
       enableSorting: true,
@@ -120,17 +120,12 @@ const CollectionFiles: FC = () => {
   }
 
   return (
-    <>
-      <h2 className="mb-4 text-xl font-medium text-gray-900">
-        Коллекция Lingvo Monkeys
-      </h2>
-      <DataTable
-        data={collectionFiles}
-        columns={columns}
-        defaultSort={[{ id: 'createdAt', desc: true }]}
-        MobileComponent={FileCard}
-      />
-    </>
+    <DataTable
+      data={collectionFiles}
+      columns={columns}
+      defaultSort={[{ id: 'createdAt', desc: true }]}
+      MobileComponent={FileCard}
+    />
   );
 };
 

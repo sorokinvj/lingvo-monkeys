@@ -53,8 +53,8 @@ export const Header: FC = () => {
   return (
     <header
       className={`
-      bg-white z-20 shadow-header md:relative w-full md:max-w-6xl md:mx-auto md:translate-x-0 md:right-auto rounded-full mx-auto
-      transition-all duration-300 ease-in-out flex items-center justify-between px-4 py-4 pr-2 md:py-8 md:pr-0
+      bg-white z-20 md:relative w-full md:max-w-6xl md:mx-auto md:translate-x-0 md:right-auto rounded-full mx-auto
+      transition-all duration-300 ease-in-out flex items-center justify-between p-4 pr-2 md:px-0 md:py-8
       ${isCollapsed ? 'max-md:!w-14 max-md:!right-4 max-md:!left-auto max-md:!translate-x-0 max-md:!mx-0 max-md:!p-0' : ''}
     `}
     >
