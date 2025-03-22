@@ -17,13 +17,17 @@ const FileStatus: React.FC<FileStatusProps> = ({ status }) => {
         error: 'bg-red-100 text-red-800',
       }[status] || 'bg-gray-100 text-gray-800';
 
-    const statusText =
-      status === 'transcribed'
-        ? 'Ready'
-        : status?.charAt(0).toUpperCase() + status?.slice(1);
+    const statusTextMap = {
+      pending: 'Ожидание',
+      transcribing: 'Транскрибация',
+      transcribed: 'Готово',
+      error: 'Ошибка',
+    };
 
     return (
-      <span className={`${baseClasses} ${statusStyles}`}>{statusText}</span>
+      <span className={`${baseClasses} ${statusStyles}`}>
+        {statusTextMap[status]}
+      </span>
     );
   };
 

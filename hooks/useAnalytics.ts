@@ -122,10 +122,6 @@ export function useAnalytics() {
       metadata?: Record<string, any>;
     }) => {
       try {
-        console.log(
-          `Tracking player interaction: ${data.actionType} at position ${data.position}`
-        );
-
         const response = await fetch('/api/analytics/track', {
           method: 'POST',
           headers: {
@@ -147,7 +143,6 @@ export function useAnalytics() {
         }
 
         const result = await response.json();
-        console.log('Tracking result:', result);
         return result;
       } catch (error) {
         console.error('Failed to track player interaction:', error);

@@ -75,7 +75,9 @@ const FileList: FC = () => {
       accessorKey: 'name',
       size: 400,
       cell: (info: CellContext<File, string>) => (
-        <span key={info.row.original.id}>{info.getValue()}</span>
+        <Link href={`/play/${info.row.original.id}`} key={info.row.original.id}>
+          {info.getValue()}
+        </Link>
       ),
     },
     {
