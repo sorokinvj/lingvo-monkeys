@@ -20,19 +20,16 @@ export default async function Admin() {
     redirect('/sign-in');
   }
 
-  if (!isAdminEmail(user?.email)) {
+  // Проверка на админа
+  const { data: userData } = await supabase
+    .from('User')
+    .select('email')
+    .eq('id', user.id)
+    .single();
+
+  if (!isAdminEmail(userData?.email)) {
     redirect('/');
   }
 
-  // Создаем клиент запросов
-  const queryClient = new QueryClient();
-
-  // Здесь можно предзагрузить данные для админ-панели
-  // (например, статистику и пр.)
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <AdminPage />
-    </HydrationBoundary>
-  );
+  return <AdminPage />;
 }

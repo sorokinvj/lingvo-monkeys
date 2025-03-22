@@ -8,17 +8,6 @@ import { UserStatsTable } from '@/components/user-stats-table';
 import { UserActivityChart } from '@/components/user-activity-chart';
 
 export default function AdminPage() {
-  const router = useRouter();
-  const [searchEmail, setSearchEmail] = useState('');
-
-  // Обработчик поиска пользователя
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchEmail) {
-      router.push(`/admin/${encodeURIComponent(searchEmail)}`);
-    }
-  };
-
   return (
     <div className="container py-10">
       <h1 className="text-3xl font-bold mb-10">Админ панель</h1>
@@ -38,35 +27,7 @@ export default function AdminPage() {
             endpoint="/api/admin/stats/files"
             description="Всего загружено"
           />
-          <StatsCard
-            title="Прослушиваний"
-            value="0"
-            endpoint="/api/admin/stats/listening"
-            description="Всего за все время"
-          />
         </div>
-      </div>
-
-      <div className="mb-10">
-        <h2 className="text-2xl font-bold mb-5">
-          Поиск пользователя для аудита
-        </h2>
-        <form onSubmit={handleSearch} className="flex gap-2 mb-4">
-          <input
-            type="email"
-            value={searchEmail}
-            onChange={(e) => setSearchEmail(e.target.value)}
-            placeholder="Email пользователя"
-            className="flex-1 p-2 border rounded"
-            required
-          />
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Поиск
-          </button>
-        </form>
       </div>
 
       <div className="mb-10">
@@ -78,14 +39,8 @@ export default function AdminPage() {
       </div>
 
       <div className="mb-10">
-        <h2 className="text-2xl font-bold mb-5">Активные пользователи</h2>
+        <h2 className="text-2xl font-bold mb-5">Все пользователи</h2>
         <UserStatsTable />
-      </div>
-
-      <div className="mt-10">
-        <Link href="/" className="text-blue-600 hover:underline">
-          Вернуться на главную
-        </Link>
       </div>
     </div>
   );
