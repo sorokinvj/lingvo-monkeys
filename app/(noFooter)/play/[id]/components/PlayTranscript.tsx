@@ -77,6 +77,7 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
     // Отправляем событие аналитики
     trackPlayerInteraction({
       fileId,
+      fileName: fileInfo?.name || 'Unknown File',
       actionType: 'seek',
       position: timeInSeconds,
       metadata: {
@@ -87,7 +88,6 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
           ? Math.round((timeInSeconds / totalDuration) * 100)
           : null,
         totalDuration: totalDuration || null,
-        fileName: fileInfo?.name || null,
       },
     });
 
