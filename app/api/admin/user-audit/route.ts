@@ -3,6 +3,9 @@ import { createClient } from '@/utils/supabase/server';
 import { Tables, Columns } from '@/schema/schema';
 import { UserAuditData } from '@/app/(withFooter)/admin/[email]/components/types';
 
+// Mark this route as dynamic to prevent static generation errors
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const adminClient = createClient({ useServiceRole: true });

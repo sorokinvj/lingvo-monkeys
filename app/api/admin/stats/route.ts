@@ -3,6 +3,9 @@ import { Tables, Columns } from '@/schema/schema';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
+// Mark this route as dynamic to prevent static generation errors
+export const dynamic = 'force-dynamic';
+
 // Helper function to check if a user is an admin
 async function isAdmin(userId: string) {
   const supabase = createRouteHandlerClient({ cookies });
