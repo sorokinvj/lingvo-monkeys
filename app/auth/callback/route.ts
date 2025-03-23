@@ -10,6 +10,9 @@ export async function GET(request: Request) {
   const origin = requestUrl.origin;
   const firstSignIn = requestUrl.searchParams.get('firstSignIn');
   const redirectTo = requestUrl.searchParams.get('redirect_to');
+  const token = requestUrl.searchParams.get('token');
+  const type = requestUrl.searchParams.get('type');
+  const email = requestUrl.searchParams.get('email');
 
   if (code) {
     const supabase = createClient();
@@ -17,7 +20,18 @@ export async function GET(request: Request) {
   }
 
   // If redirect_to parameter exists, use it; otherwise default to upload
-  const redirectPath =
+  let redirectPath =
     redirectTo || `/upload${firstSignIn ? `?firstSignIn=${firstSignIn}` : ''}`;
+
+  // For password reset flow, preserve token, type, and email parameters
+  if (redirectTo && redirectTo.includes('reset-password') && token) {
+    const params = new URLSearchParams();
+    if (token) params.append('token', token);
+    if (type) params.append('type', type);
+    if (email) params.append('email', email);
+
+    redirectPath = `${redirectTo}?${params.toString()}`;
+  }
+
   return NextResponse.redirect(`${origin}${redirectPath}`);
 }
