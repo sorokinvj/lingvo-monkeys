@@ -9,13 +9,15 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get('code');
   const origin = requestUrl.origin;
   const firstSignIn = requestUrl.searchParams.get('firstSignIn');
+  const redirectTo = requestUrl.searchParams.get('redirect_to');
 
   if (code) {
     const supabase = createClient();
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  return NextResponse.redirect(
-    `${origin}/upload${firstSignIn ? `?firstSignIn=${firstSignIn}` : ''}`
-  );
+  // If redirect_to parameter exists, use it; otherwise default to upload
+  const redirectPath =
+    redirectTo || `/upload${firstSignIn ? `?firstSignIn=${firstSignIn}` : ''}`;
+  return NextResponse.redirect(`${origin}${redirectPath}`);
 }
