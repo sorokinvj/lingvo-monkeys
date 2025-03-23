@@ -4,6 +4,7 @@ import { encodedRedirect } from '@/utils/utils';
 import { createClient } from '@/utils/supabase/server';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { error } from 'console';
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get('email')?.toString();
@@ -55,7 +56,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   const callbackUrl = formData.get('callbackUrl')?.toString();
 
   if (!email) {
-    return encodedRedirect('error', '/forgot-password', 'Email is required');
+    return { error: 'Email is required' };
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -64,22 +65,16 @@ export const forgotPasswordAction = async (formData: FormData) => {
 
   if (error) {
     console.error(error.message);
-    return encodedRedirect(
-      'error',
-      '/forgot-password',
-      'Could not reset password'
-    );
+    return { error: 'Could not reset password' };
   }
 
   if (callbackUrl) {
     return redirect(callbackUrl);
   }
 
-  return encodedRedirect(
-    'success',
-    '/forgot-password',
-    'Мы отправили вам ссылку для восстановления пароля на почту'
-  );
+  return {
+    success: 'Мы отправили вам ссылку для восстановления пароля на почту',
+  };
 };
 
 export const resetPasswordAction = async (formData: FormData) => {
@@ -89,15 +84,11 @@ export const resetPasswordAction = async (formData: FormData) => {
   const confirmPassword = formData.get('confirmPassword') as string;
 
   if (!password || !confirmPassword) {
-    encodedRedirect(
-      'error',
-      '/reset-password',
-      'Нужен пароль и его подтверждение'
-    );
+    return { error: 'Нужен пароль и его подтверждение' };
   }
 
   if (password !== confirmPassword) {
-    encodedRedirect('error', '/reset-password', 'Пароли не совпадают');
+    return { error: 'Пароли не совпадают' };
   }
 
   const { error } = await supabase.auth.updateUser({
@@ -105,14 +96,11 @@ export const resetPasswordAction = async (formData: FormData) => {
   });
 
   if (error) {
-    encodedRedirect(
-      'error',
-      '/reset-password',
-      'Не получилось изменить пароль'
-    );
+    console.error(error);
+    return { error: 'Не получилось изменить пароль' };
   }
 
-  encodedRedirect('success', '/reset-password', 'Пароль обновлен');
+  return { success: 'Пароль обновлен' };
 };
 
 export const signOutAction = async () => {
