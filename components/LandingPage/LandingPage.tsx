@@ -11,7 +11,7 @@ export const LandingPage: FC = () => {
     <div className="w-full flex flex-col gap-8">
       <Hero />
       <Video
-        src="/landing/LingvoMonkeysNew.mp4"
+        src="/landing/LingvoMonkeys.mp4"
         poster="/landing/video-cover.png"
       />
       <Benefits />

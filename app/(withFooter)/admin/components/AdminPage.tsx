@@ -1,11 +1,8 @@
 'use client';
-
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { StatsCard } from '@/components/stats-card';
 import { UserStatsTable } from '@/components/user-stats-table';
 import { UserActivityChart } from '@/components/user-activity-chart';
+import { VideoEngagementStats } from '@/components/video-engagement-stats';
 
 export default function AdminPage() {
   return (
@@ -36,6 +33,11 @@ export default function AdminPage() {
           endpoint="/api/admin/stats/upload-activity"
           description="Загрузка файлов за последние 30 дней"
         />
+      </div>
+
+      <div className="mb-10">
+        <h2 className="text-2xl font-bold mb-5">Аналитика контента</h2>
+        <VideoEngagementStats />
       </div>
 
       <div className="mb-10">

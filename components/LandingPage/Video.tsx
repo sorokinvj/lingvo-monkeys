@@ -1,4 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 interface VideoProps {
   src: string;
@@ -9,13 +10,26 @@ export const Video: FC<VideoProps> = ({ src, poster }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
+  const { trackPlayerInteraction } = useAnalytics();
 
   const handlePlayClick = () => {
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
+        trackPlayerInteraction({
+          fileId: 'landing-video',
+          fileName: 'LandingVideo',
+          actionType: 'pause',
+          position: videoRef.current.currentTime,
+        });
       } else {
         videoRef.current.play();
+        trackPlayerInteraction({
+          fileId: 'landing-video',
+          fileName: 'LandingVideo',
+          actionType: 'play',
+          position: videoRef.current.currentTime,
+        });
       }
       setIsPlaying(!isPlaying);
     }
@@ -39,10 +53,32 @@ export const Video: FC<VideoProps> = ({ src, poster }) => {
 
     if (videoRef.current) {
       observer.observe(videoRef.current);
+
+      // Add ended event listener to track video completion
+      const video = videoRef.current;
+      const handleVideoEnded = () => {
+        trackPlayerInteraction({
+          fileId: 'landing-video',
+          fileName: 'LandingVideo',
+          actionType: 'playback_complete',
+          position: video.duration,
+          metadata: {
+            method: 'auto',
+            totalDuration: video.duration,
+          },
+        });
+      };
+
+      video.addEventListener('ended', handleVideoEnded);
+
+      return () => {
+        observer.disconnect();
+        video.removeEventListener('ended', handleVideoEnded);
+      };
     }
 
     return () => observer.disconnect();
-  }, [src]);
+  }, [src, trackPlayerInteraction]);
 
   return (
     <div className="relative group">
