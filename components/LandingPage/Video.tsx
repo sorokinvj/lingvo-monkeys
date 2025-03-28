@@ -10,6 +10,7 @@ export const Video: FC<VideoProps> = ({ src, poster }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasEnded, setHasEnded] = useState(false);
   const { trackPlayerInteraction } = useAnalytics();
 
   const handlePlayClick = () => {
@@ -24,6 +25,11 @@ export const Video: FC<VideoProps> = ({ src, poster }) => {
         });
       } else {
         videoRef.current.play();
+        if (hasEnded) {
+          setHasEnded(false);
+          // Reset video to beginning when clicking "Play Again"
+          videoRef.current.currentTime = 0;
+        }
         trackPlayerInteraction({
           fileId: 'landing-video',
           fileName: 'LandingVideo',
@@ -57,6 +63,9 @@ export const Video: FC<VideoProps> = ({ src, poster }) => {
       // Add ended event listener to track video completion
       const video = videoRef.current;
       const handleVideoEnded = () => {
+        setIsPlaying(false);
+        setHasEnded(true);
+
         trackPlayerInteraction({
           fileId: 'landing-video',
           fileName: 'LandingVideo',
@@ -104,17 +113,33 @@ export const Video: FC<VideoProps> = ({ src, poster }) => {
           onClick={handlePlayClick}
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                      w-32 h-32 bg-white/30 rounded-full
-                     flex items-center justify-center
+                     flex flex-col items-center justify-center
                      transition-all hover:bg-white/40 hover:scale-110"
-          aria-label="Play video"
+          aria-label={hasEnded ? 'Play again' : 'Play video'}
         >
-          <div
-            className="w-0 h-0 
-                        border-t-[25px] border-t-transparent
-                        border-l-[35px] border-l-white
-                        border-b-[25px] border-b-transparent
-                        ml-2"
-          />
+          {hasEnded ? (
+            <>
+              <div className="w-12 h-12 flex items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  className="w-8 h-8"
+                >
+                  <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
+                </svg>
+              </div>
+              <span className="text-white font-medium mt-1">Play Again</span>
+            </>
+          ) : (
+            <div
+              className="w-0 h-0 
+                          border-t-[25px] border-t-transparent
+                          border-l-[35px] border-l-white
+                          border-b-[25px] border-b-transparent
+                          ml-2"
+            />
+          )}
         </button>
       )}
     </div>

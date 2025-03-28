@@ -12,7 +12,7 @@ export const LandingPage: FC = () => {
       <Hero />
       <Video
         src="/landing/LingvoMonkeys.mp4"
-        poster="/landing/video-cover.png"
+        poster="/landing/video-cover.jpg"
       />
       <Benefits />
       <WhatToDo />
