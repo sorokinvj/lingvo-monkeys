@@ -22,7 +22,7 @@ export const metadata = {
     description: 'Простой способ выучить язык без скукоты.',
     images: [
       {
-        url: `${baseUrl}/landing/lingvomonkeys_og.jpg?v=4`,
+        url: `${baseUrl}/landing/lingvomonkeys_og.jpg?v=5`,
         width: 1200,
         height: 630,
       },
@@ -32,7 +32,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Lingvo Monkeys',
     description: 'Простой способ выучить язык без скукоты.',
-    images: [`${baseUrl}/landing/lingvomonkeys_og.jpg?v=4`],
+    images: [`${baseUrl}/landing/lingvomonkeys_og.jpg?v=5`],
   },
 };
 
