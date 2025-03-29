@@ -16,24 +16,37 @@ interface UserStat {
   id: string;
   name: string;
   email: string;
-  minutesPerDay: number;
   totalFiles: number;
-  filesPerDay: number;
-  filesPerWeek: number;
-  uploadConsistency: number;
-  practiceConsistency: number;
+  totalListeningTime: number;
+  streak: number;
+  playerInteractions: number;
+  settingsChanges: number;
+  pageViews: number;
 }
 
-// Описания формул расчета для каждого параметра
+// Описания метрик
 const METRIC_DESCRIPTIONS = {
-  minutesPerDay:
-    'Среднее количество минут практики в день за последние 30 дней',
   totalFiles: 'Общее количество файлов, загруженных пользователем',
-  uploadConsistency:
-    'Процент дней с загрузкой файлов за последние 30 дней. Формула: (количество дней с загрузками / 30) * 100%',
-  practiceConsistency:
-    'Процент дней с практикой за последние 30 дней. Формула: (количество дней с практикой / 30) * 100%',
+  totalListeningTime: 'Общее время прослушивания в секундах',
+  streak: 'Максимальное количество дней подряд с практикой',
+  playerInteractions:
+    'Общее количество взаимодействий с плеером (play, pause, seek, etc.)',
+  settingsChanges: 'Количество изменений настроек пользователя',
+  pageViews: 'Количество просмотров страниц',
 };
+
+// Функция для форматирования времени
+function formatTime(seconds: number): string {
+  if (!seconds) return '0 мин';
+
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+
+  if (hours > 0) {
+    return `${hours} ч ${minutes} мин`;
+  }
+  return `${minutes} мин`;
+}
 
 export function UserStatsTable() {
   const [users, setUsers] = useState<UserStat[]>([]);
@@ -108,26 +121,26 @@ export function UserStatsTable() {
             <TableHead>Email</TableHead>
             <TableHead className="text-right">
               <HeaderWithTooltip
-                title="Минут в день"
-                description={METRIC_DESCRIPTIONS.minutesPerDay}
-              />
-            </TableHead>
-            <TableHead className="text-right">
-              <HeaderWithTooltip
-                title="Всего файлов"
+                title="Файлов загружено"
                 description={METRIC_DESCRIPTIONS.totalFiles}
               />
             </TableHead>
             <TableHead className="text-right">
               <HeaderWithTooltip
-                title="Регулярность загрузки"
-                description={METRIC_DESCRIPTIONS.uploadConsistency}
+                title="Время прослушивания"
+                description={METRIC_DESCRIPTIONS.totalListeningTime}
               />
             </TableHead>
             <TableHead className="text-right">
               <HeaderWithTooltip
-                title="Регулярность практики"
-                description={METRIC_DESCRIPTIONS.practiceConsistency}
+                title="Дней подряд"
+                description={METRIC_DESCRIPTIONS.streak}
+              />
+            </TableHead>
+            <TableHead className="text-right">
+              <HeaderWithTooltip
+                title="Взаимодействий"
+                description={METRIC_DESCRIPTIONS.playerInteractions}
               />
             </TableHead>
           </TableRow>
@@ -138,13 +151,13 @@ export function UserStatsTable() {
               <TableCell>
                 <Link href={`/admin/${user.email}`}>{user.email}</Link>
               </TableCell>
-              <TableCell className="text-right">{user.minutesPerDay}</TableCell>
               <TableCell className="text-right">{user.totalFiles}</TableCell>
               <TableCell className="text-right">
-                {user.uploadConsistency}%
+                {formatTime(user.totalListeningTime)}
               </TableCell>
+              <TableCell className="text-right">{user.streak}</TableCell>
               <TableCell className="text-right">
-                {user.practiceConsistency}%
+                {user.playerInteractions}
               </TableCell>
             </TableRow>
           ))}

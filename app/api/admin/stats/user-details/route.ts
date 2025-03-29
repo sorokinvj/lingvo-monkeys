@@ -9,15 +9,12 @@ import { NextResponse } from 'next/server';
  * - id: идентификатор пользователя
  * - name: имя пользователя
  * - email: email пользователя
- * - minutesPerDay: среднее количество минут практики в день за последние 30 дней
- *   (в текущей реализации используются тестовые данные)
  * - totalFiles: общее количество файлов, загруженных пользователем
- * - filesPerDay: количество файлов, загруженных пользователем сегодня (с 00:00)
- * - filesPerWeek: количество файлов, загруженных пользователем за последние 7 дней
- * - uploadConsistency: процент дней с загрузкой файлов за последние 30 дней
- *   Формула: (количество дней с загрузками / 30) * 100%
- * - practiceConsistency: процент дней с практикой за последние 30 дней
- *   (в текущей реализации используются тестовые данные)
+ * - totalListeningTime: общее время прослушивания в секундах
+ * - streak: максимальное количество дней подряд с активностью
+ * - playerInteractions: общее количество взаимодействий с плеером
+ * - settingsChanges: количество изменений настроек
+ * - pageViews: количество просмотров страниц
  */
 export async function GET() {
   const supabase = createClient();
@@ -72,71 +69,94 @@ export async function GET() {
     weekAgo.setDate(weekAgo.getDate() - 7);
     weekAgo.setHours(0, 0, 0, 0);
 
-    // Get all files with user data for counting
-    const { data: files } = await supabase
-      .from(Tables.FILE)
-      .select('userId, createdAt');
-
-    // For each user, calculate their statistics
+    // Данные для всех пользователей
     const userStats = await Promise.all(
       users.map(async (user) => {
-        // Count total files uploaded by this user
-        const totalFiles = files
-          ? files.filter((file) => file.userId === user.id).length
-          : 0;
+        // Количество файлов
+        const { count: totalFiles } = await supabase
+          .from(Tables.FILE)
+          .select('*', { count: 'exact', head: true })
+          .eq('userId', user.id);
 
-        // Count files uploaded today by this user
-        const filesPerDay = files
-          ? files.filter(
-              (file) =>
-                file.userId === user.id && new Date(file.createdAt) >= today
-            ).length
-          : 0;
+        // Получаем данные о прослушивании
+        const { data: listeningData } = await supabase
+          .from('FileListeningEvent')
+          .select('durationSeconds')
+          .eq('userId', user.id);
 
-        // Count files uploaded this week by this user
-        const filesPerWeek = files
-          ? files.filter(
-              (file) =>
-                file.userId === user.id && new Date(file.createdAt) >= weekAgo
-            ).length
-          : 0;
-
-        // Calculate upload consistency (percentage of days with uploads in the last 30 days)
-        // This is a simplistic calculation and could be improved
-        const thirtyDaysAgo = new Date(now);
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        thirtyDaysAgo.setHours(0, 0, 0, 0);
-
-        const userFiles = files
-          ? files.filter(
-              (file) =>
-                file.userId === user.id &&
-                new Date(file.createdAt) >= thirtyDaysAgo
+        const totalListeningTime = listeningData
+          ? listeningData.reduce(
+              (sum, event) => sum + (event.durationSeconds || 0),
+              0
             )
-          : [];
+          : 0;
 
-        // Count unique days with uploads
-        const uploadDays = new Set();
-        userFiles.forEach((file) => {
-          const dateStr = new Date(file.createdAt).toISOString().split('T')[0];
-          uploadDays.add(dateStr);
-        });
+        // Получаем данные о взаимодействии с плеером
+        const { count: playerInteractions } = await supabase
+          .from('PlayerInteractionEvent')
+          .select('*', { count: 'exact', head: true })
+          .eq('userId', user.id);
 
-        const uploadConsistency = Math.round((uploadDays.size / 30) * 100);
+        // Получаем данные о изменениях настроек
+        const { count: settingsChanges } = await supabase
+          .from('SettingsChangeEvent')
+          .select('*', { count: 'exact', head: true })
+          .eq('userId', user.id);
 
-        // Note: Minutes per day and practice consistency would require additional
-        // data tracking that we don't have yet. For now, we'll use placeholder data.
+        // Получаем данные о просмотрах страниц
+        const { count: pageViews } = await supabase
+          .from('PageViewEvent')
+          .select('*', { count: 'exact', head: true })
+          .eq('userId', user.id);
+
+        // Получаем дни с активностью для расчета streak
+        const { data: dailyActivity } = await supabase
+          .from('FileListeningEvent')
+          .select('date')
+          .eq('userId', user.id)
+          .order('date', { ascending: true });
+
+        let streak = 0;
+        if (dailyActivity && dailyActivity.length > 0) {
+          // Упрощенный расчет streak - найти максимальную последовательность дней
+          // Создаем массив уникальных дат без использования spread оператора для Set
+          const uniqueDatesSet = new Set(
+            dailyActivity.map((event) => event.date)
+          );
+          const uniqueDates = Array.from(uniqueDatesSet).sort();
+          let currentStreak = 1;
+          let maxStreak = 1;
+
+          for (let i = 1; i < uniqueDates.length; i++) {
+            const prevDate = new Date(uniqueDates[i - 1]);
+            const currDate = new Date(uniqueDates[i]);
+
+            // Проверяем, являются ли даты последовательными
+            const diffInDays = Math.floor(
+              (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
+            );
+
+            if (diffInDays === 1) {
+              currentStreak++;
+              maxStreak = Math.max(maxStreak, currentStreak);
+            } else {
+              currentStreak = 1;
+            }
+          }
+
+          streak = maxStreak;
+        }
 
         return {
           id: user.id,
           name: user.name,
           email: user.email,
-          minutesPerDay: Math.floor(Math.random() * 30), // Placeholder
-          totalFiles,
-          filesPerDay,
-          filesPerWeek,
-          uploadConsistency,
-          practiceConsistency: Math.floor(Math.random() * 100), // Placeholder
+          totalFiles: totalFiles || 0,
+          totalListeningTime,
+          streak,
+          playerInteractions: playerInteractions || 0,
+          settingsChanges: settingsChanges || 0,
+          pageViews: pageViews || 0,
         };
       })
     );
