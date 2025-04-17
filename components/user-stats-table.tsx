@@ -143,6 +143,12 @@ export function UserStatsTable() {
                 description={METRIC_DESCRIPTIONS.playerInteractions}
               />
             </TableHead>
+            <TableHead className="text-right">
+              <HeaderWithTooltip
+                title="Просмотров страниц"
+                description={METRIC_DESCRIPTIONS.pageViews}
+              />
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -159,6 +165,7 @@ export function UserStatsTable() {
               <TableCell className="text-right">
                 {user.playerInteractions}
               </TableCell>
+              <TableCell className="text-right">{user.pageViews}</TableCell>
             </TableRow>
           ))}
         </TableBody>

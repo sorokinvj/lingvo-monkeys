@@ -7,8 +7,6 @@ import { VideoEngagementStats } from '@/components/video-engagement-stats';
 export default function AdminPage() {
   return (
     <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-10">Админ панель</h1>
-
       <div className="mb-10">
         <h2 className="text-2xl font-bold mb-5">Статистика</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

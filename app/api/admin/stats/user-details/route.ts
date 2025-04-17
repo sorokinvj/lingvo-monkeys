@@ -1,7 +1,26 @@
 import { createClient } from '@/utils/supabase/server';
-import { Tables, Columns } from '@/schema/schema';
+import { Tables } from '@/schema/schema';
 import { NextResponse } from 'next/server';
 import { isAdminEmail } from '@/app/(withFooter)/admin/helpers';
+
+// Интерфейс для данных, возвращаемых функцией get_user_listening_stats
+interface UserListeningStats {
+  totalSeconds: number;
+  totalFilesListened: number;
+  streak: number;
+  dailyStats: Array<{
+    date: string;
+    totalListeningSeconds: number;
+    totalFilesUploaded: number;
+    filesListened: any[];
+  }>;
+}
+
+// Интерфейс для статистики взаимодействий
+interface CountResult {
+  userId: string;
+  count: string;
+}
 
 /**
  * API-эндпоинт для получения детальной статистики по пользователям
@@ -60,15 +79,72 @@ export async function GET() {
       return NextResponse.json({ users: [] });
     }
 
-    // Get current date for calculations
-    const now = new Date();
-    const today = new Date(now);
-    today.setHours(0, 0, 0, 0);
+    // Получаем статистику взаимодействий с плеером для всех пользователей одним запросом
+    console.log('Calling count_player_interactions RPC...');
+    const playerInteractionsResult = await supabase.rpc(
+      'count_player_interactions',
+      {}
+    );
+    console.log('Player interactions result:', playerInteractionsResult);
 
-    // Get a week ago
-    const weekAgo = new Date(now);
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    weekAgo.setHours(0, 0, 0, 0);
+    // Проверяем структуру данных и создаем словарь userId -> количество взаимодействий
+    const playerInteractionsMap: Record<string, number> = {};
+    if (playerInteractionsResult.data) {
+      console.log(
+        'Player interactions data structure:',
+        JSON.stringify(playerInteractionsResult.data)
+      );
+      playerInteractionsResult.data.forEach((stat: any) => {
+        // Проверяем формат данных, возвращаемых функцией
+        console.log('Player interaction stat item:', stat);
+        if (
+          stat &&
+          (typeof stat.userId !== 'undefined' ||
+            typeof stat.userid !== 'undefined') &&
+          typeof stat.count !== 'undefined'
+        ) {
+          // SQL функция возвращает userId (camelCase), а не userid (lowercase)
+          const userId = stat.userId || stat.userid;
+          playerInteractionsMap[userId] =
+            typeof stat.count === 'string'
+              ? parseInt(stat.count)
+              : Number(stat.count);
+        }
+      });
+    }
+    console.log('Final player interactions map:', playerInteractionsMap);
+
+    // Получаем статистику просмотров страниц для всех пользователей одним запросом
+    console.log('Calling count_page_views RPC...');
+    const pageViewsResult = await supabase.rpc('count_page_views', {});
+    console.log('Page views result:', pageViewsResult);
+
+    // Создаем словарь userId -> количество просмотров страниц
+    const pageViewsMap: Record<string, number> = {};
+    if (pageViewsResult.data) {
+      console.log(
+        'Page views data structure:',
+        JSON.stringify(pageViewsResult.data)
+      );
+      pageViewsResult.data.forEach((stat: any) => {
+        // Проверяем формат данных, возвращаемых функцией
+        console.log('Page view stat item:', stat);
+        if (
+          stat &&
+          (typeof stat.userId !== 'undefined' ||
+            typeof stat.userid !== 'undefined') &&
+          typeof stat.count !== 'undefined'
+        ) {
+          // SQL функция возвращает userId (camelCase), а не userid (lowercase)
+          const userId = stat.userId || stat.userid;
+          pageViewsMap[userId] =
+            typeof stat.count === 'string'
+              ? parseInt(stat.count)
+              : Number(stat.count);
+        }
+      });
+    }
+    console.log('Final page views map:', pageViewsMap);
 
     // Данные для всех пользователей
     const userStats = await Promise.all(
@@ -79,74 +155,29 @@ export async function GET() {
           .select('*', { count: 'exact', head: true })
           .eq('userId', user.id);
 
-        // Получаем данные о прослушивании
-        const { data: listeningData } = await supabase
-          .from('FileListeningEvent')
-          .select('durationSeconds')
-          .eq('userId', user.id);
+        // Получаем агрегированную статистику прослушивания из RPC-функции
+        const { data: listeningStats } = await supabase.rpc(
+          'get_user_listening_stats',
+          { user_id: user.id }
+        );
 
-        const totalListeningTime = listeningData
-          ? listeningData.reduce(
-              (sum, event) => sum + (event.durationSeconds || 0),
-              0
-            )
-          : 0;
+        // Получаем данные из агрегированной статистики
+        const stats = (listeningStats as UserListeningStats) || {
+          totalSeconds: 0,
+          streak: 0,
+        };
+        const totalListeningTime = stats.totalSeconds || 0;
+        const streak = stats.streak || 0;
 
-        // Получаем данные о взаимодействии с плеером
-        const { count: playerInteractions } = await supabase
-          .from('PlayerInteractionEvent')
-          .select('*', { count: 'exact', head: true })
-          .eq('userId', user.id);
-
-        // Получаем данные о изменениях настроек
+        // Получаем данные о изменениях настроек из отдельного запроса
         const { count: settingsChanges } = await supabase
           .from('SettingsChangeEvent')
           .select('*', { count: 'exact', head: true })
           .eq('userId', user.id);
 
-        // Получаем данные о просмотрах страниц
-        const { count: pageViews } = await supabase
-          .from('PageViewEvent')
-          .select('*', { count: 'exact', head: true })
-          .eq('userId', user.id);
-
-        // Получаем дни с активностью для расчета streak
-        const { data: dailyActivity } = await supabase
-          .from('FileListeningEvent')
-          .select('date')
-          .eq('userId', user.id)
-          .order('date', { ascending: true });
-
-        let streak = 0;
-        if (dailyActivity && dailyActivity.length > 0) {
-          // Упрощенный расчет streak - найти максимальную последовательность дней
-          // Создаем массив уникальных дат без использования spread оператора для Set
-          const uniqueDatesSet = new Set(
-            dailyActivity.map((event) => event.date)
-          );
-          const uniqueDates = Array.from(uniqueDatesSet).sort();
-          let currentStreak = 1;
-          let maxStreak = 1;
-
-          for (let i = 1; i < uniqueDates.length; i++) {
-            const prevDate = new Date(uniqueDates[i - 1]);
-            const currDate = new Date(uniqueDates[i]);
-
-            // Проверяем, являются ли даты последовательными
-            const diffInDays = Math.floor(
-              (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
-            );
-
-            if (diffInDays === 1) {
-              currentStreak++;
-              maxStreak = Math.max(maxStreak, currentStreak);
-            } else {
-              currentStreak = 1;
-            }
-          }
-
-          streak = maxStreak;
-        }
+        // Используем данные из предварительно полученных словарей
+        const playerInteractions = playerInteractionsMap[user.id] || 0;
+        const pageViews = pageViewsMap[user.id] || 0;
 
         return {
           id: user.id,
@@ -155,9 +186,9 @@ export async function GET() {
           totalFiles: totalFiles || 0,
           totalListeningTime,
           streak,
-          playerInteractions: playerInteractions || 0,
+          playerInteractions,
           settingsChanges: settingsChanges || 0,
-          pageViews: pageViews || 0,
+          pageViews,
         };
       })
     );
