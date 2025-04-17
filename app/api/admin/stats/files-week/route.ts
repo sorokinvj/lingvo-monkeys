@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { Tables, Columns } from '@/schema/schema';
 import { NextResponse } from 'next/server';
+import { isAdminEmail } from '@/app/(withFooter)/admin/helpers';
 
 export async function GET() {
   const supabase = createClient();
@@ -24,8 +25,8 @@ export async function GET() {
     .eq('id', user.id)
     .single();
 
-  // Используем тот же метод проверки что и на странице
-  const isAdmin = userData?.email === 'sorokinvj@gmail.com';
+  // Используем ту же функцию проверки что и на странице
+  const isAdmin = isAdminEmail(userData?.email);
 
   if (!isAdmin) {
     return NextResponse.json(
