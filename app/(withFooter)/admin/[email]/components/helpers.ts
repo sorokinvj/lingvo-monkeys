@@ -135,11 +135,16 @@ export const fetchUserAuditData = async (
       throw new Error('You must be logged in as admin to view audit data');
     }
 
-    // Используем абсолютный URL с origin
-    const apiUrl = new URL(
-      `/api/admin/user-audit?email=${email}`,
-      window.location.origin
-    ).toString();
+    // Определяем API URL без использования window для работы и на сервере, и на клиенте
+    // Используем относительный URL на сервере и абсолютный URL на клиенте
+    const apiUrl =
+      typeof window === 'undefined'
+        ? `/api/admin/user-audit?email=${email}`
+        : new URL(
+            `/api/admin/user-audit?email=${email}`,
+            window.location.origin
+          ).toString();
+
     const response = await fetch(apiUrl);
 
     if (!response.ok) {

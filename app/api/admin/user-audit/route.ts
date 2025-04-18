@@ -47,7 +47,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       'get_user_audit_events',
       {
         user_id: userId,
-        limit_per_table: 5,
+        limit_per_table: 100,
       }
     );
 
