@@ -20,7 +20,7 @@ export const FAQItem: FC<FAQItemProps> = ({
       {({ open }) => (
         <div className="flex flex-col shadow-disclosure rounded-lg overflow-hidden">
           <DisclosureButton
-            className={`flex justify-between w-full px-4 md:p-6 md:pb-2 py-3 text-base font-medium text-left text-gray-900 ${bgColor} focus:outline-none`}
+            className={`flex justify-between w-full px-4 md:p-6 ${open ? 'md:pb-2' : ''} py-3 text-base font-medium text-left text-gray-900 ${bgColor} focus:outline-none`}
           >
             <span className="font-semibold">{question}</span>
             {open ? (
