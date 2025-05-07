@@ -48,10 +48,25 @@ export const processUserAuditData = (
     eventType: 'file_upload' as const,
   }));
 
-  const playerEvents = auditData.player_events.map((event) => ({
-    ...event,
-    eventType: 'player_interaction' as const,
-  }));
+  const playerEvents = auditData.player_events.map((event) => {
+    // Нормализуем данные для взаимодействия с плеером
+    const normalizedEvent = {
+      ...event,
+      eventType: 'player_interaction' as const,
+    };
+
+    // Проверяем, существует ли actionType
+    if (!normalizedEvent.actionType && normalizedEvent.action) {
+      normalizedEvent.actionType = normalizedEvent.action;
+    }
+
+    // Для обратной совместимости с разными форматами
+    if (normalizedEvent.actionType === 'speed_change') {
+      normalizedEvent.actionType = 'speed';
+    }
+
+    return normalizedEvent;
+  });
 
   const settingsEvents = auditData.settings_events.map((event) => ({
     ...event,
@@ -104,9 +119,12 @@ export const getEventDescription = (
         pause: 'Пауза',
         seek: 'Перемотка',
         speed: 'Изменение скорости',
+        speed_change: 'Изменение скорости',
       };
 
-      const action = actionMap[event.actionType] || 'Взаимодействие';
+      // Используем actionType или action, если actionType не существует
+      const actionKey = event.actionType || event.action || '';
+      const action = actionMap[actionKey] || 'Взаимодействие';
       return `${action} с аудиоплеером`;
 
     case 'settings_change':
