@@ -1,6 +1,10 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { useAnalytics } from '@/hooks/useAnalytics';
 
+// Используем фиксированный UUID для лендинг-видео
+// UUID v4 сгенерирован заранее
+const LANDING_VIDEO_UUID = '00000000-0000-4000-a000-000000000001';
+
 interface VideoProps {
   src: string;
   poster?: string;
@@ -18,7 +22,7 @@ export const Video: FC<VideoProps> = ({ src, poster }) => {
       if (isPlaying) {
         videoRef.current.pause();
         trackPlayerInteraction({
-          fileId: 'landing-video',
+          fileId: LANDING_VIDEO_UUID,
           fileName: 'LandingVideo',
           actionType: 'pause',
           position: videoRef.current.currentTime,
@@ -31,7 +35,7 @@ export const Video: FC<VideoProps> = ({ src, poster }) => {
           videoRef.current.currentTime = 0;
         }
         trackPlayerInteraction({
-          fileId: 'landing-video',
+          fileId: LANDING_VIDEO_UUID,
           fileName: 'LandingVideo',
           actionType: 'play',
           position: videoRef.current.currentTime,
@@ -67,7 +71,7 @@ export const Video: FC<VideoProps> = ({ src, poster }) => {
         setHasEnded(true);
 
         trackPlayerInteraction({
-          fileId: 'landing-video',
+          fileId: LANDING_VIDEO_UUID,
           fileName: 'LandingVideo',
           actionType: 'playback_complete',
           position: video.duration,
