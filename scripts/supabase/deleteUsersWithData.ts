@@ -6,12 +6,8 @@ import { Tables } from '@/schema/schema';
 
 // Default emails to delete if none are provided via command line
 const DEFAULT_EMAILS_TO_DELETE = [
-  'xeniamchedlidze@gmail.com',
-  'sorokinvj+new_acc-2@gmail.com',
-  'sorokinvj+new_acc@gmail.com',
-  'vladislav+34@proxylink.co',
-  'vladislav@proxylink.co',
-  'kseniamchedlidze@gmail.com',
+  'sorokinvj+reg@gmail.com',
+  'sorokinvj+new@gmail.com',
 ];
 
 // Load environment variables from .env.local
