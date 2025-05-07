@@ -21,3 +21,6 @@ export const UPLOAD_STAGES = {
 } as const;
 
 export type UploadStage = keyof typeof UPLOAD_STAGES;
+
+// Фиксированные идентификаторы для аналитики
+export const LANDING_VIDEO_UUID = '00000000-0000-4000-a000-000000000001';

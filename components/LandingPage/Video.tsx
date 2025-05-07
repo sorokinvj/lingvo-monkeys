@@ -1,9 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { useAnalytics } from '@/hooks/useAnalytics';
-
-// Используем фиксированный UUID для лендинг-видео
-// UUID v4 сгенерирован заранее
-const LANDING_VIDEO_UUID = '00000000-0000-4000-a000-000000000001';
+import { LANDING_VIDEO_UUID } from '@/config/constants';
 
 interface VideoProps {
   src: string;
