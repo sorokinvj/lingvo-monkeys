@@ -17,11 +17,13 @@ export interface UploadEvent extends BaseEvent {
 
 export interface PlayerEvent extends BaseEvent {
   eventType: 'player_interaction';
-  actionType: 'play' | 'pause' | 'seek' | 'speed' | string;
+  actionType?: 'play' | 'pause' | 'seek' | 'speed' | 'speed_change' | string;
+  action?: string; // Добавляем поле action для совместимости со старыми данными
   fileId?: string;
   fileName?: string;
   position?: number;
   speed?: number;
+  metadata?: Record<string, any>;
 }
 
 export interface SettingsEvent extends BaseEvent {

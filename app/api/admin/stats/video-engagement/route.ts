@@ -3,6 +3,7 @@ import { Tables } from '@/schema/schema';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { isAdminEmail } from '@/app/(withFooter)/admin/helpers';
+import { LANDING_VIDEO_UUID } from '@/config/constants';
 
 // Mark this route as dynamic to prevent static generation errors
 export const dynamic = 'force-dynamic';
@@ -44,14 +45,14 @@ export async function GET() {
     const { count: playCount } = await supabase
       .from('PlayerInteractionEvent')
       .select('*', { count: 'exact', head: true })
-      .eq('fileId', 'landing-video')
+      .eq('fileId', LANDING_VIDEO_UUID)
       .eq('actionType', 'play');
 
     // Count unique users who played the video
     const { data: uniquePlays } = await supabase
       .from('PlayerInteractionEvent')
       .select('userId')
-      .eq('fileId', 'landing-video')
+      .eq('fileId', LANDING_VIDEO_UUID)
       .eq('actionType', 'play');
 
     const uniqueUserPlays = new Set(uniquePlays?.map((item) => item.userId))
@@ -61,14 +62,14 @@ export async function GET() {
     const { count: completionCount } = await supabase
       .from('PlayerInteractionEvent')
       .select('*', { count: 'exact', head: true })
-      .eq('fileId', 'landing-video')
+      .eq('fileId', LANDING_VIDEO_UUID)
       .eq('actionType', 'playback_complete');
 
     // Count unique users who completed the video
     const { data: uniqueCompletions } = await supabase
       .from('PlayerInteractionEvent')
       .select('userId')
-      .eq('fileId', 'landing-video')
+      .eq('fileId', LANDING_VIDEO_UUID)
       .eq('actionType', 'playback_complete');
 
     const uniqueUserCompletions = new Set(
