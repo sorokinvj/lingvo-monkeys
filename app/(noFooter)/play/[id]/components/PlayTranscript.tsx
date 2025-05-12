@@ -149,6 +149,7 @@ const PlayTranscript: React.FC<Props> = ({ publicUrl, transcriptionId }) => {
             onWaveformSeek={handleWaveformSeek}
             onDurationReady={handleDurationReady}
             fileName={fileInfo?.name}
+            pageId={transcriptionId}
           />
         </div>
       </div>
