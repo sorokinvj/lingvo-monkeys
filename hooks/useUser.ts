@@ -1,16 +1,14 @@
-import { createClient } from '@/utils/supabase/client';
-import { User } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
+import { createClient } from '@/utils/supabase/client';
 
-export const useUser = () => {
-  const supabase = createClient();
-  return useQuery<User | null>({
+export function useUser() {
+  return useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      return user;
+      const supabase = createClient();
+      const { data } = await supabase.auth.getUser();
+      return data?.user;
     },
+    staleTime: 5 * 60 * 1000,
   });
-};
+}

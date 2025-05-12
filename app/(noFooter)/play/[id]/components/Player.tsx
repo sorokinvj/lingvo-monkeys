@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { createClient } from '@/utils/supabase/client';
 import { useLogPracticeSession } from '@/hooks/useLogPracticeSession';
+import { useUser } from '@supabase/auth-helpers-react';
 
 interface PlayerProps {
   publicUrl: string;
@@ -43,25 +44,22 @@ const Player: React.FC<PlayerProps> = ({
   const accumulatedTimeRef = useRef(0); // ms
   const playbackStartTimeRef = useRef<number | null>(null); // ms timestamp when playback starts/resumes
 
-  const supabase = createClient();
   const logSession = useLogPracticeSession();
+  const user = useUser();
 
-  // -- Helper: save session to Supabase via mutation
+  // -- Helper: save session to Supabase via mutation, using useUser
   const savePracticeSession = useCallback(
-    async (durationMs: number, startedAt: Date | null) => {
-      if (!pageId || !fileName || !startedAt) return;
-      const { data } = await supabase.auth.getUser();
-      const user_id = data?.user?.id;
-      if (!user_id) return;
+    (durationMs: number, startedAt: Date | null) => {
+      if (!pageId || !fileName || !startedAt || !user?.id) return;
       logSession.mutate({
-        user_id,
+        user_id: user.id,
         page_id: pageId,
         file_name: fileName,
         started_at: startedAt.toISOString(),
         duration_seconds: Math.round(durationMs / 1000),
       });
     },
-    [logSession, pageId, fileName, supabase]
+    [logSession, pageId, fileName, user]
   );
 
   // DRY: finalize and log session
