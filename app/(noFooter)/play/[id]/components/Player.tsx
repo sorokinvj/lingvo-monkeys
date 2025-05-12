@@ -364,10 +364,7 @@ const handleBeforeUnload = useCallback(() => {
         )}
         <div ref={containerRef} className="w-full h-full" />
       </div>
-      {saving && (
-        <div className="text-xs text-blue-400 mt-2">Saving practice session...</div>
-      )}
-    </div>
+      </div>
   );
 };
 
