@@ -65,6 +65,19 @@ const Player: React.FC<PlayerProps> = ({
     [logSession, pageId, fileName, supabase]
   );
 
+  // DRY: finalize and log session
+  const finalizeSession = useCallback(() => {
+    if (sessionActive && playbackStartTimeRef.current && sessionStartRef.current) {
+      const now = Date.now();
+      accumulatedTimeRef.current += now - playbackStartTimeRef.current;
+      playbackStartTimeRef.current = null;
+      savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
+      sessionStartRef.current = null;
+      accumulatedTimeRef.current = 0;
+      setSessionActive(false);
+    }
+  }, [sessionActive, savePracticeSession]);
+
   // --- WaveSurfer logic ---
   const initializeWaveSurfer = useCallback(() => {
     if (containerRef.current && !wavesurferRef.current) {
@@ -118,19 +131,7 @@ const Player: React.FC<PlayerProps> = ({
           actionType: 'pause',
           position: wavesurferRef.current?.getCurrentTime() || 0,
         });
-
-        // --- PRACTICE SESSION: accumulate time and log ---
-        if (sessionActive && playbackStartTimeRef.current && sessionStartRef.current) {
-          const now = Date.now();
-          accumulatedTimeRef.current += now - playbackStartTimeRef.current;
-          playbackStartTimeRef.current = null;
-
-          savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
-          // Reset for next session
-          sessionStartRef.current = null;
-          accumulatedTimeRef.current = 0;
-          setSessionActive(false);
-        }
+        finalizeSession();
       });
 
       wavesurferRef.current.on('timeupdate', (currentTime) => {
@@ -154,18 +155,7 @@ const Player: React.FC<PlayerProps> = ({
             totalDuration: wavesurferRef.current?.getDuration() || 0,
           },
         });
-
-        // --- PRACTICE SESSION: accumulate time and log ---
-        if (sessionActive && playbackStartTimeRef.current && sessionStartRef.current) {
-          const now = Date.now();
-          accumulatedTimeRef.current += now - playbackStartTimeRef.current;
-          playbackStartTimeRef.current = null;
-
-          savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
-          sessionStartRef.current = null;
-          accumulatedTimeRef.current = 0;
-          setSessionActive(false);
-        }
+        finalizeSession();
       });
 
       // Seeking/clicking in waveform: do NOT stop session, just update position
@@ -205,17 +195,7 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       // Visibility/page unload events
-      const handleSessionInterrupt = () => {
-        if (sessionActive && playbackStartTimeRef.current && sessionStartRef.current) {
-          const now = Date.now();
-          accumulatedTimeRef.current += now - playbackStartTimeRef.current;
-          playbackStartTimeRef.current = null;
-          savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
-          sessionStartRef.current = null;
-          accumulatedTimeRef.current = 0;
-          setSessionActive(false);
-        }
-      };
+      const handleSessionInterrupt = finalizeSession;
 
       const handleVisibility = () => {
         if (document.visibilityState === 'hidden') {
