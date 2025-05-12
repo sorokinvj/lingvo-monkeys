@@ -7,6 +7,11 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import { useLogPracticeSession } from '@/hooks/useLogPracticeSession';
 import { useUser } from '@/hooks/useUser';
 
+// Минимальное время сессии для логирования (в мс)
+const MIN_SESSION_DURATION_MS = 1000; // 1 секунда
+// Дебаунс для аналитики (в мс)
+const ANALYTICS_DEBOUNCE_MS = 500; // 0.5 секунды
+
 interface PlayerProps {
   publicUrl: string;
   fileId: string;
@@ -36,12 +41,32 @@ const Player: React.FC<PlayerProps> = ({
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
+  // Предотвращение избыточной аналитики
+  const lastTrackEventRef = useRef<{ type: string; time: number } | null>(null);
   const { trackPlayerInteraction } = useAnalytics();
+
+  // Обертка для предотвращения дублирования аналитики
+  const trackPlayerWithDebounce = useCallback(
+    (data: any) => {
+      const now = Date.now();
+      if (
+        !lastTrackEventRef.current ||
+        lastTrackEventRef.current.type !== data.actionType ||
+        now - lastTrackEventRef.current.time > ANALYTICS_DEBOUNCE_MS
+      ) {
+        lastTrackEventRef.current = { type: data.actionType, time: now };
+        trackPlayerInteraction(data);
+      }
+    },
+    [trackPlayerInteraction]
+  );
 
   // --- Practice session state ---
   const sessionStartRef = useRef<Date | null>(null);
   const accumulatedTimeRef = useRef(0); // ms
   const playbackStartTimeRef = useRef<number | null>(null); // ms timestamp when playback starts/resumes
+  const isFinalizingRef = useRef(false); // Флаг для предотвращения одновременных вызовов finalizeSession
+  const wasPlayerInitializedRef = useRef(false); // Флаг для отслеживания инициализации
 
   const logSession = useLogPracticeSession();
   const { data: user } = useUser();
@@ -61,81 +86,104 @@ const Player: React.FC<PlayerProps> = ({
     [logSession, pageId, fileName, user]
   );
 
-  // DRY: finalize and log session
-  const finalizeSession = useCallback(() => {
-    // Only log if a session is active and has started and playback was ongoing
-    if (
-      sessionStartRef.current &&
-      playbackStartTimeRef.current !== null &&
-      accumulatedTimeRef.current !== null
-    ) {
-      const now = Date.now();
-      accumulatedTimeRef.current += now - playbackStartTimeRef.current;
-      playbackStartTimeRef.current = null;
+  /**
+   * Финализация и логирование сессии - с защитой от дублирующих вызовов
+   * и оптимизацией для предотвращения отправки слишком коротких сессий
+   */
+  const finalizeSession = useCallback(
+    (isBeforeUnload = false) => {
+      // Блокируем повторные вызовы
+      if (isFinalizingRef.current) return;
+      isFinalizingRef.current = true;
 
-      if (user?.id && pageId && fileName && sessionStartRef.current) {
-        // Синхронно отправляем данные с помощью sendBeacon при закрытии страницы
-        const payload = {
-          user_id: user.id,
-          page_id: pageId,
-          file_name: fileName,
-          started_at: sessionStartRef.current.toISOString(),
-          duration_seconds: Math.round(accumulatedTimeRef.current / 1000),
-        };
+      // Проверяем наличие активной сессии
+      if (sessionStartRef.current && playbackStartTimeRef.current !== null) {
+        // Считаем накопленное время
+        const now = Date.now();
+        accumulatedTimeRef.current += now - playbackStartTimeRef.current;
+        playbackStartTimeRef.current = null;
 
-        /**
-         * ВАЖНО: Здесь используется navigator.sendBeacon вместо обычного fetch запроса,
-         * потому что он специально разработан для надёжной отправки данных при закрытии страницы.
-         *
-         * Почему sendBeacon:
-         * 1. Гарантирует доставку данных даже когда страница закрывается (обычные XHR/fetch часто прерываются)
-         * 2. Браузер выполняет запрос в фоне после закрытия страницы
-         * 3. Не блокируется событием beforeunload, в отличие от синхронных AJAX
-         * 4. Имеет высокий приоритет браузера для выполнения (выше чем обычные запросы)
-         *
-         * Мы оборачиваем вызов в try-catch и намеренно игнорируем ошибки, так как:
-         * - Пользователь уже покидает страницу и не увидит уведомления об ошибке
-         * - Мы не хотим мешать закрытию страницы из-за проблем с аналитикой
-         * - В некоторых браузерах или с определенными настройками приватности
-         *   sendBeacon может быть не поддержан или заблокирован
-         */
-        try {
-          navigator.sendBeacon(
-            '/api/practice-session',
-            new Blob([JSON.stringify(payload)], {
-              type: 'application/json',
-            })
-          );
-        } catch (e) {
-          // Игнорируем ошибки при beforeunload
+        // Логируем только если сессия имеет минимальную длительность
+        if (accumulatedTimeRef.current >= MIN_SESSION_DURATION_MS) {
+          if (
+            isBeforeUnload &&
+            user?.id &&
+            pageId &&
+            fileName &&
+            sessionStartRef.current
+          ) {
+            /**
+             * ВАЖНО: Здесь используется navigator.sendBeacon вместо обычного fetch запроса,
+             * потому что он специально разработан для надёжной отправки данных при закрытии страницы.
+             *
+             * Почему sendBeacon:
+             * 1. Гарантирует доставку данных даже когда страница закрывается (обычные XHR/fetch часто прерываются)
+             * 2. Браузер выполняет запрос в фоне после закрытия страницы
+             * 3. Не блокируется событием beforeunload, в отличие от синхронных AJAX
+             * 4. Имеет высокий приоритет браузера для выполнения (выше чем обычные запросы)
+             *
+             * Мы оборачиваем вызов в try-catch и намеренно игнорируем ошибки, так как:
+             * - Пользователь уже покидает страницу и не увидит уведомления об ошибке
+             * - Мы не хотим мешать закрытию страницы из-за проблем с аналитикой
+             * - В некоторых браузерах или с определенными настройками приватности
+             *   sendBeacon может быть не поддержан или заблокирован
+             */
+            try {
+              const payload = {
+                user_id: user.id,
+                page_id: pageId,
+                file_name: fileName,
+                started_at: sessionStartRef.current.toISOString(),
+                duration_seconds: Math.round(accumulatedTimeRef.current / 1000),
+              };
+
+              navigator.sendBeacon(
+                '/api/practice-session',
+                new Blob([JSON.stringify(payload)], {
+                  type: 'application/json',
+                })
+              );
+            } catch (e) {
+              // Игнорируем ошибки при beforeunload
+            }
+          } else if (user?.id) {
+            // Обычный случай - используем мутацию
+            savePracticeSession(
+              accumulatedTimeRef.current,
+              sessionStartRef.current
+            );
+          }
         }
-      } else {
-        // Обычный случай - используем мутацию
-        savePracticeSession(
-          accumulatedTimeRef.current,
-          sessionStartRef.current
-        );
+
+        // Сбрасываем состояние сессии
+        sessionStartRef.current = null;
+        accumulatedTimeRef.current = 0;
       }
 
-      sessionStartRef.current = null;
-      accumulatedTimeRef.current = 0;
-    }
-  }, [savePracticeSession, pageId, fileName, user]);
+      // После короткой задержки разрешаем новые вызовы
+      setTimeout(() => {
+        isFinalizingRef.current = false;
+      }, 100);
+    },
+    [savePracticeSession, pageId, fileName, user]
+  );
 
-  // Visibility/page unload event handlers
+  // Обработчики событий visibility и beforeunload
   const handleVisibility = useCallback(() => {
     if (document.visibilityState === 'hidden') {
-      finalizeSession();
+      finalizeSession(false);
     }
   }, [finalizeSession]);
 
   const handleBeforeUnload = useCallback(() => {
-    finalizeSession();
+    finalizeSession(true);
   }, [finalizeSession]);
 
   // --- WaveSurfer logic ---
   const initializeWaveSurfer = useCallback(() => {
+    console.log('[PLAYER] Initializing WaveSurfer', { publicUrl });
     if (containerRef.current && !wavesurferRef.current) {
+      console.log('[PLAYER] Creating WaveSurfer instance');
       wavesurferRef.current = WaveSurfer.create({
         container: containerRef.current,
         waveColor: '#0349A4',
@@ -149,6 +197,7 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       wavesurferRef.current.on('ready', () => {
+        console.log('[PLAYER] WaveSurfer ready event');
         setIsReady(true);
 
         if (wavesurferRef.current && onDurationReady) {
@@ -171,7 +220,7 @@ const Player: React.FC<PlayerProps> = ({
           // Resuming from pause
           playbackStartTimeRef.current = Date.now();
         }
-        trackPlayerInteraction({
+        trackPlayerWithDebounce({
           fileId,
           fileName: fileName || 'Unknown File',
           actionType: 'play',
@@ -183,7 +232,7 @@ const Player: React.FC<PlayerProps> = ({
       wavesurferRef.current.on('pause', () => {
         finalizeSession();
         setIsPlaying(false);
-        trackPlayerInteraction({
+        trackPlayerWithDebounce({
           fileId,
           fileName: fileName || 'Unknown File',
           actionType: 'pause',
@@ -197,6 +246,7 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       wavesurferRef.current.on('loading', (progress) => {
+        console.log('[PLAYER] WaveSurfer loading event', { progress });
         setLoadingProgress(progress);
       });
 
@@ -204,7 +254,7 @@ const Player: React.FC<PlayerProps> = ({
       wavesurferRef.current.on('finish', () => {
         finalizeSession();
         setIsPlaying(false);
-        trackPlayerInteraction({
+        trackPlayerWithDebounce({
           fileId,
           fileName: fileName || 'Unknown File',
           actionType: 'playback_complete',
@@ -225,7 +275,7 @@ const Player: React.FC<PlayerProps> = ({
           const totalDuration = wavesurferRef.current.getDuration();
           const positionPercent = Math.round(relativePosition * 100);
 
-          trackPlayerInteraction({
+          trackPlayerWithDebounce({
             fileId,
             fileName: fileName || 'Unknown File',
             actionType: 'seek',
@@ -243,13 +293,21 @@ const Player: React.FC<PlayerProps> = ({
         }
       });
 
+      // Добавляем дебаунс для seeking, чтобы предотвратить шквал событий
+      let seekingTimeout: ReturnType<typeof setTimeout> | null = null;
       wavesurferRef.current.on('seeking', () => {
-        trackPlayerInteraction({
-          fileId,
-          fileName: fileName || 'Unknown File',
-          actionType: 'seek',
-          position: wavesurferRef.current?.getCurrentTime() || 0,
-        });
+        if (seekingTimeout) {
+          clearTimeout(seekingTimeout);
+        }
+        seekingTimeout = setTimeout(() => {
+          trackPlayerWithDebounce({
+            fileId,
+            fileName: fileName || 'Unknown File',
+            actionType: 'seek',
+            position: wavesurferRef.current?.getCurrentTime() || 0,
+          });
+          seekingTimeout = null;
+        }, 200); // Задержка 200мс перед отправкой события
       });
 
       // Register visibility/page unload events here (removed from effect)
@@ -266,7 +324,7 @@ const Player: React.FC<PlayerProps> = ({
     publicUrl,
     onTimeUpdate,
     onWaveformSeek,
-    trackPlayerInteraction,
+    trackPlayerWithDebounce,
     fileId,
     onDurationReady,
     fileName,
@@ -276,9 +334,11 @@ const Player: React.FC<PlayerProps> = ({
   ]);
 
   useEffect(() => {
+    console.log('[PLAYER] Mount effect called');
     initializeWaveSurfer();
 
     return () => {
+      console.log('[PLAYER] Cleanup effect');
       if (wavesurferRef.current) {
         wavesurferRef.current.destroy();
         wavesurferRef.current = null;
@@ -317,7 +377,7 @@ const Player: React.FC<PlayerProps> = ({
           const roundedRate = Number(newRate.toFixed(1));
           wavesurferRef.current?.setPlaybackRate(roundedRate);
 
-          trackPlayerInteraction({
+          trackPlayerWithDebounce({
             fileId,
             fileName: fileName || 'Unknown File',
             actionType: 'speed_change',
@@ -332,7 +392,7 @@ const Player: React.FC<PlayerProps> = ({
         });
       }
     },
-    [trackPlayerInteraction, fileId, fileName]
+    [trackPlayerWithDebounce, fileId, fileName]
   );
 
   return (
