@@ -4,9 +4,8 @@ import WaveSurfer from 'wavesurfer.js';
 import { Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import dayjs from 'dayjs';
 import { useAnalytics } from '@/hooks/useAnalytics';
-import { createClient } from '@/utils/supabase/client';
 import { useLogPracticeSession } from '@/hooks/useLogPracticeSession';
-import { useUser } from '@supabase/auth-helpers-react';
+import { useUser } from '@/hooks/useUser';
 
 interface PlayerProps {
   publicUrl: string;
@@ -45,7 +44,7 @@ const Player: React.FC<PlayerProps> = ({
   const playbackStartTimeRef = useRef<number | null>(null); // ms timestamp when playback starts/resumes
 
   const logSession = useLogPracticeSession();
-  const user = useUser();
+  const { data: user } = useUser();
 
   // -- Helper: save session to Supabase via mutation, using useUser
   const savePracticeSession = useCallback(
@@ -63,8 +62,7 @@ const Player: React.FC<PlayerProps> = ({
   );
 
   // DRY: finalize and log session
-const finalizeSession = useCallback(
-  (sync: boolean = false) => {
+  const finalizeSession = useCallback(() => {
     // Only log if a session is active and has started and playback was ongoing
     if (
       sessionStartRef.current &&
@@ -74,53 +72,66 @@ const finalizeSession = useCallback(
       const now = Date.now();
       accumulatedTimeRef.current += now - playbackStartTimeRef.current;
       playbackStartTimeRef.current = null;
-      if (sync) {
-        // Synchronously flush session data (for beforeunload)
-        let user_id: string | undefined;
+
+      if (user?.id && pageId && fileName && sessionStartRef.current) {
+        // Синхронно отправляем данные с помощью sendBeacon при закрытии страницы
+        const payload = {
+          user_id: user.id,
+          page_id: pageId,
+          file_name: fileName,
+          started_at: sessionStartRef.current.toISOString(),
+          duration_seconds: Math.round(accumulatedTimeRef.current / 1000),
+        };
+
+        /**
+         * ВАЖНО: Здесь используется navigator.sendBeacon вместо обычного fetch запроса,
+         * потому что он специально разработан для надёжной отправки данных при закрытии страницы.
+         *
+         * Почему sendBeacon:
+         * 1. Гарантирует доставку данных даже когда страница закрывается (обычные XHR/fetch часто прерываются)
+         * 2. Браузер выполняет запрос в фоне после закрытия страницы
+         * 3. Не блокируется событием beforeunload, в отличие от синхронных AJAX
+         * 4. Имеет высокий приоритет браузера для выполнения (выше чем обычные запросы)
+         *
+         * Мы оборачиваем вызов в try-catch и намеренно игнорируем ошибки, так как:
+         * - Пользователь уже покидает страницу и не увидит уведомления об ошибке
+         * - Мы не хотим мешать закрытию страницы из-за проблем с аналитикой
+         * - В некоторых браузерах или с определенными настройками приватности
+         *   sendBeacon может быть не поддержан или заблокирован
+         */
         try {
-          const raw = window.localStorage.getItem('supabase.auth.token');
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            user_id = parsed?.currentSession?.user?.id;
-          }
-        } catch {}
-        if (user_id && pageId && fileName && sessionStartRef.current) {
-          const payload = {
-            user_id,
-            page_id: pageId,
-            file_name: fileName,
-            started_at: sessionStartRef.current.toISOString(),
-            duration_seconds: Math.round(accumulatedTimeRef.current / 1000),
-          };
-          try {
-            navigator.sendBeacon(
-              '/api/practice-session',
-              new Blob([JSON.stringify(payload)], { type: 'application/json' })
-            );
-          } catch (e) {
-            // Ignore errors in beforeunload
-          }
+          navigator.sendBeacon(
+            '/api/practice-session',
+            new Blob([JSON.stringify(payload)], {
+              type: 'application/json',
+            })
+          );
+        } catch (e) {
+          // Игнорируем ошибки при beforeunload
         }
       } else {
-        savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
+        // Обычный случай - используем мутацию
+        savePracticeSession(
+          accumulatedTimeRef.current,
+          sessionStartRef.current
+        );
       }
+
       sessionStartRef.current = null;
       accumulatedTimeRef.current = 0;
     }
-  },
-  [savePracticeSession, pageId, fileName]
-);
+  }, [savePracticeSession, pageId, fileName, user]);
 
-// Visibility/page unload event handlers
-const handleVisibility = useCallback(() => {
-  if (document.visibilityState === 'hidden') {
-    finalizeSession(false);
-  }
-}, [finalizeSession]);
+  // Visibility/page unload event handlers
+  const handleVisibility = useCallback(() => {
+    if (document.visibilityState === 'hidden') {
+      finalizeSession();
+    }
+  }, [finalizeSession]);
 
-const handleBeforeUnload = useCallback(() => {
-  finalizeSession(true);
-}, [finalizeSession]);
+  const handleBeforeUnload = useCallback(() => {
+    finalizeSession();
+  }, [finalizeSession]);
 
   // --- WaveSurfer logic ---
   const initializeWaveSurfer = useCallback(() => {
@@ -170,7 +181,7 @@ const handleBeforeUnload = useCallback(() => {
 
       // On PAUSE, end session and log
       wavesurferRef.current.on('pause', () => {
-        finalizeSession(false);
+        finalizeSession();
         setIsPlaying(false);
         trackPlayerInteraction({
           fileId,
@@ -191,7 +202,7 @@ const handleBeforeUnload = useCallback(() => {
 
       // On FINISH (natural end), end session and log
       wavesurferRef.current.on('finish', () => {
-        finalizeSession(false);
+        finalizeSession();
         setIsPlaying(false);
         trackPlayerInteraction({
           fileId,
@@ -362,7 +373,7 @@ const handleBeforeUnload = useCallback(() => {
         )}
         <div ref={containerRef} className="w-full h-full" />
       </div>
-      </div>
+    </div>
   );
 };
 
