@@ -1,5 +1,5 @@
 // libs
-import React, { useRef, useState, useCallback, useEffect } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import { Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import dayjs from 'dayjs';
@@ -39,7 +39,6 @@ const Player: React.FC<PlayerProps> = ({
   const { trackPlayerInteraction } = useAnalytics();
 
   // --- Practice session state ---
-  const [sessionActive, setSessionActive] = useState(false);
   const sessionStartRef = useRef<Date | null>(null);
   const accumulatedTimeRef = useRef(0); // ms
   const playbackStartTimeRef = useRef<number | null>(null); // ms timestamp when playback starts/resumes
@@ -67,16 +66,15 @@ const Player: React.FC<PlayerProps> = ({
 
   // DRY: finalize and log session
   const finalizeSession = useCallback(() => {
-    if (sessionActive && playbackStartTimeRef.current && sessionStartRef.current) {
+    if (isPlaying && playbackStartTimeRef.current && sessionStartRef.current) {
       const now = Date.now();
       accumulatedTimeRef.current += now - playbackStartTimeRef.current;
       playbackStartTimeRef.current = null;
       savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
       sessionStartRef.current = null;
       accumulatedTimeRef.current = 0;
-      setSessionActive(false);
     }
-  }, [sessionActive, savePracticeSession]);
+  }, [isPlaying, savePracticeSession]);
 
   // --- WaveSurfer logic ---
   const initializeWaveSurfer = useCallback(() => {
@@ -102,28 +100,31 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       wavesurferRef.current.on('play', () => {
-        setIsPlaying(true);
+        // If already playing, don't restart session
+        if (!isPlaying) {
+          setIsPlaying(true);
+          // --- PRACTICE SESSION START LOGIC ---
+          // If session not active, start one
+          if (!sessionStartRef.current) {
+            sessionStartRef.current = new Date();
+            accumulatedTimeRef.current = 0;
+          }
+          playbackStartTimeRef.current = Date.now();
+        } else if (playbackStartTimeRef.current === null) {
+          // Resuming from pause
+          playbackStartTimeRef.current = Date.now();
+        }
         trackPlayerInteraction({
           fileId,
           fileName: fileName || 'Unknown File',
           actionType: 'play',
           position: wavesurferRef.current?.getCurrentTime() || 0,
         });
-
-        // --- PRACTICE SESSION START LOGIC ---
-        // If session not active, start one
-        if (!sessionActive) {
-          sessionStartRef.current = new Date();
-          playbackStartTimeRef.current = Date.now();
-          setSessionActive(true);
-        } else if (playbackStartTimeRef.current === null) {
-          // Resuming from pause
-          playbackStartTimeRef.current = Date.now();
-        }
       });
 
       // On PAUSE, end session and log
       wavesurferRef.current.on('pause', () => {
+        finalizeSession();
         setIsPlaying(false);
         trackPlayerInteraction({
           fileId,
@@ -131,7 +132,9 @@ const Player: React.FC<PlayerProps> = ({
           actionType: 'pause',
           position: wavesurferRef.current?.getCurrentTime() || 0,
         });
-        finalizeSession();
+        // reset session refs after logging
+        sessionStartRef.current = null;
+        accumulatedTimeRef.current = 0;
       });
 
       wavesurferRef.current.on('timeupdate', (currentTime) => {
@@ -145,6 +148,8 @@ const Player: React.FC<PlayerProps> = ({
 
       // On FINISH (natural end), end session and log
       wavesurferRef.current.on('finish', () => {
+        finalizeSession();
+        setIsPlaying(false);
         trackPlayerInteraction({
           fileId,
           fileName: fileName || 'Unknown File',
@@ -155,7 +160,9 @@ const Player: React.FC<PlayerProps> = ({
             totalDuration: wavesurferRef.current?.getDuration() || 0,
           },
         });
-        finalizeSession();
+        // reset session refs after logging
+        sessionStartRef.current = null;
+        accumulatedTimeRef.current = 0;
       });
 
       // Seeking/clicking in waveform: do NOT stop session, just update position
@@ -195,7 +202,13 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       // Visibility/page unload events
-      const handleSessionInterrupt = finalizeSession;
+      const handleSessionInterrupt = () => {
+        finalizeSession();
+        setIsPlaying(false);
+        // reset session refs after logging
+        sessionStartRef.current = null;
+        accumulatedTimeRef.current = 0;
+      };
 
       const handleVisibility = () => {
         if (document.visibilityState === 'hidden') {
