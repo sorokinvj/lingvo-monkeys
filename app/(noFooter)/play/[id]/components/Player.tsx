@@ -1,5 +1,5 @@
 // libs
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import { Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import dayjs from 'dayjs';
