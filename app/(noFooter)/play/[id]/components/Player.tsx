@@ -1,10 +1,11 @@
 // libs
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import { Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import dayjs from 'dayjs';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { createClient } from '@/utils/supabase/client';
+import { useLogPracticeSession } from '@/hooks/useLogPracticeSession';
 
 interface PlayerProps {
   publicUrl: string;
@@ -42,40 +43,27 @@ const Player: React.FC<PlayerProps> = ({
   const sessionStartRef = useRef<Date | null>(null);
   const accumulatedTimeRef = useRef(0); // ms
   const playbackStartTimeRef = useRef<number | null>(null); // ms timestamp when playback starts/resumes
-  const [saving, setSaving] = useState(false);
 
-  // Fetch user for session logging
   const supabase = createClient();
-  const [userId, setUserId] = useState<string | null>(null);
+  const logSession = useLogPracticeSession();
 
-  useEffect(() => {
-    // Only fetch on mount
-    supabase.auth.getUser().then(({ data }) => {
-      setUserId(data?.user?.id ?? null);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // -- Helper: save session to Supabase --
-  const savePracticeSession = useCallback(async (durationMs: number, startedAt: Date | null) => {
-    if (!userId || !pageId || !fileName || !startedAt) return;
-    setSaving(true);
-    try {
-      await supabase.from('practice_sessions').insert([
-        {
-          user_id: userId,
-          page_id: pageId,
-          file_name: fileName,
-          started_at: startedAt.toISOString(),
-          duration_seconds: Math.round(durationMs / 1000),
-        },
-      ]);
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to log practice session', err);
-    }
-    setSaving(false);
-  }, [userId, pageId, fileName, supabase]);
+  // -- Helper: save session to Supabase via mutation
+  const savePracticeSession = useCallback(
+    async (durationMs: number, startedAt: Date | null) => {
+      if (!pageId || !fileName || !startedAt) return;
+      const { data } = await supabase.auth.getUser();
+      const user_id = data?.user?.id;
+      if (!user_id) return;
+      logSession.mutate({
+        user_id,
+        page_id: pageId,
+        file_name: fileName,
+        started_at: startedAt.toISOString(),
+        duration_seconds: Math.round(durationMs / 1000),
+      });
+    },
+    [logSession, pageId, fileName, supabase]
+  );
 
   // --- WaveSurfer logic ---
   const initializeWaveSurfer = useCallback(() => {
@@ -122,7 +110,7 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       // On PAUSE, end session and log
-      wavesurferRef.current.on('pause', async () => {
+      wavesurferRef.current.on('pause', () => {
         setIsPlaying(false);
         trackPlayerInteraction({
           fileId,
@@ -137,7 +125,7 @@ const Player: React.FC<PlayerProps> = ({
           accumulatedTimeRef.current += now - playbackStartTimeRef.current;
           playbackStartTimeRef.current = null;
 
-          await savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
+          savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
           // Reset for next session
           sessionStartRef.current = null;
           accumulatedTimeRef.current = 0;
@@ -155,7 +143,7 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       // On FINISH (natural end), end session and log
-      wavesurferRef.current.on('finish', async () => {
+      wavesurferRef.current.on('finish', () => {
         trackPlayerInteraction({
           fileId,
           fileName: fileName || 'Unknown File',
@@ -173,7 +161,7 @@ const Player: React.FC<PlayerProps> = ({
           accumulatedTimeRef.current += now - playbackStartTimeRef.current;
           playbackStartTimeRef.current = null;
 
-          await savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
+          savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
           sessionStartRef.current = null;
           accumulatedTimeRef.current = 0;
           setSessionActive(false);
@@ -215,6 +203,37 @@ const Player: React.FC<PlayerProps> = ({
           position: wavesurferRef.current?.getCurrentTime() || 0,
         });
       });
+
+      // Visibility/page unload events
+      const handleSessionInterrupt = () => {
+        if (sessionActive && playbackStartTimeRef.current && sessionStartRef.current) {
+          const now = Date.now();
+          accumulatedTimeRef.current += now - playbackStartTimeRef.current;
+          playbackStartTimeRef.current = null;
+          savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
+          sessionStartRef.current = null;
+          accumulatedTimeRef.current = 0;
+          setSessionActive(false);
+        }
+      };
+
+      const handleVisibility = () => {
+        if (document.visibilityState === 'hidden') {
+          handleSessionInterrupt();
+        }
+      };
+      const handleBeforeUnload = () => {
+        handleSessionInterrupt();
+      };
+
+      document.addEventListener('visibilitychange', handleVisibility);
+      window.addEventListener('beforeunload', handleBeforeUnload);
+
+      // Clean up event listeners on destroy
+      wavesurferRef.current.on('destroy', () => {
+        document.removeEventListener('visibilitychange', handleVisibility);
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+      });
     }
   }, [
     publicUrl,
@@ -224,10 +243,10 @@ const Player: React.FC<PlayerProps> = ({
     fileId,
     onDurationReady,
     fileName,
-    // practice session deps:
     sessionActive,
     savePracticeSession,
     currentTime,
+    pageId,
   ]);
 
   useEffect(() => {
