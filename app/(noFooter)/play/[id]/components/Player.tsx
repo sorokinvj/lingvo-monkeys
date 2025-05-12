@@ -1,5 +1,5 @@
 // libs
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, useCallback, useEffect } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import { Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import dayjs from 'dayjs';
@@ -65,16 +65,65 @@ const Player: React.FC<PlayerProps> = ({
   );
 
   // DRY: finalize and log session
-  const finalizeSession = useCallback(() => {
-    if (isPlaying && playbackStartTimeRef.current && sessionStartRef.current) {
+const finalizeSession = useCallback(
+  (sync: boolean = false) => {
+    // Only log if a session is active and has started and playback was ongoing
+    if (
+      sessionStartRef.current &&
+      playbackStartTimeRef.current !== null &&
+      accumulatedTimeRef.current !== null
+    ) {
       const now = Date.now();
       accumulatedTimeRef.current += now - playbackStartTimeRef.current;
       playbackStartTimeRef.current = null;
-      savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
+      if (sync) {
+        // Synchronously flush session data (for beforeunload)
+        let user_id: string | undefined;
+        try {
+          const raw = window.localStorage.getItem('supabase.auth.token');
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            user_id = parsed?.currentSession?.user?.id;
+          }
+        } catch {}
+        if (user_id && pageId && fileName && sessionStartRef.current) {
+          const payload = {
+            user_id,
+            page_id: pageId,
+            file_name: fileName,
+            started_at: sessionStartRef.current.toISOString(),
+            duration_seconds: Math.round(accumulatedTimeRef.current / 1000),
+          };
+          try {
+            navigator.sendBeacon(
+              '/api/practice-session',
+              new Blob([JSON.stringify(payload)], { type: 'application/json' })
+            );
+          } catch (e) {
+            // Ignore errors in beforeunload
+          }
+        }
+      } else {
+        savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
+      }
       sessionStartRef.current = null;
       accumulatedTimeRef.current = 0;
+      setSessionActive(false);
     }
-  }, [isPlaying, savePracticeSession]);
+  },
+  [savePracticeSession, pageId, fileName]
+);
+
+// Visibility/page unload event handlers
+const handleVisibility = useCallback(() => {
+  if (document.visibilityState === 'hidden') {
+    finalizeSession(false);
+  }
+}, [finalizeSession]);
+
+const handleBeforeUnload = useCallback(() => {
+  finalizeSession(true);
+}, [finalizeSession]);
 
   // --- WaveSurfer logic ---
   const initializeWaveSurfer = useCallback(() => {
@@ -124,7 +173,7 @@ const Player: React.FC<PlayerProps> = ({
 
       // On PAUSE, end session and log
       wavesurferRef.current.on('pause', () => {
-        finalizeSession();
+        finalizeSession(false);
         setIsPlaying(false);
         trackPlayerInteraction({
           fileId,
@@ -132,9 +181,6 @@ const Player: React.FC<PlayerProps> = ({
           actionType: 'pause',
           position: wavesurferRef.current?.getCurrentTime() || 0,
         });
-        // reset session refs after logging
-        sessionStartRef.current = null;
-        accumulatedTimeRef.current = 0;
       });
 
       wavesurferRef.current.on('timeupdate', (currentTime) => {
@@ -148,7 +194,7 @@ const Player: React.FC<PlayerProps> = ({
 
       // On FINISH (natural end), end session and log
       wavesurferRef.current.on('finish', () => {
-        finalizeSession();
+        finalizeSession(false);
         setIsPlaying(false);
         trackPlayerInteraction({
           fileId,
@@ -160,9 +206,6 @@ const Player: React.FC<PlayerProps> = ({
             totalDuration: wavesurferRef.current?.getDuration() || 0,
           },
         });
-        // reset session refs after logging
-        sessionStartRef.current = null;
-        accumulatedTimeRef.current = 0;
       });
 
       // Seeking/clicking in waveform: do NOT stop session, just update position
@@ -201,24 +244,7 @@ const Player: React.FC<PlayerProps> = ({
         });
       });
 
-      // Visibility/page unload events
-      const handleSessionInterrupt = () => {
-        finalizeSession();
-        setIsPlaying(false);
-        // reset session refs after logging
-        sessionStartRef.current = null;
-        accumulatedTimeRef.current = 0;
-      };
-
-      const handleVisibility = () => {
-        if (document.visibilityState === 'hidden') {
-          handleSessionInterrupt();
-        }
-      };
-      const handleBeforeUnload = () => {
-        handleSessionInterrupt();
-      };
-
+      // Register visibility/page unload events here (removed from effect)
       document.addEventListener('visibilitychange', handleVisibility);
       window.addEventListener('beforeunload', handleBeforeUnload);
 
@@ -236,53 +262,23 @@ const Player: React.FC<PlayerProps> = ({
     fileId,
     onDurationReady,
     fileName,
-    sessionActive,
-    savePracticeSession,
-    currentTime,
-    pageId,
+    isPlaying,
+    handleVisibility,
+    handleBeforeUnload,
   ]);
 
   useEffect(() => {
     initializeWaveSurfer();
-
-    // --- Handle visibility change/unload events for logging session ---
-    const handleSessionInterrupt = async () => {
-      if (sessionActive && playbackStartTimeRef.current && sessionStartRef.current) {
-        const now = Date.now();
-        accumulatedTimeRef.current += now - playbackStartTimeRef.current;
-        playbackStartTimeRef.current = null;
-        await savePracticeSession(accumulatedTimeRef.current, sessionStartRef.current);
-        sessionStartRef.current = null;
-        accumulatedTimeRef.current = 0;
-        setSessionActive(false);
-      }
-    };
-
-    const handleVisibility = () => {
-      // Only log if audio was playing
-      if (document.visibilityState === 'hidden') {
-        handleSessionInterrupt();
-      }
-    };
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      handleSessionInterrupt();
-      // Optionally, show a dialog (not necessary)
-      // e.preventDefault(); e.returnValue = '';
-    };
-
-    document.addEventListener('visibilitychange', handleVisibility);
-    window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
       if (wavesurferRef.current) {
         wavesurferRef.current.destroy();
         wavesurferRef.current = null;
       }
-      document.removeEventListener('visibilitychange', handleVisibility);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      // No need to clean up global handlers here; they're cleaned up by .on('destroy')
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initializeWaveSurfer, sessionActive, savePracticeSession]);
+  }, [initializeWaveSurfer]);
 
   useEffect(() => {
     if (
