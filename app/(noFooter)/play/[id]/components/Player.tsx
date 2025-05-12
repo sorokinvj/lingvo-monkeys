@@ -44,6 +44,8 @@ const Player: React.FC<PlayerProps> = ({
   // Предотвращение избыточной аналитики
   const lastTrackEventRef = useRef<{ type: string; time: number } | null>(null);
   const { trackPlayerInteraction } = useAnalytics();
+  // Флаг для отслеживания инициализации WaveSurfer
+  const wasPlayerInitializedRef = useRef(false);
 
   // Обертка для предотвращения дублирования аналитики
   const trackPlayerWithDebounce = useCallback(
@@ -66,7 +68,6 @@ const Player: React.FC<PlayerProps> = ({
   const accumulatedTimeRef = useRef(0); // ms
   const playbackStartTimeRef = useRef<number | null>(null); // ms timestamp when playback starts/resumes
   const isFinalizingRef = useRef(false); // Флаг для предотвращения одновременных вызовов finalizeSession
-  const wasPlayerInitializedRef = useRef(false); // Флаг для отслеживания инициализации
 
   const logSession = useLogPracticeSession();
   const { data: user } = useUser();
@@ -179,11 +180,19 @@ const Player: React.FC<PlayerProps> = ({
     finalizeSession(true);
   }, [finalizeSession]);
 
-  // --- WaveSurfer logic ---
-  const initializeWaveSurfer = useCallback(() => {
-    console.log('[PLAYER] Initializing WaveSurfer', { publicUrl });
-    if (containerRef.current && !wavesurferRef.current) {
+  // Главный Effect - инициализация WaveSurfer и обработчиков
+  useEffect(() => {
+    console.log(
+      '[PLAYER] Mount effect called, wasInitialized:',
+      wasPlayerInitializedRef.current
+    );
+
+    // Инициализируем WaveSurfer только один раз
+    if (!wasPlayerInitializedRef.current && containerRef.current) {
+      wasPlayerInitializedRef.current = true;
       console.log('[PLAYER] Creating WaveSurfer instance');
+
+      // Создаём экземпляр WaveSurfer
       wavesurferRef.current = WaveSurfer.create({
         container: containerRef.current,
         waveColor: '#0349A4',
@@ -194,8 +203,13 @@ const Player: React.FC<PlayerProps> = ({
         height: 60,
         normalize: true,
         url: publicUrl,
+        // Добавляем опцию кэширования для предотвращения повторных запросов
+        fetchParams: {
+          cache: 'force-cache',
+        },
       });
 
+      // Настраиваем обработчики событий
       wavesurferRef.current.on('ready', () => {
         console.log('[PLAYER] WaveSurfer ready event');
         setIsReady(true);
@@ -310,44 +324,36 @@ const Player: React.FC<PlayerProps> = ({
         }, 200); // Задержка 200мс перед отправкой события
       });
 
-      // Register visibility/page unload events here (removed from effect)
-      document.addEventListener('visibilitychange', handleVisibility);
-      window.addEventListener('beforeunload', handleBeforeUnload);
-
-      // Clean up event listeners on destroy
+      // Сохраняем обработчик в функции destroy
       wavesurferRef.current.on('destroy', () => {
-        document.removeEventListener('visibilitychange', handleVisibility);
-        window.removeEventListener('beforeunload', handleBeforeUnload);
+        console.log('[PLAYER] WaveSurfer destroy event');
       });
     }
-  }, [
-    publicUrl,
-    onTimeUpdate,
-    onWaveformSeek,
-    trackPlayerWithDebounce,
-    fileId,
-    onDurationReady,
-    fileName,
-    isPlaying,
-    handleVisibility,
-    handleBeforeUnload,
-  ]);
 
-  useEffect(() => {
-    console.log('[PLAYER] Mount effect called');
-    initializeWaveSurfer();
+    // Отдельно добавляем обработчики событий на документ
+    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
+    // Очистка при размонтировании компонента
     return () => {
       console.log('[PLAYER] Cleanup effect');
+
+      // Удаляем обработчики событий
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+
+      // Уничтожаем WaveSurfer
       if (wavesurferRef.current) {
         wavesurferRef.current.destroy();
         wavesurferRef.current = null;
       }
-      // No need to clean up global handlers here; they're cleaned up by .on('destroy')
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initializeWaveSurfer]);
 
+      // Сбрасываем флаг инициализации только если компонент полностью размонтируется
+      wasPlayerInitializedRef.current = false;
+    };
+  }, []); // Пустой массив зависимостей - выполняется только при монтировании
+
+  // Отдельный эффект для обработки jumpToPositionMS
   useEffect(() => {
     if (
       wavesurferRef.current &&
