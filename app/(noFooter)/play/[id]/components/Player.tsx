@@ -108,7 +108,6 @@ const finalizeSession = useCallback(
       }
       sessionStartRef.current = null;
       accumulatedTimeRef.current = 0;
-      setSessionActive(false);
     }
   },
   [savePracticeSession, pageId, fileName]
