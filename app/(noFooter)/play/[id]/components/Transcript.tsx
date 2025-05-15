@@ -1,7 +1,8 @@
 import { FC, useState, useEffect, useCallback, Fragment, useRef } from 'react';
 import { FullTranscription } from '@/schema/models';
 import { useSettings } from '@/hooks/useSettings';
-import { AVAILABLE_FONTS } from '@/config/fonts';
+import TranscriptWord from './TranscriptWord';
+import BreakLine from './BreakLine';
 
 type Props = {
   transcript?: FullTranscription | null;
@@ -20,10 +21,22 @@ const Transcription: FC<Props> = ({
   const [activeWordIndex, setActiveWordIndex] = useState(-1);
   const [clickCount, setClickCount] = useState(0);
 
-  // Создаем мапу рефов для всех слов
-  const wordRefs = useRef<Map<number, HTMLSpanElement | null>>(new Map());
+  // Для отслеживания DOM-элементов слов (для прокрутки)
+  const wordRefs = useRef<Map<number, HTMLSpanElement>>(new Map());
   // Реф на контейнер для прокрутки
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // Регистрация рефа для слова
+  const registerWordRef = useCallback(
+    (index: number, element: HTMLSpanElement | null) => {
+      if (element) {
+        wordRefs.current.set(index, element);
+      } else {
+        wordRefs.current.delete(index);
+      }
+    },
+    []
+  );
 
   const findActiveWordIndex = useCallback(
     (words: any[], timeMS: number) => {
@@ -44,14 +57,17 @@ const Transcription: FC<Props> = ({
     [settings.highlightDelay]
   );
 
+  // Пороговое значение для определения, что слова находятся на одной строке (в пикселях)
+  const ROW_THRESHOLD = 5;
+
   const isInSameRow = useCallback((word1: DOMRect, word2: DOMRect) => {
-    const threshold = 5;
-    return Math.abs(word1.top - word2.top) < threshold;
+    return Math.abs(word1.top - word2.top) < ROW_THRESHOLD;
   }, []);
 
+  // Определение, должно ли слово быть подсвечено
   const shouldHighlight = useCallback(
-    (index: number, spanRef: HTMLSpanElement | null) => {
-      if (!spanRef) return false;
+    (index: number) => {
+      if (activeWordIndex === -1) return false;
 
       switch (settings.highlightMode) {
         case 'current':
@@ -59,72 +75,30 @@ const Transcription: FC<Props> = ({
         case 'all past':
           return index <= activeWordIndex;
         case 'past row': {
-          if (activeWordIndex === -1) return false;
-
-          // Используем ref вместо querySelector
           const activeWordElement = wordRefs.current.get(activeWordIndex);
-          if (!activeWordElement) return false;
+          const currentWordElement = wordRefs.current.get(index);
 
-          const activeWordRect = activeWordElement.getBoundingClientRect();
-          const currentWordRect = spanRef.getBoundingClientRect();
+          if (!activeWordElement || !currentWordElement) return false;
 
-          return isInSameRow(activeWordRect, currentWordRect);
+          const activeRect = activeWordElement.getBoundingClientRect();
+          const currentRect = currentWordElement.getBoundingClientRect();
+
+          // Подсвечиваем только слова на той же строке
+          return Math.abs(activeRect.top - currentRect.top) < ROW_THRESHOLD;
         }
         default:
           return false;
       }
     },
-    [activeWordIndex, settings.highlightMode, isInSameRow]
-  );
-
-  const applyWordStyles = useCallback(
-    (el: HTMLSpanElement | null, index: number) => {
-      if (!el) return;
-
-      const highlight = shouldHighlight(index, el);
-      const selectedFont = AVAILABLE_FONTS.find(
-        (font) => font.name === settings.fontFamily
-      );
-
-      Object.assign(el.style, {
-        color: highlight ? settings.pastWordsColor : settings.currentWordColor,
-        backgroundColor: highlight
-          ? settings.pastWordsHighlightColor
-          : settings.currentWordHighlightColor,
-        fontSize: `${settings.fontSize}rem`,
-        lineHeight: settings.lineHeight,
-        fontFamily: selectedFont?.value || 'system-ui',
-        fontSmooth: 'always',
-        WebkitFontSmoothing: 'antialiased',
-        MozOsxFontSmoothing: 'grayscale',
-        fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1, "dlig" 1',
-        textRendering: 'optimizeLegibility',
-        letterSpacing: '-0.01em',
-      });
-    },
-    [settings, shouldHighlight]
+    [activeWordIndex, settings.highlightMode]
   );
 
   const handleWordClick = useCallback(
-    (event: React.MouseEvent, time: number, wordIndex: number) => {
-      event.preventDefault();
-      event.stopPropagation();
+    (time: number, wordIndex: number) => {
       setClickCount((prev) => prev + 1);
       onWordClick(time + clickCount * 0.0001, wordIndex);
     },
     [onWordClick, clickCount]
-  );
-
-  // Функция для сохранения рефов к словам
-  const setWordRef = useCallback(
-    (el: HTMLSpanElement | null, index: number) => {
-      if (el) {
-        wordRefs.current.set(index, el);
-      } else {
-        wordRefs.current.delete(index);
-      }
-    },
-    []
   );
 
   // Функция для прокрутки к активному слову
@@ -201,25 +175,19 @@ const Transcription: FC<Props> = ({
       >
         {words.map((word: any, index: number) => (
           <Fragment key={`${word.start}-${word.end}`}>
-            <span
-              data-start={word.start}
-              data-end={word.end}
-              data-word-index={index}
-              ref={(el) => {
-                setWordRef(el, index); // Сохраняем ref в Map
-                applyWordStyles(el, index); // Применяем стили
-              }}
-              className="inline cursor-pointer px-0.5 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
-              onClick={(e) => handleWordClick(e, word.start, index)}
-              onMouseDown={(e) => e.preventDefault()}
-              suppressHydrationWarning={true}
-            >
-              {word.punctuated_word}
-            </span>{' '}
+            <TranscriptWord
+              word={word}
+              index={index}
+              activeWordIndex={activeWordIndex}
+              shouldHighlight={shouldHighlight}
+              onWordClick={handleWordClick}
+              ref={(el) => registerWordRef(index, el)}
+            />{' '}
             {settings.enableTextBreathing &&
               index < words.length - 1 &&
-              words[index + 1].start - word.end > settings.pauseThreshold &&
-              [...Array(settings.pauseLines)].map((_, i) => <br key={i} />)}
+              words[index + 1].start - word.end > settings.pauseThreshold && (
+                <BreakLine count={settings.pauseLines} />
+              )}
           </Fragment>
         ))}
       </div>
