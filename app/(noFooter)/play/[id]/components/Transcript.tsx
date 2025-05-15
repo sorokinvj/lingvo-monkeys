@@ -142,7 +142,13 @@ const Transcription: FC<Props> = ({
     const words = transcript.results.channels[0].alternatives[0].words;
     const newActiveIndex = findActiveWordIndex(words, currentTimeMS);
 
-    // Обновляем activeWordIndex только если он изменился
+    // КРИТИЧЕСКИ ВАЖНО!
+    // Эта проверка на неравенство с текущим activeWordIndex предотвращает
+    // бесконечный цикл обновлений состояния. Если её удалить или изменить,
+    // React будет уходить в Maximum update depth exceeded.
+    // Строчка setActiveWordIndex вызывает перерендер, который в свою очередь
+    // вызовет новое обновление времени, новый вызов useEffect, и т.д.
+    // Эта проверка разрывает потенциальный цикл обновлений!
     if (newActiveIndex !== -1 && newActiveIndex !== activeWordIndex) {
       setActiveWordIndex(newActiveIndex);
 

@@ -28,12 +28,15 @@ const Player: React.FC<PlayerProps> = ({
   const wavesurferRef = useRef<WaveSurfer | null>(null);
   const currentTimeRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  // const [currentTime, setCurrentTime] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
-  const { trackPlayerInteraction } = useAnalytics();
+  // Рефы для отслеживания времени прослушивания
+  const sessionStartRef = useRef<string | null>(null); // Время начала всей сессии прослушивания
+  const currentPlaySegmentStartTimeRef = useRef<number | null>(null); // Время начала текущего сегмента воспроизведения
+  const totalPlaybackTimeRef = useRef<number>(0); // Общее накопленное время прослушивания
+  const { trackPlayerInteraction, trackEvent } = useAnalytics();
 
   const initializeWaveSurfer = useCallback(() => {
     if (containerRef.current && !wavesurferRef.current) {
@@ -59,22 +62,26 @@ const Player: React.FC<PlayerProps> = ({
 
       wavesurferRef.current.on('play', () => {
         setIsPlaying(true);
-        trackPlayerInteraction({
-          fileId,
-          fileName: fileName || 'Unknown File',
-          actionType: 'play',
-          position: wavesurferRef.current?.getCurrentTime() || 0,
-        });
+
+        // Запоминаем время начала сессии при первом запуске воспроизведения
+        if (sessionStartRef.current === null) {
+          sessionStartRef.current = new Date().toISOString();
+        }
+
+        // Начинаем отслеживать текущий сегмент воспроизведения
+        currentPlaySegmentStartTimeRef.current = Date.now();
       });
 
       wavesurferRef.current.on('pause', () => {
         setIsPlaying(false);
-        trackPlayerInteraction({
-          fileId,
-          fileName: fileName || 'Unknown File',
-          actionType: 'pause',
-          position: wavesurferRef.current?.getCurrentTime() || 0,
-        });
+
+        // Рассчитываем время воспроизведения при остановке
+        if (currentPlaySegmentStartTimeRef.current !== null) {
+          const elapsedTimeMs =
+            Date.now() - currentPlaySegmentStartTimeRef.current;
+          totalPlaybackTimeRef.current += elapsedTimeMs;
+          currentPlaySegmentStartTimeRef.current = null;
+        }
       });
 
       wavesurferRef.current.on('timeupdate', (currentTime) => {
@@ -87,6 +94,30 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       wavesurferRef.current.on('finish', () => {
+        // Если воспроизведение идет, сохраняем текущее накопленное время
+        if (currentPlaySegmentStartTimeRef.current !== null) {
+          const elapsedTimeMs =
+            Date.now() - currentPlaySegmentStartTimeRef.current;
+          totalPlaybackTimeRef.current += elapsedTimeMs;
+          currentPlaySegmentStartTimeRef.current = null;
+        }
+
+        trackEvent({
+          eventType: 'file_listening',
+          data: {
+            fileId,
+            fileName: fileName || 'Unknown File',
+            startTime: sessionStartRef.current || new Date().toISOString(),
+            endTime: new Date().toISOString(),
+            durationSeconds: Math.floor(totalPlaybackTimeRef.current / 1000),
+            totalPlaybackTimeMs: totalPlaybackTimeRef.current,
+          },
+        });
+
+        // Сбрасываем рефы после отправки
+        sessionStartRef.current = null;
+        totalPlaybackTimeRef.current = 0;
+
         trackPlayerInteraction({
           fileId,
           fileName: fileName || 'Unknown File',
@@ -95,6 +126,7 @@ const Player: React.FC<PlayerProps> = ({
           metadata: {
             method: 'auto',
             totalDuration: wavesurferRef.current?.getDuration() || 0,
+            sessionTimeMs: totalPlaybackTimeRef.current,
           },
         });
       });
@@ -104,34 +136,9 @@ const Player: React.FC<PlayerProps> = ({
           const absoluteTime =
             relativePosition * wavesurferRef.current.getDuration();
           const timeMS = Math.floor(absoluteTime * 1000);
-          const totalDuration = wavesurferRef.current.getDuration();
-          const positionPercent = Math.round(relativePosition * 100);
-
-          trackPlayerInteraction({
-            fileId,
-            fileName: fileName || 'Unknown File',
-            actionType: 'seek',
-            position: absoluteTime,
-            metadata: {
-              source: 'transcript',
-              method: 'click',
-              positionPercent,
-              totalDuration,
-            },
-          });
-
           onTimeUpdate?.(timeMS);
           onWaveformSeek?.(timeMS);
         }
-      });
-
-      wavesurferRef.current.on('seeking', () => {
-        trackPlayerInteraction({
-          fileId,
-          fileName: fileName || 'Unknown File',
-          actionType: 'seek',
-          position: wavesurferRef.current?.getCurrentTime() || 0,
-        });
       });
     }
   }, [
@@ -142,18 +149,51 @@ const Player: React.FC<PlayerProps> = ({
     fileId,
     onDurationReady,
     fileName,
+    trackEvent,
   ]);
 
   useEffect(() => {
     initializeWaveSurfer();
 
     return () => {
+      // Сохраняем накопленное время при размонтировании компонента
+      if (currentPlaySegmentStartTimeRef.current !== null) {
+        const elapsedTimeMs =
+          Date.now() - currentPlaySegmentStartTimeRef.current;
+        totalPlaybackTimeRef.current += elapsedTimeMs;
+      }
+
+      if (totalPlaybackTimeRef.current > 0) {
+        // Отправляем FileListeningEvent
+        trackEvent({
+          eventType: 'file_listening',
+          data: {
+            fileId,
+            fileName: fileName || 'Unknown File',
+            startTime: sessionStartRef.current || new Date().toISOString(),
+            endTime: new Date().toISOString(),
+            durationSeconds: Math.floor(totalPlaybackTimeRef.current / 1000),
+            totalPlaybackTimeMs: totalPlaybackTimeRef.current,
+          },
+        });
+
+        // Обнуляем счетчики при успешной отправке
+        sessionStartRef.current = null;
+        totalPlaybackTimeRef.current = 0;
+      }
+
       if (wavesurferRef.current) {
         wavesurferRef.current.destroy();
         wavesurferRef.current = null;
       }
     };
-  }, [initializeWaveSurfer]);
+  }, [
+    initializeWaveSurfer,
+    trackPlayerInteraction,
+    fileId,
+    fileName,
+    trackEvent,
+  ]);
 
   useEffect(() => {
     if (

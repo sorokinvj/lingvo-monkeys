@@ -90,4 +90,14 @@ export const Columns = {
     EXITED_AT: 'exitedAt',
     DURATION: 'duration',
   },
+
+  // Колонки для FileListeningEvent
+  FILE_LISTENING_EVENT: {
+    FILE_ID: 'fileId',
+    FILE_NAME: 'fileName',
+    START_TIME: 'startTime',
+    END_TIME: 'endTime',
+    DURATION_SECONDS: 'durationSeconds',
+    TOTAL_PLAYBACK_TIME_MS: 'totalPlaybackTimeMs',
+  },
 } as const;

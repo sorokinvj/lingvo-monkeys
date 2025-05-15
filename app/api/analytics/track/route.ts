@@ -87,6 +87,15 @@ export async function POST(req: NextRequest) {
         break;
       case 'file_listening':
         table = 'FileListeningEvent';
+        // Убедимся, что данные отформатированы правильно
+        if (
+          dataWithUser.durationSeconds === undefined &&
+          dataWithUser.totalPlaybackTimeMs
+        ) {
+          dataWithUser.durationSeconds = Math.floor(
+            dataWithUser.totalPlaybackTimeMs / 1000
+          );
+        }
         break;
       case 'player_interaction':
         table = 'PlayerInteractionEvent';
