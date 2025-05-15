@@ -26,8 +26,9 @@ const Player: React.FC<PlayerProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
+  const currentTimeRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  // const [currentTime, setCurrentTime] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -77,7 +78,7 @@ const Player: React.FC<PlayerProps> = ({
       });
 
       wavesurferRef.current.on('timeupdate', (currentTime) => {
-        setCurrentTime(currentTime);
+        currentTimeRef.current = currentTime;
         onTimeUpdate?.(Math.floor(currentTime * 1000));
       });
 
@@ -90,7 +91,7 @@ const Player: React.FC<PlayerProps> = ({
           fileId,
           fileName: fileName || 'Unknown File',
           actionType: 'playback_complete',
-          position: currentTime,
+          position: currentTimeRef.current,
           metadata: {
             method: 'auto',
             totalDuration: wavesurferRef.current?.getDuration() || 0,
@@ -226,7 +227,7 @@ const Player: React.FC<PlayerProps> = ({
             <ChevronRight size={20} />
           </button>
         </div>
-        <p className="font-mono">{formatTime(currentTime)}</p>
+        <p className="font-mono">{formatTime(currentTimeRef.current)}</p>
       </div>
       <div className="relative w-full h-[30px] md:h-[60px]">
         {loadingProgress < 100 && (

@@ -1,8 +1,7 @@
-import { FC, useState, useEffect, useCallback, Fragment } from 'react';
+import { FC, useState, useEffect, useCallback, Fragment, useRef } from 'react';
 import { FullTranscription } from '@/schema/models';
 import { useSettings } from '@/hooks/useSettings';
 import { AVAILABLE_FONTS } from '@/config/fonts';
-import { setTimeout } from 'timers';
 
 type Props = {
   transcript?: FullTranscription | null;
@@ -20,6 +19,11 @@ const Transcription: FC<Props> = ({
   const { settings } = useSettings();
   const [activeWordIndex, setActiveWordIndex] = useState(-1);
   const [clickCount, setClickCount] = useState(0);
+
+  // Создаем мапу рефов для всех слов
+  const wordRefs = useRef<Map<number, HTMLSpanElement | null>>(new Map());
+  // Реф на контейнер для прокрутки
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const findActiveWordIndex = useCallback(
     (words: any[], timeMS: number) => {
@@ -57,9 +61,8 @@ const Transcription: FC<Props> = ({
         case 'past row': {
           if (activeWordIndex === -1) return false;
 
-          const activeWordElement = document.querySelector(
-            `[data-word-index="${activeWordIndex}"]`
-          );
+          // Используем ref вместо querySelector
+          const activeWordElement = wordRefs.current.get(activeWordIndex);
           if (!activeWordElement) return false;
 
           const activeWordRect = activeWordElement.getBoundingClientRect();
@@ -112,63 +115,86 @@ const Transcription: FC<Props> = ({
     [onWordClick, clickCount]
   );
 
+  // Функция для сохранения рефов к словам
+  const setWordRef = useCallback(
+    (el: HTMLSpanElement | null, index: number) => {
+      if (el) {
+        wordRefs.current.set(index, el);
+      } else {
+        wordRefs.current.delete(index);
+      }
+    },
+    []
+  );
+
+  // Функция для прокрутки к активному слову
+  const scrollToActiveWord = useCallback((wordIndex: number) => {
+    // Получаем элемент по индексу из нашей мапы рефов
+    const wordElement = wordRefs.current.get(wordIndex);
+    // Находим ближайший scrollable контейнер
+    const scrollContainer =
+      scrollContainerRef.current?.closest('.overflow-y-auto');
+
+    if (!wordElement || !scrollContainer) return;
+
+    // Получаем позиции элементов
+    const containerRect = scrollContainer.getBoundingClientRect();
+    const elementRect = wordElement.getBoundingClientRect();
+
+    // Проверяем видимость
+    const isVisible =
+      elementRect.top >= containerRect.top &&
+      elementRect.bottom <= containerRect.bottom;
+
+    if (!isVisible) {
+      // Вычисляем позицию для прокрутки
+      const scrollTop =
+        scrollContainer.scrollTop +
+        (elementRect.top - containerRect.top) -
+        containerRect.height / 2 +
+        elementRect.height / 2;
+
+      // Плавно прокручиваем
+      scrollContainer.scrollTo({
+        top: scrollTop,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
   useEffect(() => {
-    if (transcript) {
-      const words = transcript.results.channels[0].alternatives[0].words;
-      const newActiveIndex = findActiveWordIndex(words, currentTimeMS);
-      if (newActiveIndex !== -1) {
-        setActiveWordIndex(newActiveIndex);
+    if (!transcript) return;
 
-        // Only scroll when explicitly requested (after waveform click)
-        if (shouldScrollToWord) {
-          setTimeout(() => {
-            const activeWordElement = document.querySelector(
-              `[data-word-index="${newActiveIndex}"]`
-            ) as HTMLElement;
+    const words = transcript.results.channels[0].alternatives[0].words;
+    const newActiveIndex = findActiveWordIndex(words, currentTimeMS);
 
-            if (activeWordElement) {
-              // Find the parent scrollable container
-              const scrollableParent =
-                activeWordElement.closest('.overflow-y-auto');
+    // Обновляем activeWordIndex только если он изменился
+    if (newActiveIndex !== -1 && newActiveIndex !== activeWordIndex) {
+      setActiveWordIndex(newActiveIndex);
 
-              if (scrollableParent) {
-                // Get the parent's scroll position and dimensions
-                const parentRect = scrollableParent.getBoundingClientRect();
-                const elementRect = activeWordElement.getBoundingClientRect();
-
-                // Check if element is outside the visible area
-                const isVisible =
-                  elementRect.top >= parentRect.top &&
-                  elementRect.bottom <= parentRect.bottom;
-
-                if (!isVisible) {
-                  // Calculate the scroll position
-                  const scrollTop =
-                    scrollableParent.scrollTop +
-                    (elementRect.top - parentRect.top) -
-                    parentRect.height / 2 +
-                    elementRect.height / 2;
-
-                  // Smoothly scroll to the element
-                  scrollableParent.scrollTo({
-                    top: scrollTop,
-                    behavior: 'smooth',
-                  });
-                }
-              }
-            }
-          }, 0); // setTimeout to ensure DOM has updated
-        }
+      // Прокручиваем к слову, если нужно, используя нашу функцию
+      if (shouldScrollToWord) {
+        scrollToActiveWord(newActiveIndex);
       }
     }
-  }, [currentTimeMS, transcript, findActiveWordIndex, shouldScrollToWord]);
+  }, [
+    transcript,
+    currentTimeMS,
+    findActiveWordIndex,
+    shouldScrollToWord,
+    activeWordIndex,
+    scrollToActiveWord,
+  ]);
 
   if (!transcript) return null;
 
   const words = transcript.results.channels[0].alternatives[0].words;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+    <div
+      className="max-w-4xl mx-auto p-6 bg-gray-50 dark:bg-gray-900 overflow-hidden"
+      ref={scrollContainerRef}
+    >
       <div
         className="font-serif text-lg dark:text-gray-200 subpixel-antialiased"
         style={{ textAlign: settings.textAlignment }}
@@ -179,7 +205,10 @@ const Transcription: FC<Props> = ({
               data-start={word.start}
               data-end={word.end}
               data-word-index={index}
-              ref={(el) => applyWordStyles(el, index)}
+              ref={(el) => {
+                setWordRef(el, index); // Сохраняем ref в Map
+                applyWordStyles(el, index); // Применяем стили
+              }}
               className="inline cursor-pointer px-0.5 py-0.5 rounded selection:bg-blue-200 dark:selection:bg-blue-800"
               onClick={(e) => handleWordClick(e, word.start, index)}
               onMouseDown={(e) => e.preventDefault()}
