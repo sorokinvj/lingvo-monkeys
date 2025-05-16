@@ -28,7 +28,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const event: AnalyticsEvent = await req.json();
+    // Обработка запросов от sendBeacon (они могут приходить как text/plain)
+    let event: AnalyticsEvent;
+    const contentType = req.headers.get('content-type');
+
+    if (contentType?.includes('application/json')) {
+      event = await req.json();
+    } else {
+      // Обработка для text/plain (используется sendBeacon)
+      const text = await req.text();
+      try {
+        event = JSON.parse(text);
+      } catch (e) {
+        console.error('Failed to parse sendBeacon payload:', e);
+        return NextResponse.json(
+          { error: 'Invalid JSON in request body' },
+          { status: 400 }
+        );
+      }
+    }
 
     console.log('Received analytics event:', {
       type: event.eventType,
