@@ -17,16 +17,18 @@ export const formatEventTime = (date: string): string => {
 export const groupEventsByDay = (events: AnalyticsEvent[]) => {
   const grouped: Record<string, AnalyticsEvent[]> = {};
 
-  events.forEach((event) => {
-    const date = new Date(event.createdAt);
-    const dateKey = date.toLocaleDateString('ru-RU');
+  events
+    .filter((event) => event.eventType !== 'page_view')
+    .forEach((event) => {
+      const date = new Date(event.createdAt);
+      const dateKey = date.toLocaleDateString('ru-RU');
 
-    if (!grouped[dateKey]) {
-      grouped[dateKey] = [];
-    }
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = [];
+      }
 
-    grouped[dateKey].push(event);
-  });
+      grouped[dateKey].push(event);
+    });
 
   // Сортируем дни по убыванию (сначала новые)
   return Object.entries(grouped).sort(([dateA], [dateB]) => {
@@ -101,11 +103,23 @@ export const processUserAuditData = (
   return { events, fileNames };
 };
 
+const getFileListeningDescription = (
+  fileName: string,
+  durationSeconds: number
+) => {
+  if (durationSeconds < 60) {
+    return `Занимался с ${fileName} ${durationSeconds} секунд`;
+  }
+
+  const minutesWithSeconds = (durationSeconds / 60).toFixed(2);
+  return `Занимался с ${fileName} ${minutesWithSeconds} минут`;
+};
+
 // Получаем описание события для отображения
 export const getEventDescription = (
   event: AnalyticsEvent,
   fileNames: Record<string, string>
-): string => {
+): string | null => {
   const fileName =
     event.fileName ||
     (event.fileId && fileNames[event.fileId]) ||
@@ -119,17 +133,10 @@ export const getEventDescription = (
       return `Изменена настройка: ${event.settingKey} на ${event.newValue || 'Неизвестно'}`;
 
     case 'file_listening':
-      // Форматируем время прослушивания
-      const minutes = Math.floor((event.duration || 0) / 60);
-      return `Занимался с ${fileName} ${minutes} минут`;
+      return getFileListeningDescription(fileName, event.durationSeconds);
 
     case 'page_view':
-      // Не отображаем события посещения страниц /play/
-      if (event.path?.includes('/play/')) {
-        return '';
-      }
-      // Для остальных страниц оставляем как есть
-      return `Посетил ${event.path}`;
+      return null;
 
     default:
       return '';

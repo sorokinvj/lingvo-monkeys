@@ -131,20 +131,35 @@ export async function GET() {
           .select('*', { count: 'exact', head: true })
           .eq('userId', user.id);
 
-        // Получаем агрегированную статистику прослушивания из RPC-функции
-        const { data: listeningStats } = await supabase.rpc(
-          'get_user_listening_stats',
-          { user_id: user.id }
+        // Получаем все события аудита пользователя
+        const { data: auditData } = await supabase.rpc(
+          'get_user_audit_events',
+          { user_id: user.id, limit_per_table: 9999 }
         );
 
-        // Получаем данные из агрегированной статистики
-        const stats = listeningStats || {
-          total_seconds: 0,
-          total_files_listened: 0,
-          daily_stats: [],
-        };
+        // Считаем статистику слушания напрямую из listening_events
+        const listening_events = auditData?.listening_events || [];
+        const totalListeningTime = listening_events.reduce(
+          (acc: number, event: any) => acc + (event.durationSeconds || 0),
+          0
+        );
 
-        const totalListeningTime = stats.total_seconds || 0;
+        // Считаем количество уникальных прослушанных файлов
+        const uniqueFileIds = new Set(
+          listening_events.map((event: any) => event.fileId)
+        );
+        const totalFilesListened = uniqueFileIds.size;
+
+        console.log(`Calculated listening stats for ${user.email}:`, {
+          totalListeningTime,
+          totalFilesListened,
+        });
+
+        // Создаем объект stats для совместимости с остальным кодом
+        const stats = {
+          total_seconds: totalListeningTime,
+          total_files_listened: totalFilesListened,
+        };
 
         console.log(
           `Raw listening stats for ${user.email}:`,

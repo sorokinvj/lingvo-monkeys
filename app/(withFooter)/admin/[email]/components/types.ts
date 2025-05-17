@@ -46,13 +46,8 @@ export interface UserDailyStats {
   totalFilesListened: number;
   dailyStats?: Array<{
     date: string;
-    totalListeningSeconds: number;
-    totalFilesUploaded: number;
-    filesListened: Array<{
-      fileId: string;
-      fileName: string;
-      seconds: number;
-    }>;
+    totalSeconds: number;
+    filesCount: number;
   }>;
 }
 
@@ -79,5 +74,4 @@ export interface UserAuditData {
   settings_events: SettingsEvent[];
   page_view_events: PageViewEvent[];
   listening_events: FileListeningEvent[];
-  daily_stats?: UserDailyStats;
 }

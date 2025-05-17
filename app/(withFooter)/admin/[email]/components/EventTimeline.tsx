@@ -18,7 +18,9 @@ export default function EventTimeline({
       <div className="flex items-start flex-wrap gap-8">
         {eventsByDay.map(([day, dayEvents]) => (
           <div key={day}>
-            <h3 className="text-base font-bold text-blue-900">{day}</h3>
+            {dayEvents.length > 0 && (
+              <h3 className="text-base font-bold text-blue-900">{day}</h3>
+            )}
             <div className="space-y-2">
               {dayEvents.map((event) => (
                 <EventItem key={event.id} event={event} fileNames={fileNames} />

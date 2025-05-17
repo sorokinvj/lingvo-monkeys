@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { UserAuditData } from './types';
 
 // Функция для форматирования секунд в удобочитаемый формат времени
@@ -23,13 +24,19 @@ export default function StatisticsSection({
   const totalPlayerInteractions = auditData.player_events.length;
   const totalSettingsChanges = auditData.settings_events.length;
 
-  // Получаем данные из новой агрегированной статистики
-  const dailyStats = auditData.daily_stats || {
-    totalSeconds: 0,
-    totalFilesListened: 0,
-  };
-  const totalListeningTime = dailyStats.totalSeconds || 0;
-  const totalFilesListened = dailyStats.totalFilesListened || 0;
+  const totalListeningTimeInSeconds = useMemo(() => {
+    return auditData.listening_events.reduce(
+      (acc, event) => acc + event.durationSeconds,
+      0
+    );
+  }, [auditData.listening_events]);
+
+  const totalFilesListened = useMemo(() => {
+    const uniqueFiles = new Set(
+      auditData.listening_events.map((event) => event.fileId)
+    );
+    return uniqueFiles.size;
+  }, [auditData.listening_events]);
 
   return (
     <div className="my-2">
@@ -42,9 +49,9 @@ export default function StatisticsSection({
         </div>
         <div className="bg-lime-100 p-4 rounded-md">
           <div className="text-3xl font-bold text-lime-600 mb-2">
-            {formatTime(totalListeningTime)}
+            {formatTime(totalListeningTimeInSeconds)}
           </div>
-          <div className="text-sm text-gray-600">Общее время прослушивания</div>
+          <div className="text-sm text-gray-600">Прослушано всего</div>
         </div>
         <div className="bg-amber-100 p-4 rounded-md">
           <div className="text-3xl font-bold text-amber-600 mb-2">
