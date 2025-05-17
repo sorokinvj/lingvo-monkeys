@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { Tables } from '@/schema/schema';
 import { NextResponse } from 'next/server';
-import { isAdminEmail } from '@/app/(withFooter)/admin/helpers';
+import { isAdminEmail } from '@/app/(noFooter)/admin/helpers';
 
 // Интерфейс для возвращаемых данных статистики
 interface UserStatsResponse {

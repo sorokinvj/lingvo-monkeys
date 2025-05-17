@@ -1,5 +1,6 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 interface ActivityData {
@@ -13,33 +14,26 @@ interface ChartProps {
 }
 
 export function UserActivityChart({ endpoint, description }: ChartProps) {
-  const [activityData, setActivityData] = useState<ActivityData[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
+  const {
+    data: activityData,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery<ActivityData[], Error>({
+    queryKey: ['activityData'],
+    queryFn: async () => {
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        throw new Error(`Server responded with ${response.status}`);
+      }
+      const data = await response.json();
+      return data.activity || [];
+    },
+  });
 
   useEffect(() => {
-    const fetchActivityData = async () => {
-      try {
-        setIsLoading(true);
-        setError(false);
-
-        const response = await fetch(endpoint);
-        if (!response.ok) {
-          throw new Error(`Server responded with ${response.status}`);
-        }
-
-        const data = await response.json();
-        setActivityData(data.activity || []);
-      } catch (error) {
-        console.error('Error fetching activity data:', error);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchActivityData();
-  }, [endpoint]);
+    refetch();
+  }, [endpoint, refetch]);
 
   if (isLoading) {
     return <div className="p-8 text-center">Загрузка данных активности...</div>;
@@ -53,7 +47,7 @@ export function UserActivityChart({ endpoint, description }: ChartProps) {
     );
   }
 
-  if (activityData.length === 0) {
+  if (!activityData || activityData.length === 0) {
     return <div className="p-8 text-center">Нет данных для отображения</div>;
   }
 
@@ -81,7 +75,7 @@ export function UserActivityChart({ endpoint, description }: ChartProps) {
               className="relative flex h-full flex-1 flex-col justify-end"
             >
               <div
-                className="bg-primary w-full rounded-t"
+                className="bg-sky-100 w-full rounded-t"
                 style={{ height: `${heightPercentage}%` }}
               ></div>
               <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-gray-500">

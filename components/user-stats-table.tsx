@@ -12,7 +12,7 @@ import {
 import Link from 'next/link';
 import { InfoIcon } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { formatListeningTime } from '@/app/(withFooter)/admin/[email]/components/helpers';
+import { formatListeningTime } from '@/app/(noFooter)/admin/[email]/components/helpers';
 
 interface UserStat {
   id: string;

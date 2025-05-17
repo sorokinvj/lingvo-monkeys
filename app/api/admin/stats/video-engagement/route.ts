@@ -2,7 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { Tables } from '@/schema/schema';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { isAdminEmail } from '@/app/(withFooter)/admin/helpers';
+import { isAdminEmail } from '@/app/(noFooter)/admin/helpers';
 import { LANDING_VIDEO_UUID } from '@/config/constants';
 
 // Mark this route as dynamic to prevent static generation errors
