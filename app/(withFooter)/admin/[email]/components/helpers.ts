@@ -13,10 +13,12 @@ export const formatEventTime = (date: string): string => {
   });
 };
 
-// Группировка событий по дням
+// Группировка событий по дням с агрегацией событий прослушивания
 export const groupEventsByDay = (events: AnalyticsEvent[]) => {
   const grouped: Record<string, AnalyticsEvent[]> = {};
+  const aggregatedListeningByDay: Record<string, Record<string, number>> = {};
 
+  // Сначала фильтруем события и группируем их по дням
   events
     .filter((event) => event.eventType !== 'page_view')
     .forEach((event) => {
@@ -27,8 +29,75 @@ export const groupEventsByDay = (events: AnalyticsEvent[]) => {
         grouped[dateKey] = [];
       }
 
-      grouped[dateKey].push(event);
+      // Если это событие прослушивания, агрегируем его
+      if (event.eventType === 'file_listening') {
+        // Инициализируем агрегаторы для этого дня, если не существуют
+        if (!aggregatedListeningByDay[dateKey]) {
+          aggregatedListeningByDay[dateKey] = {};
+        }
+
+        // Используем имя файла или fileId как ключ
+        const fileKey = event.fileName || event.fileId || 'unknown';
+
+        // Увеличиваем общее время прослушивания для этого файла
+        if (!aggregatedListeningByDay[dateKey][fileKey]) {
+          aggregatedListeningByDay[dateKey][fileKey] = 0;
+        }
+        aggregatedListeningByDay[dateKey][fileKey] +=
+          event.durationSeconds || 0;
+      } else {
+        // Если это не событие прослушивания, добавляем как обычно
+        grouped[dateKey].push(event);
+      }
     });
+
+  // Теперь добавляем агрегированные события прослушивания
+  Object.entries(aggregatedListeningByDay).forEach(([dateKey, files]) => {
+    Object.entries(files).forEach(([fileKey, totalDuration]) => {
+      if (totalDuration > 0) {
+        // Находим первое событие прослушивания этого файла за день для получения образца
+        const originalEvents = events.filter(
+          (e) =>
+            e.eventType === 'file_listening' &&
+            (e.fileName === fileKey || e.fileId === fileKey) &&
+            new Date(e.createdAt).toLocaleDateString('ru-RU') === dateKey
+        );
+
+        if (originalEvents.length > 0) {
+          // Берем самое раннее событие дня как основу
+          const baseEvent = [...originalEvents].sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          )[0];
+
+          // Создаем "синтетическое" событие на основе первого
+          const aggregatedEvent: AnalyticsEvent = {
+            ...baseEvent,
+            durationSeconds: totalDuration,
+            // Сохраняем оригинальный ID, чтобы React не жаловался на дубликаты ключей
+            id: `${baseEvent.id}_aggregated`,
+          };
+
+          grouped[dateKey].push(aggregatedEvent);
+        }
+      }
+    });
+  });
+
+  // Для каждого дня удаляем оригинальные события прослушивания,
+  // так как мы заменили их агрегированными
+  Object.keys(grouped).forEach((dateKey) => {
+    grouped[dateKey] = grouped[dateKey].filter(
+      (event) =>
+        event.eventType !== 'file_listening' || event.id.includes('_aggregated')
+    );
+
+    // Сортируем события по времени (сначала новые)
+    grouped[dateKey].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  });
 
   // Сортируем дни по убыванию (сначала новые)
   return Object.entries(grouped).sort(([dateA], [dateB]) => {
@@ -103,6 +172,7 @@ export const processUserAuditData = (
   return { events, fileNames };
 };
 
+// Форматирование времени прослушивания в более читабельном виде
 const getFileListeningDescription = (
   fileName: string,
   durationSeconds: number
@@ -111,8 +181,25 @@ const getFileListeningDescription = (
     return `Занимался с ${fileName} ${durationSeconds} секунд`;
   }
 
-  const minutesWithSeconds = (durationSeconds / 60).toFixed(2);
-  return `Занимался с ${fileName} ${minutesWithSeconds} минут`;
+  const minutes = Math.floor(durationSeconds / 60);
+  const seconds = durationSeconds % 60;
+
+  if (minutes < 60) {
+    // Меньше часа - отображаем минуты и секунды
+    if (seconds === 0) {
+      return `Занимался с ${fileName} ${minutes} минут`;
+    }
+    return `Занимался с ${fileName} ${minutes} мин. ${seconds} сек.`;
+  } else {
+    // Больше часа - отображаем часы и минуты
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (remainingMinutes === 0) {
+      return `Занимался с ${fileName} ${hours} часов`;
+    }
+    return `Занимался с ${fileName} ${hours} ч. ${remainingMinutes} мин.`;
+  }
 };
 
 // Получаем описание события для отображения

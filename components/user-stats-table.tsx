@@ -62,8 +62,6 @@ export function UserStatsTable() {
     },
   });
 
-  console.log(stats);
-
   if (isLoading) {
     return (
       <div className="p-8 text-center">Загрузка данных пользователей...</div>
