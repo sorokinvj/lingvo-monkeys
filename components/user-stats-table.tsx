@@ -12,6 +12,7 @@ import {
 import Link from 'next/link';
 import { InfoIcon } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { formatListeningTime } from '@/app/(withFooter)/admin/[email]/components/helpers';
 
 interface UserStat {
   id: string;
@@ -32,19 +33,6 @@ const METRIC_DESCRIPTIONS = {
   interactions: 'Количество кликов по плееру и настройкам',
   pageViews: 'Количество просмотров страниц',
 };
-
-// Функция для форматирования времени
-function formatTime(seconds: number): string {
-  if (!seconds) return '0 мин';
-
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-
-  if (hours > 0) {
-    return `${hours} ч ${minutes} мин`;
-  }
-  return `${minutes} мин`;
-}
 
 export function UserStatsTable() {
   const {
@@ -78,20 +66,6 @@ export function UserStatsTable() {
 
   if (!stats || stats.length === 0) {
     return <div className="p-8 text-center">Нет данных для отображения</div>;
-  }
-
-  if (isLoading) {
-    return (
-      <div className="p-8 text-center">Загрузка данных пользователей...</div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="p-8 text-center text-destructive">
-        Ошибка загрузки данных
-      </div>
-    );
   }
 
   // Компонент для отображения заголовка с описанием
@@ -160,7 +134,7 @@ export function UserStatsTable() {
               <TableCell className="text-right">{user.totalFiles}</TableCell>
               <TableCell className="text-right">{user.libraryCount}</TableCell>
               <TableCell className="text-right">
-                {formatTime(user.totalListeningTime)}
+                {formatListeningTime(user.totalListeningTime)}
               </TableCell>
               <TableCell className="text-right">{user.interactions}</TableCell>
               <TableCell className="text-right">{user.pageViews}</TableCell>

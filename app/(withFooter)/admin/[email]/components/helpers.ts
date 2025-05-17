@@ -13,6 +13,20 @@ export const formatEventTime = (date: string): string => {
   });
 };
 
+// Функция для форматирования секунд в удобочитаемый формат времени
+export function formatListeningTime(seconds: number): string {
+  if (!seconds) return '0 мин';
+  if (seconds < 60) return `${seconds} сек`;
+
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+
+  if (hours > 0) {
+    return `${hours} ч ${minutes} мин`;
+  }
+  return `${minutes} мин`;
+}
+
 // Группировка событий по дням с агрегацией событий прослушивания
 export const groupEventsByDay = (events: AnalyticsEvent[]) => {
   const grouped: Record<string, AnalyticsEvent[]> = {};

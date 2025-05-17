@@ -1,18 +1,6 @@
 import { useMemo } from 'react';
 import { UserAuditData } from './types';
-
-// Функция для форматирования секунд в удобочитаемый формат времени
-function formatTime(seconds: number): string {
-  if (!seconds) return '0 мин';
-
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-
-  if (hours > 0) {
-    return `${hours} ч ${minutes} мин`;
-  }
-  return `${minutes} мин`;
-}
+import { formatListeningTime } from './helpers';
 
 export default function StatisticsSection({
   auditData,
@@ -49,7 +37,7 @@ export default function StatisticsSection({
         </div>
         <div className="bg-lime-100 p-4 rounded-md">
           <div className="text-3xl font-bold text-lime-600 mb-2">
-            {formatTime(totalListeningTimeInSeconds)}
+            {formatListeningTime(totalListeningTimeInSeconds)}
           </div>
           <div className="text-sm text-gray-600">Прослушано всего</div>
         </div>
