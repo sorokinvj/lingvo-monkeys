@@ -4,6 +4,7 @@ import WaveSurfer from 'wavesurfer.js';
 import { Pause, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import dayjs from 'dayjs';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { usePlaybackTracking } from './usePlaybackTracking';
 
 interface PlayerProps {
   publicUrl: string;
@@ -26,13 +27,21 @@ const Player: React.FC<PlayerProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const wavesurferRef = useRef<WaveSurfer | null>(null);
+  const currentTimeRef = useRef(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
   const { trackPlayerInteraction } = useAnalytics();
+
+  // Используем хук для отслеживания прослушивания
+  const { sendListeningData } = usePlaybackTracking({
+    fileId,
+    fileName,
+    isPlaying,
+    wavesurferRef,
+  });
 
   const initializeWaveSurfer = useCallback(() => {
     if (containerRef.current && !wavesurferRef.current) {
@@ -58,26 +67,14 @@ const Player: React.FC<PlayerProps> = ({
 
       wavesurferRef.current.on('play', () => {
         setIsPlaying(true);
-        trackPlayerInteraction({
-          fileId,
-          fileName: fileName || 'Unknown File',
-          actionType: 'play',
-          position: wavesurferRef.current?.getCurrentTime() || 0,
-        });
       });
 
       wavesurferRef.current.on('pause', () => {
         setIsPlaying(false);
-        trackPlayerInteraction({
-          fileId,
-          fileName: fileName || 'Unknown File',
-          actionType: 'pause',
-          position: wavesurferRef.current?.getCurrentTime() || 0,
-        });
       });
 
       wavesurferRef.current.on('timeupdate', (currentTime) => {
-        setCurrentTime(currentTime);
+        currentTimeRef.current = currentTime;
         onTimeUpdate?.(Math.floor(currentTime * 1000));
       });
 
@@ -90,7 +87,7 @@ const Player: React.FC<PlayerProps> = ({
           fileId,
           fileName: fileName || 'Unknown File',
           actionType: 'playback_complete',
-          position: currentTime,
+          position: currentTimeRef.current,
           metadata: {
             method: 'auto',
             totalDuration: wavesurferRef.current?.getDuration() || 0,
@@ -103,34 +100,9 @@ const Player: React.FC<PlayerProps> = ({
           const absoluteTime =
             relativePosition * wavesurferRef.current.getDuration();
           const timeMS = Math.floor(absoluteTime * 1000);
-          const totalDuration = wavesurferRef.current.getDuration();
-          const positionPercent = Math.round(relativePosition * 100);
-
-          trackPlayerInteraction({
-            fileId,
-            fileName: fileName || 'Unknown File',
-            actionType: 'seek',
-            position: absoluteTime,
-            metadata: {
-              source: 'transcript',
-              method: 'click',
-              positionPercent,
-              totalDuration,
-            },
-          });
-
           onTimeUpdate?.(timeMS);
           onWaveformSeek?.(timeMS);
         }
-      });
-
-      wavesurferRef.current.on('seeking', () => {
-        trackPlayerInteraction({
-          fileId,
-          fileName: fileName || 'Unknown File',
-          actionType: 'seek',
-          position: wavesurferRef.current?.getCurrentTime() || 0,
-        });
       });
     }
   }, [
@@ -152,7 +124,7 @@ const Player: React.FC<PlayerProps> = ({
         wavesurferRef.current = null;
       }
     };
-  }, [initializeWaveSurfer]);
+  }, [initializeWaveSurfer, trackPlayerInteraction, fileId, fileName]);
 
   useEffect(() => {
     if (
@@ -226,7 +198,7 @@ const Player: React.FC<PlayerProps> = ({
             <ChevronRight size={20} />
           </button>
         </div>
-        <p className="font-mono">{formatTime(currentTime)}</p>
+        <p className="font-mono">{formatTime(currentTimeRef.current)}</p>
       </div>
       <div className="relative w-full h-[30px] md:h-[60px]">
         {loadingProgress < 100 && (

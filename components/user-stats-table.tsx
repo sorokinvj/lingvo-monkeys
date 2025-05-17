@@ -11,70 +11,44 @@ import {
 } from '@/components/ui/ui-table';
 import Link from 'next/link';
 import { InfoIcon } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { formatListeningTime } from '@/app/(noFooter)/admin/[email]/components/helpers';
 
 interface UserStat {
   id: string;
   name: string;
   email: string;
   totalFiles: number;
+  libraryCount: number;
   totalListeningTime: number;
-  streak: number;
-  playerInteractions: number;
-  settingsChanges: number;
+  interactions: number;
   pageViews: number;
 }
 
 // Описания метрик
 const METRIC_DESCRIPTIONS = {
   totalFiles: 'Общее количество файлов, загруженных пользователем',
-  totalListeningTime: 'Общее время прослушивания в секундах',
-  streak: 'Максимальное количество дней подряд с практикой',
-  playerInteractions:
-    'Общее количество взаимодействий с плеером (play, pause, seek, etc.)',
-  settingsChanges: 'Количество изменений настроек пользователя',
+  library: 'Количество файлов, прослушанных в библиотеке',
+  minutes: 'Минут практики',
+  interactions: 'Количество кликов по плееру и настройкам',
   pageViews: 'Количество просмотров страниц',
 };
 
-// Функция для форматирования времени
-function formatTime(seconds: number): string {
-  if (!seconds) return '0 мин';
-
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-
-  if (hours > 0) {
-    return `${hours} ч ${minutes} мин`;
-  }
-  return `${minutes} мин`;
-}
-
 export function UserStatsTable() {
-  const [users, setUsers] = useState<UserStat[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchUserStats = async () => {
-      try {
-        setIsLoading(true);
-        setError(false);
-
-        const response = await fetch('/api/admin/stats/user-details');
-        if (!response.ok) {
-          throw new Error('Failed to fetch user stats');
-        }
-        const data = await response.json();
-        setUsers(data.users);
-      } catch (error) {
-        console.error('Error fetching user stats:', error);
-        setError(true);
-      } finally {
-        setIsLoading(false);
+  const {
+    isLoading,
+    error,
+    data: stats,
+  } = useQuery({
+    queryKey: ['userStats'],
+    queryFn: async () => {
+      const response = await fetch('/api/admin/stats/user-details');
+      if (!response.ok) {
+        throw new Error('Failed to fetch user stats');
       }
-    };
-
-    fetchUserStats();
-  }, []);
+      return response.json();
+    },
+  });
 
   if (isLoading) {
     return (
@@ -90,7 +64,7 @@ export function UserStatsTable() {
     );
   }
 
-  if (users.length === 0) {
+  if (!stats || stats.length === 0) {
     return <div className="p-8 text-center">Нет данных для отображения</div>;
   }
 
@@ -121,26 +95,26 @@ export function UserStatsTable() {
             <TableHead>Email</TableHead>
             <TableHead className="text-right">
               <HeaderWithTooltip
-                title="Файлов загружено"
+                title="Файлы"
                 description={METRIC_DESCRIPTIONS.totalFiles}
               />
             </TableHead>
             <TableHead className="text-right">
               <HeaderWithTooltip
-                title="Время прослушивания"
-                description={METRIC_DESCRIPTIONS.totalListeningTime}
+                title="Библиотека"
+                description={METRIC_DESCRIPTIONS.library}
               />
             </TableHead>
             <TableHead className="text-right">
               <HeaderWithTooltip
-                title="Дней подряд"
-                description={METRIC_DESCRIPTIONS.streak}
+                title="Практика"
+                description={METRIC_DESCRIPTIONS.minutes}
               />
             </TableHead>
             <TableHead className="text-right">
               <HeaderWithTooltip
                 title="Взаимодействий"
-                description={METRIC_DESCRIPTIONS.playerInteractions}
+                description={METRIC_DESCRIPTIONS.interactions}
               />
             </TableHead>
             <TableHead className="text-right">
@@ -152,19 +126,17 @@ export function UserStatsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => (
+          {stats.map((user: UserStat) => (
             <TableRow key={user.id}>
               <TableCell>
                 <Link href={`/admin/${user.email}`}>{user.email}</Link>
               </TableCell>
               <TableCell className="text-right">{user.totalFiles}</TableCell>
+              <TableCell className="text-right">{user.libraryCount}</TableCell>
               <TableCell className="text-right">
-                {formatTime(user.totalListeningTime)}
+                {formatListeningTime(user.totalListeningTime)}
               </TableCell>
-              <TableCell className="text-right">{user.streak}</TableCell>
-              <TableCell className="text-right">
-                {user.playerInteractions}
-              </TableCell>
+              <TableCell className="text-right">{user.interactions}</TableCell>
               <TableCell className="text-right">{user.pageViews}</TableCell>
             </TableRow>
           ))}

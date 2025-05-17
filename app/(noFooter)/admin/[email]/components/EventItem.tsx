@@ -6,7 +6,6 @@ import { getEventDescription } from './helpers';
 const EventIcons = {
   file_upload: '📤',
   file_listening: '🎧',
-  player_interaction: '▶️',
   settings_change: '⚙️',
   page_view: '👁️',
 };
@@ -50,12 +49,31 @@ export default function EventItem({
 
   const toggleDetails = () => setIsOpen(!isOpen);
 
+  // Пропускаем события взаимодействия с плеером
+  if (event.eventType === 'player_interaction') {
+    return null;
+  }
+
+  // Проверяем, не является ли это событие посещением страницы /play/
+  if (event.eventType === 'page_view' && event.path?.includes('/play/')) {
+    // Для событий просмотра файлов будем использовать информацию из FileListeningEvent
+    // Эта логика теперь находится в helpers.ts, getEventDescription
+  }
+
   const icon = EventIcons[event.eventType as keyof typeof EventIcons] || '📋';
   const time = new Date(event.createdAt).toLocaleTimeString('ru-RU', {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
   });
+
+  // Получаем описание события
+  const description = getEventDescription(event, fileNames);
+
+  // Если описание пустое, не отображаем событие
+  if (!description) {
+    return null;
+  }
 
   return (
     <>
@@ -64,21 +82,25 @@ export default function EventItem({
         <div className="w-2 h-2 flex items-center justify-center text-sm">
           {icon}
         </div>
-        <span className="font-medium text-sm">
-          {getEventDescription(event, fileNames)}
-        </span>
-        <button
-          onClick={toggleDetails}
-          className="text-sm text-gray-600 hover:text-blue-800 focus:outline-none"
-        >
-          🛠️
-        </button>
+        <span className="font-medium text-sm">{description}</span>
+        {(event.eventType === 'settings_change' ||
+          event.eventType === 'file_upload') && (
+          <button
+            onClick={toggleDetails}
+            className="text-sm text-gray-600 hover:text-blue-800 focus:outline-none"
+          >
+            🛠️
+          </button>
+        )}
       </div>
-      <EventDetails
-        event={event}
-        isOpen={isOpen}
-        toggleDetails={toggleDetails}
-      />
+      {(event.eventType === 'settings_change' ||
+        event.eventType === 'file_upload') && (
+        <EventDetails
+          event={event}
+          isOpen={isOpen}
+          toggleDetails={toggleDetails}
+        />
+      )}
     </>
   );
 }

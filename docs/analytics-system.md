@@ -1,6 +1,6 @@
 # Система аналитики пользовательских действий
 
-Этот документ описывает систему для отслеживания и анализа пользовательских действий в приложении.
+Этот документ описывает систему для отслеживания и анализа пользовательских действий в приложении Lingvo Monkeys.
 
 ## Обзор
 
@@ -10,8 +10,12 @@
 2. Прослушивание файлов
 3. Просмотр страниц
 4. Взаимодействие с плеером
-5. Взаимодействие с транскрипцией
-6. Изменение настроек
+5. Изменение настроек
+
+Данные собираются для анализа пользовательского поведения, улучшения функциональности приложения и предоставления статистики как для пользователей, так и для администраторов.
+
+> [!NOTE]
+> Система полностью внедрена и оптимизирована (май 2025). Все ранее существовавшие таблицы статистики (`UserDailyStats`) удалены и заменены на более эффективные решения с прямым доступом к событиям.
 
 ## Структура данных
 
@@ -80,22 +84,7 @@ CREATE TABLE IF NOT EXISTS "PlayerInteractionEvent" (
 );
 ```
 
-### 5. Взаимодействие с транскрипцией (`TranscriptInteractionEvent`)
-
-Отслеживает взаимодействие пользователя с транскрипцией:
-
-```sql
-CREATE TABLE IF NOT EXISTS "TranscriptInteractionEvent" (
-  "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  "userId" UUID NOT NULL REFERENCES "User"("id") ON DELETE CASCADE,
-  "fileId" UUID NOT NULL REFERENCES "File"("id") ON DELETE CASCADE,
-  "wordIndex" INTEGER, -- индекс слова в транскрипции
-  "timestamp" FLOAT, -- временная метка в аудио
-  "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-### 6. Изменение настроек (`SettingsChangeEvent`)
+### 5. Изменение настроек (`SettingsChangeEvent`)
 
 Отслеживает изменения пользовательских настроек:
 
@@ -150,7 +139,6 @@ export const useAnalytics = () => {
     trackFileListeningStart,
     trackFileListeningEnd,
     trackPlayerInteraction,
-    trackTranscriptInteraction,
     trackSettingsChange,
   };
 };

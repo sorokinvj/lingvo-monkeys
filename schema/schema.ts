@@ -45,6 +45,7 @@ export const Columns = {
     LANGUAGE: 'language',
     LANGUAGE_LEVEL: 'languageLevel',
     CONTENT_TYPE: 'contentType',
+    IS_LIBRARY: 'isLibrary',
   },
 
   // Колонки для Transcription
@@ -89,5 +90,15 @@ export const Columns = {
     LAST_ACTIVITY_AT: 'lastActivityAt',
     EXITED_AT: 'exitedAt',
     DURATION: 'duration',
+  },
+
+  // Колонки для FileListeningEvent
+  FILE_LISTENING_EVENT: {
+    FILE_ID: 'fileId',
+    FILE_NAME: 'fileName',
+    START_TIME: 'startTime',
+    END_TIME: 'endTime',
+    DURATION_SECONDS: 'durationSeconds',
+    TOTAL_PLAYBACK_TIME_MS: 'totalPlaybackTimeMs',
   },
 } as const;

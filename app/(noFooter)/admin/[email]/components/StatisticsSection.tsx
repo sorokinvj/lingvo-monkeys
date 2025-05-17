@@ -1,17 +1,6 @@
+import { useMemo } from 'react';
 import { UserAuditData } from './types';
-
-// Функция для форматирования секунд в удобочитаемый формат времени
-function formatTime(seconds: number): string {
-  if (!seconds) return '0 мин';
-
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-
-  if (hours > 0) {
-    return `${hours} ч ${minutes} мин`;
-  }
-  return `${minutes} мин`;
-}
+import { formatListeningTime } from './helpers';
 
 export default function StatisticsSection({
   auditData,
@@ -23,10 +12,19 @@ export default function StatisticsSection({
   const totalPlayerInteractions = auditData.player_events.length;
   const totalSettingsChanges = auditData.settings_events.length;
 
-  // Получаем данные из новой агрегированной статистики
-  const dailyStats = auditData.daily_stats || { totalSeconds: 0, streak: 0 };
-  const totalListeningTime = dailyStats.totalSeconds || 0;
-  const streak = dailyStats.streak || 0;
+  const totalListeningTimeInSeconds = useMemo(() => {
+    return auditData.listening_events.reduce(
+      (acc, event) => acc + event.durationSeconds,
+      0
+    );
+  }, [auditData.listening_events]);
+
+  const totalFilesListened = useMemo(() => {
+    const uniqueFiles = new Set(
+      auditData.listening_events.map((event) => event.fileId)
+    );
+    return uniqueFiles.size;
+  }, [auditData.listening_events]);
 
   return (
     <div className="my-2">
@@ -39,13 +37,17 @@ export default function StatisticsSection({
         </div>
         <div className="bg-lime-100 p-4 rounded-md">
           <div className="text-3xl font-bold text-lime-600 mb-2">
-            {formatTime(totalListeningTime)}
+            {formatListeningTime(totalListeningTimeInSeconds)}
           </div>
-          <div className="text-sm text-gray-600">Общее время прослушивания</div>
+          <div className="text-sm text-gray-600">Прослушано всего</div>
         </div>
         <div className="bg-amber-100 p-4 rounded-md">
-          <div className="text-3xl font-bold text-amber-600 mb-2">{streak}</div>
-          <div className="text-sm text-gray-600">Дней подряд с практикой</div>
+          <div className="text-3xl font-bold text-amber-600 mb-2">
+            {totalFilesListened}
+          </div>
+          <div className="text-sm text-gray-600">
+            Уникальных файлов прослушано
+          </div>
         </div>
       </div>
 

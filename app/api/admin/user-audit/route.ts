@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 import { Tables, Columns } from '@/schema/schema';
-import { UserAuditData } from '@/app/(withFooter)/admin/[email]/components/types';
+import { UserAuditData } from '@/app/(noFooter)/admin/[email]/components/types';
 
 // Mark this route as dynamic to prevent static generation errors
 export const dynamic = 'force-dynamic';
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       'get_user_audit_events',
       {
         user_id: userId,
-        limit_per_table: 100,
+        limit_per_table: 9999,
       }
     );
 

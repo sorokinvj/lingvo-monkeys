@@ -6,9 +6,9 @@ import { VideoEngagementStats } from '@/components/video-engagement-stats';
 
 export default function AdminPage() {
   return (
-    <div className="container py-10">
-      <div className="mb-10">
-        <h2 className="text-2xl font-bold mb-5">Статистика</h2>
+    <div className="container py-1 flex flex-col gap-10">
+      <div className="flex flex-col gap-5">
+        <h2 className="text-2xl font-bold">Статистика</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <StatsCard
             title="Пользователей"
@@ -25,22 +25,21 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div className="mb-10">
-        <h2 className="text-2xl font-bold mb-5">Активность пользователей</h2>
+      <div className="flex flex-col gap-5">
         <UserActivityChart
           endpoint="/api/admin/stats/upload-activity"
           description="Загрузка файлов за последние 30 дней"
         />
       </div>
 
-      <div className="mb-10">
-        <h2 className="text-2xl font-bold mb-5">Аналитика контента</h2>
-        <VideoEngagementStats />
+      <div className="flex flex-col gap-5">
+        <h2 className="text-2xl font-bold">Все пользователи</h2>
+        <UserStatsTable />
       </div>
 
-      <div className="mb-10">
-        <h2 className="text-2xl font-bold mb-5">Все пользователи</h2>
-        <UserStatsTable />
+      <div className="flex flex-col gap-5">
+        <h2 className="text-2xl font-bold">Аналитика контента</h2>
+        <VideoEngagementStats />
       </div>
     </div>
   );
