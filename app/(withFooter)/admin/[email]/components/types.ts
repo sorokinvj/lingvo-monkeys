@@ -44,7 +44,6 @@ export interface PageViewEvent extends BaseEvent {
 export interface UserDailyStats {
   totalSeconds: number;
   totalFilesListened: number;
-  streak: number;
   dailyStats?: Array<{
     date: string;
     totalListeningSeconds: number;
@@ -57,12 +56,21 @@ export interface UserDailyStats {
   }>;
 }
 
+// Интерфейс для события прослушивания файла
+export interface FileListeningEvent extends BaseEvent {
+  eventType: 'file_listening';
+  fileId: string;
+  fileName?: string;
+  duration: number; // длительность в секундах
+}
+
 // Объединенный тип для всех событий
 export type AnalyticsEvent =
   | UploadEvent
   | PlayerEvent
   | SettingsEvent
-  | PageViewEvent;
+  | PageViewEvent
+  | FileListeningEvent;
 
 // Структура ответа API
 export interface UserAuditData {
@@ -70,5 +78,6 @@ export interface UserAuditData {
   player_events: PlayerEvent[];
   settings_events: SettingsEvent[];
   page_view_events: PageViewEvent[];
+  listening_events: FileListeningEvent[];
   daily_stats?: UserDailyStats;
 }

@@ -64,9 +64,7 @@ export function UserActivityChart({ endpoint, description }: ChartProps) {
     <div className="w-full">
       {description && (
         <div className="mb-4 text-sm text-gray-500">
-          <p>
-            <strong>Формула расчета:</strong> {description}
-          </p>
+          <p>{description}</p>
         </div>
       )}
       <div className="flex h-[200px] items-end gap-2">

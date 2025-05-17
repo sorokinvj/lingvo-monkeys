@@ -24,9 +24,12 @@ export default function StatisticsSection({
   const totalSettingsChanges = auditData.settings_events.length;
 
   // Получаем данные из новой агрегированной статистики
-  const dailyStats = auditData.daily_stats || { totalSeconds: 0, streak: 0 };
+  const dailyStats = auditData.daily_stats || {
+    totalSeconds: 0,
+    totalFilesListened: 0,
+  };
   const totalListeningTime = dailyStats.totalSeconds || 0;
-  const streak = dailyStats.streak || 0;
+  const totalFilesListened = dailyStats.totalFilesListened || 0;
 
   return (
     <div className="my-2">
@@ -44,8 +47,12 @@ export default function StatisticsSection({
           <div className="text-sm text-gray-600">Общее время прослушивания</div>
         </div>
         <div className="bg-amber-100 p-4 rounded-md">
-          <div className="text-3xl font-bold text-amber-600 mb-2">{streak}</div>
-          <div className="text-sm text-gray-600">Дней подряд с практикой</div>
+          <div className="text-3xl font-bold text-amber-600 mb-2">
+            {totalFilesListened}
+          </div>
+          <div className="text-sm text-gray-600">
+            Уникальных файлов прослушано
+          </div>
         </div>
       </div>
 

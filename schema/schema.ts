@@ -45,6 +45,7 @@ export const Columns = {
     LANGUAGE: 'language',
     LANGUAGE_LEVEL: 'languageLevel',
     CONTENT_TYPE: 'contentType',
+    IS_LIBRARY: 'isLibrary',
   },
 
   // Колонки для Transcription

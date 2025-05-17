@@ -3,23 +3,16 @@ import { Tables } from '@/schema/schema';
 import { NextResponse } from 'next/server';
 import { isAdminEmail } from '@/app/(withFooter)/admin/helpers';
 
-// Интерфейс для данных, возвращаемых функцией get_user_listening_stats
-interface UserListeningStats {
-  totalSeconds: number;
-  totalFilesListened: number;
-  streak: number;
-  dailyStats: Array<{
-    date: string;
-    totalListeningSeconds: number;
-    totalFilesUploaded: number;
-    filesListened: any[];
-  }>;
-}
-
-// Интерфейс для статистики взаимодействий
-interface CountResult {
-  userId: string;
-  count: string;
+// Интерфейс для возвращаемых данных статистики
+interface UserStatsResponse {
+  id: string;
+  name: string;
+  email: string;
+  totalFiles: number;
+  libraryCount: number;
+  totalListeningTime: number;
+  interactions: number;
+  pageViews: number;
 }
 
 /**
@@ -30,10 +23,9 @@ interface CountResult {
  * - name: имя пользователя
  * - email: email пользователя
  * - totalFiles: общее количество файлов, загруженных пользователем
+ * - libraryCount: количество файлов библиотеки, прослушанных более 1 минуты
  * - totalListeningTime: общее время прослушивания в секундах
- * - streak: максимальное количество дней подряд с активностью
- * - playerInteractions: общее количество взаимодействий с плеером
- * - settingsChanges: количество изменений настроек
+ * - interactions: общее количество взаимодействий (плеер + настройки)
  * - pageViews: количество просмотров страниц
  */
 export async function GET() {
@@ -80,23 +72,16 @@ export async function GET() {
     }
 
     // Получаем статистику взаимодействий с плеером для всех пользователей одним запросом
-    console.log('Calling count_player_interactions RPC...');
     const playerInteractionsResult = await supabase.rpc(
       'count_player_interactions',
       {}
     );
-    console.log('Player interactions result:', playerInteractionsResult);
 
     // Проверяем структуру данных и создаем словарь userId -> количество взаимодействий
     const playerInteractionsMap: Record<string, number> = {};
     if (playerInteractionsResult.data) {
-      console.log(
-        'Player interactions data structure:',
-        JSON.stringify(playerInteractionsResult.data)
-      );
       playerInteractionsResult.data.forEach((stat: any) => {
         // Проверяем формат данных, возвращаемых функцией
-        console.log('Player interaction stat item:', stat);
         if (
           stat &&
           (typeof stat.userId !== 'undefined' ||
@@ -112,23 +97,15 @@ export async function GET() {
         }
       });
     }
-    console.log('Final player interactions map:', playerInteractionsMap);
 
     // Получаем статистику просмотров страниц для всех пользователей одним запросом
-    console.log('Calling count_page_views RPC...');
     const pageViewsResult = await supabase.rpc('count_page_views', {});
-    console.log('Page views result:', pageViewsResult);
 
     // Создаем словарь userId -> количество просмотров страниц
     const pageViewsMap: Record<string, number> = {};
     if (pageViewsResult.data) {
-      console.log(
-        'Page views data structure:',
-        JSON.stringify(pageViewsResult.data)
-      );
       pageViewsResult.data.forEach((stat: any) => {
         // Проверяем формат данных, возвращаемых функцией
-        console.log('Page view stat item:', stat);
         if (
           stat &&
           (typeof stat.userId !== 'undefined' ||
@@ -144,7 +121,6 @@ export async function GET() {
         }
       });
     }
-    console.log('Final page views map:', pageViewsMap);
 
     // Данные для всех пользователей
     const userStats = await Promise.all(
@@ -162,14 +138,35 @@ export async function GET() {
         );
 
         // Получаем данные из агрегированной статистики
-        const stats = (listeningStats as UserListeningStats) || {
-          totalSeconds: 0,
-          streak: 0,
+        const stats = listeningStats || {
+          total_seconds: 0,
+          total_files_listened: 0,
+          daily_stats: [],
         };
-        const totalListeningTime = stats.totalSeconds || 0;
-        const streak = stats.streak || 0;
 
-        // Получаем данные о изменениях настроек из отдельного запроса
+        const totalListeningTime = stats.total_seconds || 0;
+
+        console.log(
+          `Raw listening stats for ${user.email}:`,
+          JSON.stringify(stats, null, 2)
+        );
+
+        // Получаем количество библиотечных файлов, которые пользователь прослушал
+        // более 1 минуты суммарно, используя оптимизированную SQL-функцию
+        const { data: directLibraryQuery } = await supabase.rpc(
+          'get_library_count_for_user',
+          { user_id_param: user.id }
+        );
+
+        console.log(
+          `Direct library query for ${user.email}:`,
+          directLibraryQuery
+        );
+
+        // Используем результат либо из прямого SQL-запроса, либо из предыдущего запроса
+        const libraryCount = directLibraryQuery?.count || 0;
+
+        // Получаем данные о изменениях настроек
         const { count: settingsChanges } = await supabase
           .from('SettingsChangeEvent')
           .select('*', { count: 'exact', head: true })
@@ -177,6 +174,8 @@ export async function GET() {
 
         // Используем данные из предварительно полученных словарей
         const playerInteractions = playerInteractionsMap[user.id] || 0;
+        // Объединяем взаимодействия (плеер + настройки)
+        const interactions = playerInteractions + (settingsChanges || 0);
         const pageViews = pageViewsMap[user.id] || 0;
 
         return {
@@ -184,16 +183,18 @@ export async function GET() {
           name: user.name,
           email: user.email,
           totalFiles: totalFiles || 0,
+          libraryCount,
           totalListeningTime,
-          streak,
-          playerInteractions,
-          settingsChanges: settingsChanges || 0,
+          interactions,
           pageViews,
         };
       })
     );
 
-    return NextResponse.json({ users: userStats });
+    // Сортируем пользователей по общему времени прослушивания (по убыванию)
+    userStats.sort((a, b) => b.totalListeningTime - a.totalListeningTime);
+
+    return NextResponse.json(userStats);
   } catch (error) {
     console.error('Error fetching user details:', error);
     return NextResponse.json(

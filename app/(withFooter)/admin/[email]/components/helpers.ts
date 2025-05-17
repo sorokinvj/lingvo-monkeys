@@ -48,53 +48,55 @@ export const processUserAuditData = (
     eventType: 'file_upload' as const,
   }));
 
-  const playerEvents = auditData.player_events.map((event) => {
-    // Нормализуем данные для взаимодействия с плеером
-    const normalizedEvent = {
-      ...event,
-      eventType: 'player_interaction' as const,
-    };
-
-    // Проверяем, существует ли actionType
-    if (!normalizedEvent.actionType && normalizedEvent.action) {
-      normalizedEvent.actionType = normalizedEvent.action;
-    }
-
-    // Для обратной совместимости с разными форматами
-    if (normalizedEvent.actionType === 'speed_change') {
-      normalizedEvent.actionType = 'speed';
-    }
-
-    return normalizedEvent;
-  });
-
   const settingsEvents = auditData.settings_events.map((event) => ({
     ...event,
     eventType: 'settings_change' as const,
   }));
 
-  const pageViewEvents = auditData.page_view_events.map((event) => ({
-    ...event,
-    eventType: 'page_view' as const,
-  }));
+  // Преобразуем события просмотра страницы с /play/ в события прослушивания файлов
+  const listeningEvents: AnalyticsEvent[] = auditData.listening_events
+    ? auditData.listening_events.map((event) => ({
+        ...event,
+        eventType: 'file_listening' as const,
+      }))
+    : [];
+  const pageViewEvents = auditData.page_view_events.map((event) => {
+    const transformed = {
+      ...event,
+      eventType: 'page_view' as const,
+    };
+    return transformed;
+  });
 
   // Объединяем все события в один массив и сортируем по времени
   const events = [
     ...uploadEvents,
-    ...playerEvents,
+    //...playerEvents, // Исключаем события взаимодействия с плеером
     ...settingsEvents,
-    ...pageViewEvents,
+    ...pageViewEvents.filter((event) => !event.path?.includes('/play/')), // Исключаем события просмотра страниц /play/
+    ...listeningEvents, // Добавляем новые события прослушивания
   ].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   }) as AnalyticsEvent[];
 
-  // Создаем словарь имен файлов из событий загрузки
+  // Создаем словарь имен файлов из событий загрузки и прослушивания
   const fileNames: Record<string, string> = {};
+
+  // Добавляем имена из загруженных файлов
   auditData.upload_events.forEach((event) => {
     if (event.fileId && event.fileName) {
       fileNames[event.fileId] = event.fileName;
     }
   });
+
+  // Добавляем имена из прослушиваемых файлов (важно для библиотечных файлов)
+  if (auditData.listening_events) {
+    auditData.listening_events.forEach((event) => {
+      if (event.fileId && event.fileName) {
+        fileNames[event.fileId] = event.fileName;
+      }
+    });
+  }
 
   return { events, fileNames };
 };
@@ -113,28 +115,24 @@ export const getEventDescription = (
     case 'file_upload':
       return `Загружен файл: ${fileName}`;
 
-    case 'player_interaction':
-      const actionMap: Record<string, string> = {
-        play: 'Воспроизведение',
-        pause: 'Пауза',
-        seek: 'Перемотка',
-        speed: 'Изменение скорости',
-        speed_change: 'Изменение скорости',
-      };
-
-      // Используем actionType или action, если actionType не существует
-      const actionKey = event.actionType || event.action || '';
-      const action = actionMap[actionKey] || 'Взаимодействие';
-      return `${action} с аудиоплеером`;
-
     case 'settings_change':
       return `Изменена настройка: ${event.settingKey} на ${event.newValue || 'Неизвестно'}`;
 
+    case 'file_listening':
+      // Форматируем время прослушивания
+      const minutes = Math.floor((event.duration || 0) / 60);
+      return `Занимался с ${fileName} ${minutes} минут`;
+
     case 'page_view':
+      // Не отображаем события посещения страниц /play/
+      if (event.path?.includes('/play/')) {
+        return '';
+      }
+      // Для остальных страниц оставляем как есть
       return `Посетил ${event.path}`;
 
     default:
-      return 'Неизвестное действие';
+      return '';
   }
 };
 
