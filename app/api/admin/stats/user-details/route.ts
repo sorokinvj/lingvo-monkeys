@@ -150,32 +150,17 @@ export async function GET() {
         );
         const totalFilesListened = uniqueFileIds.size;
 
-        console.log(`Calculated listening stats for ${user.email}:`, {
-          totalListeningTime,
-          totalFilesListened,
-        });
-
         // Создаем объект stats для совместимости с остальным кодом
         const stats = {
           total_seconds: totalListeningTime,
           total_files_listened: totalFilesListened,
         };
 
-        console.log(
-          `Raw listening stats for ${user.email}:`,
-          JSON.stringify(stats, null, 2)
-        );
-
         // Получаем количество библиотечных файлов, которые пользователь прослушал
         // более 1 минуты суммарно, используя оптимизированную SQL-функцию
         const { data: directLibraryQuery } = await supabase.rpc(
           'get_library_count_for_user',
           { user_id_param: user.id }
-        );
-
-        console.log(
-          `Direct library query for ${user.email}:`,
-          directLibraryQuery
         );
 
         // Используем результат либо из прямого SQL-запроса, либо из предыдущего запроса
