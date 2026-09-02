@@ -2,6 +2,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { Tables, Columns } from '@/schema/schema';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { isAdminEmail } from '@/app/(withFooter)/admin/helpers';
 
 // Mark this route as dynamic to prevent static generation errors
 export const dynamic = 'force-dynamic';
@@ -17,12 +18,14 @@ async function isAdmin(userId: string) {
     .eq('id', userId)
     .single();
 
-  // Check if the user is an admin
-  // You may want to replace this with a proper admin role check
-  return (
-    userData?.email &&
-    (userData.email === process.env.ADMIN_EMAIL ||
-      userData.email.endsWith('@lingvomonkeys.com'))
+  // Список админов — тот же, что у страницы /admin (isAdminEmail), иначе
+  // дашборд открывается, а этот роут отвечает 403. ADMIN_EMAIL и домен
+  // оставлены как дополнительное разрешение.
+  return Boolean(
+    isAdminEmail(userData?.email) ||
+      (userData?.email &&
+        (userData.email === process.env.ADMIN_EMAIL ||
+          userData.email.endsWith('@lingvomonkeys.com')))
   );
 }
 

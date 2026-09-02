@@ -2,12 +2,40 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 import { Tables, Columns } from '@/schema/schema';
 import { UserAuditData } from '@/app/(withFooter)/admin/[email]/components/types';
+import { isAdminEmail } from '@/app/(withFooter)/admin/helpers';
 
 // Mark this route as dynamic to prevent static generation errors
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
+    // Роут ходит сервисным ключом и отдаёт всю историю событий любого
+    // пользователя по email, поэтому доступ к нему обязан быть только у админа.
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { data: null, error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    const { data: currentUser } = await supabase
+      .from(Tables.USER)
+      .select('email')
+      .eq('id', user.id)
+      .single();
+
+    if (!isAdminEmail(currentUser?.email)) {
+      return NextResponse.json(
+        { data: null, error: 'Admin access required' },
+        { status: 403 }
+      );
+    }
+
     const adminClient = createClient({ useServiceRole: true });
     // Получение email пользователя из параметров запроса
     const searchParams = new URL(request.url).searchParams;
