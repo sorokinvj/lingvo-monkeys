@@ -34,11 +34,23 @@ export async function DELETE(
     return NextResponse.json({ error: 'File ID is required' }, { status: 400 });
   }
 
-  // Fetch the file details
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Fetch the file details.
+  // Фильтр по userId обязателен: без него роут удалял объект из S3 ещё до
+  // того, как RLS отсечёт запись в БД (в том числе для файлов коллекции,
+  // которые читать может кто угодно).
   const { data: file, error: fetchError } = await supabase
     .from(Tables.FILE)
     .select('path, transcriptionId')
     .eq('id', fileId)
+    .eq(Columns.COMMON.USER_ID, user.id)
     .single();
 
   if (fetchError || !file) {
