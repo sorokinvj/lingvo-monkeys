@@ -2,11 +2,16 @@ import { createClient } from '@/utils/supabase/server';
 import { Tables, Columns } from '@/schema/schema';
 import { NextResponse } from 'next/server';
 
-// Email пользователя, владеющего коллекцией
+// Email пользователя, владеющего коллекцией.
+// Продублирован в public.library_owner_id() (миграция 20260902000000),
+// откуда RLS-политика на File/Transcription берёт список публичных файлов.
 const COLLECTION_OWNER_EMAIL = 'christrobs@gmail.com';
 
 export async function GET() {
-  const supabase = createClient();
+  // Сервисный ключ: роут читает чужую (владельца коллекции) строку в User,
+  // что под RLS недоступно ни anon, ни обычному авторизованному пользователю.
+  // Наружу отдаём только файлы коллекции — они и так публичные.
+  const supabase = createClient({ useServiceRole: true });
 
   try {
     // Находим пользователя в таблице User по email
