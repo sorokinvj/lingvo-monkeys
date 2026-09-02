@@ -1,4 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
+import { notFound } from 'next/navigation';
 import { Tables, Columns } from '@/schema/schema';
 import {
   dehydrate,
@@ -17,12 +18,10 @@ export default async function PlayPage({ params }: { params: { id: string } }) {
     .eq('id', params.id)
     .single();
 
-  if (fileError) {
-    throw new Error(`Error fetching file: ${fileError.message}`);
-  }
-
-  if (!file) {
-    throw new Error('File not found');
+  // Под RLS чужой приватный файл просто не возвращается (PGRST116 у .single()),
+  // поэтому «нет доступа» и «нет файла» — одна и та же ветка: 404, а не 500.
+  if (fileError || !file) {
+    notFound();
   }
 
   const queryClient = new QueryClient();
