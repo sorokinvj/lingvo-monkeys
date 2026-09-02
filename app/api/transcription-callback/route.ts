@@ -14,7 +14,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = createClient();
+    // Вебхук приходит от Deepgram без сессии пользователя, поэтому вся запись
+    // идёт сервисным ключом: под RLS анонимный клиент обновил бы 0 строк и
+    // файл навсегда остался бы в статусе "transcribing".
     const adminClient = createClient({ useServiceRole: true });
 
     const body = await request.json();
@@ -26,7 +28,7 @@ export async function POST(request: NextRequest) {
     const transcript = body.results.channels[0].alternatives[0].transcript;
 
     // Update the Transcription record with the results
-    const { data: transcriptionData, error } = await supabase
+    const { data: transcriptionData, error } = await adminClient
       .from(Tables.TRANSCRIPTION)
       .update({
         content: transcript,
@@ -48,7 +50,7 @@ export async function POST(request: NextRequest) {
     const updatedTranscription = transcriptionData[0]; // It's an array, so we take the first item
 
     // Update the File record with the new transcriptionId and status
-    const { data: fileData, error: updateFileError } = await supabase
+    const { data: fileData, error: updateFileError } = await adminClient
       .from(Tables.FILE)
       .update({
         status: 'transcribed',
