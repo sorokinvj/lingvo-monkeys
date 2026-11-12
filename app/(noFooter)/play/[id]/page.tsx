@@ -8,7 +8,10 @@ import {
 } from '@tanstack/react-query';
 import PlayTranscript from './components/PlayTranscript';
 
-export default async function PlayPage({ params }: { params: { id: string } }) {
+export default async function PlayPage(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = await props.params;
   const supabase = createClient();
 
   // Fetch the file record

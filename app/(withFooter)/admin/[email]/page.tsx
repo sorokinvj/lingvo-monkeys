@@ -12,9 +12,9 @@ import { isAdminEmail } from '../helpers';
 export default async function UserAudit({
   params,
 }: {
-  params: { email: string };
+  params: Promise<{ email: string }>;
 }) {
-  const email = decodeURIComponent(params.email);
+  const email = decodeURIComponent((await params).email);
   const supabase = createClient();
 
   // Проверяем права доступа

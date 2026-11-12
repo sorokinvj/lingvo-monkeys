@@ -1,0 +1,59 @@
+name: Cloudflare
+
+# Production runs on Cloudflare Workers (OpenNext) since 2026-11-12; Vercel is
+# retired. Pull requests are built to catch breakage; main is built and deployed
+# to the `lingvo-monkeys` Worker (lingvomonkeys.com).
+#
+# Build-time (inlined into the client bundle, public by design):
+#   vars.NEXT_PUBLIC_SUPABASE_URL, vars.NEXT_PUBLIC_SUPABASE_ANON_KEY
+# Runtime secrets live on the Worker itself (wrangler secret put), not here:
+#   SUPABASE_SERVICE_ROLE_KEY, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, DEEPGRAM_API_KEY
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile
+
+      - name: Build (OpenNext)
+        run: yarn cf:build
+
+      - name: Deploy
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 491c314890616555d6f741f1c8d57232
+        run: npx opennextjs-cloudflare deploy
+
+      - name: Smoke check
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          for path in / /api/collection; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://lingvo-monkeys.frosty-fog-32a2.workers.dev$path")
+            echo "$path -> $code"
+            [ "$code" = "200" ] || exit 1
+          done
