@@ -5,10 +5,10 @@ import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
 export async function DELETE(
   _: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const supabase = createClient();
-  const fileId = params.id;
+  const { id: fileId } = await params;
   if (
     !process.env.AWS_REGION ||
     !process.env.AWS_ACCESS_KEY_ID ||
